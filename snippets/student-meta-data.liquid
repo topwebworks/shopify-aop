@@ -1,0 +1,953 @@
+{% assign currentTime =  "now" | date: "%Y-%m-%d" %}
+  {% assign productuid = product.metafields.custom.course_uuid %}
+{% if product.metafields.custom.digital_product == true and product.metafields.custom.product_type == "Online Single Course" and product.selected_or_first_available_variant.sku != "MONROBOTIFY" and product.selected_or_first_available_variant.sku != "MONROBOTIFYM" %}
+
+  <div class="purchasing-block digital-purchase">
+  <div style="display:none;" class="free-with-access student-full-access-detail">
+                 	<h5><span>Free</span> with your Full Access </h5>
+    
+    {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign productt = all_products[productHandleyear] %}
+                 	<p>(Regularly {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency  }} or {{ productt.price | money }}{{ productt.metafields.custom.product_billing_frequency  }})</p>
+                   </div> 
+<h6>Purchasing For: <span class="full-access" style="display:none;">Full Access Member</span></h6>
+  
+
+<div class="dropdown student-meta digital-drop">
+          <div class="select">   <!-- when open drodown add class open -->
+            <span class="static_val">Select Student</span>
+            <span class="stydent-meta-loader">
+              </span>
+          </div>
+          <ul style="display:none;">
+            {% for student in customer.metafields.custom.student_accounts.value %}
+              {% assign subscriptionactivecheck = "no" %}
+              {% assign expireDate = student.package_subscription_expiration | split: "T" | first%}
+              {% assign PackageActive = student.package_subscription %}
+              {% if currentTime < expireDate and PackageActive == "yes" or PackageActive == "true" %}
+              {% assign platformAcces = "yes" %}
+              {% else %}
+              {% assign platformAcces = "no" %}
+              {% endif %}
+              {% for activesubscription in customer.metafields.custom.active_subscriptions.value %}
+                {% if  activesubscription.student_id == student.student_id %}
+              {% for course in activesubscription.courses %}
+                {% assign activetilldate = course.course_expiration | split: "T" | first %}
+                {% if course.course_uuid == productuid and activetilldate > currentTime %}
+                  {% assign subscriptionactivecheck = "yes" %}
+                   {% break %}
+                  {% endif %}
+              {% endfor %}
+                  {% endif %}
+              {% endfor %}
+            <li data-prohand="{{ product.handle }}" data-courseId="{{ productuid }}" class="rest-listing" data-id="{{ student.student_id }}" data-access="{% if student.package_subscription_active == true %}yes{% else %}no{% endif %}" data-subscription="{{ subscriptionactivecheck }}" data-name="{{ student.first_name }} {{ student.last_name }}" data-username="{{ student.username }}" data-enroll="">{{ student.first_name }} {{ student.last_name }}</li>
+            {% endfor %}
+    
+            <li class="addstudent">+ Add a Student</li>
+          </ul>
+</div>
+</div>
+<p class="access-text" style="display:none;"><svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#6tkj592vna)">
+        <path d="M9.697 18a9 9 0 1 1 0-18 9 9 0 0 1 0 18zm-1.8-4.5 8.1-7.65-1.35-1.35-6.75 6.3-3.15-3.15L3.397 9l4.5 4.5z" fill="#5D9411"/>
+    </g>
+    <defs>
+        <clipPath id="6tkj592vna">
+            <path fill="#fff" transform="translate(.697)" d="M0 0h18v18H0z"/>
+        </clipPath>
+    </defs>
+</svg>
+This student is already enrolled in the course under their Full Access membership.</p>
+
+{% if product.metafields.custom.product_billing_frequency != blank %}
+<div class="student-subcription-plan">
+	<div class="subcription-title">Choose Your Subscription:</div>
+  <div class="student-subcription-plan-wrapper">
+   {% if product.metafields.custom.product_billing_frequency == "Monthly" %}
+    <div class="student-subcription-item active" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" data-price='{{ product.price | money }}' data-url="{{ product.url }}" data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+         </div>
+      </div>
+    {% if product.metafields.custom.associated_product_handle != blank %}
+    {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign product = all_products[productHandleyear] %}
+{% if product.compare_at_price_max > product.price %}
+  {% capture comparepriceoff  %}{{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+    {% endif %}
+    
+    <div class="student-subcription-item" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"  data-compare= "{{ product.compare_at_price_max | money }}" data-off="{{ comparepriceoff }}" data-price='{{ product.price | money }}' data-url="{{ product.url }}" data-sell="{{product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+           {% if product.compare_at_price_max > product.price %}
+             <div class="save-price">SAVE {{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%</div>
+          {% endif %}
+         </div>
+      </div>
+	  {% endif %}
+    
+      {% else %}
+     
+      {% if product.metafields.custom.associated_product_handle != blank %}
+    {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign productt = all_products[productHandleyear] %}
+{% if productt.compare_at_price_max > productt.price %}
+  {% capture comparepriceoff  %}{{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+    {% endif %}
+    
+    <div class="student-subcription-item active" data-selling="{{ productt.selling_plan_groups[0].selling_plans[0].id }}"  data-compare= "{{ productt.compare_at_price_max | money }}" data-off="{{ comparepriceoff }}" data-price='{{ productt.price | money }}' data-url="{{ productt.url }}" data-sell="{{productt.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ productt.title }}" data-id="{{ productt.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ productt.price | money }}/{{ productt.metafields.custom.product_billing_frequency }}</div>
+           {% if productt.compare_at_price_max > productt.price %}
+             <div class="save-price">SAVE {{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%</div>
+          {% endif %}
+         </div>
+      </div>
+	  {% endif %}
+     <div class="student-subcription-item" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" data-price="{{ product.price | money }}" data-url="{{ product.url }}" data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+         </div>
+      </div>
+      {% endif %}
+      </div>
+       
+      
+</div>
+{% endif %}
+<style>
+                .t4s-swatch{display:none;}
+                </style>
+              <script>
+                $(document).ready(function(){
+                  var PriceGet = $(".student-subcription-item.active").attr("data-price");
+                  $(".t4s-product__info-container .t4s-product-price").html(PriceGet);
+                  var variant_idGet = $(".student-subcription-item.active").attr("data-id");
+  var selling_id = $(".student-subcription-item.active").attr("data-selling");
+  $("input[name='selling_plan']").val(selling_id);
+  if($("select.t4s-product__select").length > 0 ){
+    $("select.t4s-product__select option").val(variant_idGet);
+  }
+  else{
+  $(".t4s-form__product input[name='id']").val(variant_idGet);
+  }
+                  $(".t4s-main-product__content .t4s-product__info-container .t4s-product-price ins").html(PriceGet);
+                  $(".t4s-main-product__content .t4s-product__info-container .t4s-product-price del").hide();
+                  $(".t4s-main-product__content .t4s-product__info-container span.t4s-badge-price").hide();
+                })
+              </script>
+{% elsif product.metafields.custom.product_type == "Online Full Access" and product.metafields.custom.digital_product == true %}
+            
+               {% assign metafieldData = product.metafields.custom.associated_product_handle | split: "," %}
+  <div class="purchasing-block full-access-purchase">
+              <div class="dropdown student-meta full-access-drop">
+          <div class="select">   <!-- when open drodown add class open -->
+            <span class="static_val">Select Student</span>
+             <span class="stydent-meta-loader"></span>
+          </div>
+           <ul style="display:none;">
+             {% assign studentexist = false %}
+             
+            {% for student in customer.metafields.custom.student_accounts.value %}
+              {% assign studentexist = true %}
+              {% assign subscriptionactivecheck = "no" %}
+              {% assign expireDate = student.PackageSubscription_expiration | split: "T" | first%}
+              {% assign PackageActive = student.isPackageSubscription %}
+              {% if currentTime < expireDate and PackageActive == "yes" or PackageActive == "true" %}
+              {% assign platformAcces = "yes" %}
+              {% else %}
+              {% assign platformAcces = "no" %}
+              {% endif %}
+              {% for activesubscription in customer.metafields.custom.active_subscriptions.value %}
+                {% if  activesubscription.student_id == student.student_id %}
+              {% for course in activesubscription.courses %}
+                {% assign activetilldate = course.course_expiration | split: "T" | first %}
+                {% if course.course_uuid == productuid and activetilldate > currentTime %}
+                  {% assign subscriptionactivecheck = "yes" %}
+                   {% break %}
+                  {% endif %}
+              {% endfor %}
+                  {% endif %}
+              {% endfor %}    
+              {% capture Studentlisting %}
+            <li data-prohand="{{ product.handle }}" data-name="{{ student.first_name }} {{ student.last_name }}" data-username="{{ student.username }}" data-courseId="{{ productuid }}" data-id="{{ student.student_id }}" data-handle="{{ product.handle }}" data-fullprice="{{ student.fullprice }}" data-teacheractive="{{ customer.metafields.custom.teacher_package_subscription }}" class="rest-listing" data-subscriptionnew="{{ student.package_subscription }}" data-subactive="{% if student.package_subscription_active == true %}{{ student.package_subscription_active }}{% else %}false{% endif %}" data-access="{% if student.package_subscription_active == true %}yes{% else %}no{% endif %}" data-subscription="{{ subscriptionactivecheck }}" subscription-old="{{ subscriptionactivecheck }}" data-enroll="">{{ student.first_name }} {{ student.last_name }}</li>
+            {% endcapture %}
+              {{ Studentlisting }}
+                {% endfor %}
+   
+            <li class="addstudent">+ Add a Student</li>
+          </ul>
+</div>
+    <p class="access-text" style="display:none;"><svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#6tkj592vna)">
+        <path d="M9.697 18a9 9 0 1 1 0-18 9 9 0 0 1 0 18zm-1.8-4.5 8.1-7.65-1.35-1.35-6.75 6.3-3.15-3.15L3.397 9l4.5 4.5z" fill="#5D9411"/>
+    </g>
+    <defs>
+        <clipPath id="6tkj592vna">
+            <path fill="#fff" transform="translate(.697)" d="M0 0h18v18H0z"/>
+        </clipPath>
+    </defs>
+</svg>
+This student already has an active Full Access membership.</p>
+  </div>
+          {% assign frequency =  product.metafields.custom.product_billing_frequency   %} 
+    <div class="student-subcription-plan" style="display:none;">
+    <div class="subcription-title">Choose Your Subscription:</div>
+   <div class="student-subcription-plan-wrapper free-trial-product">
+     {% assign DiscountMonth = false %}
+     {% assign DiscountYear = false %}
+     {% assign FullMonth = false %}
+     {% assign FullYear = false %}
+     {% for productHandle in metafieldData %}
+       
+     {% assign productName = productHandle | split: ":" | first  %}
+       {% if productName contains "discounted_monthly" %}
+     {% assign DiscountMonth =  true %}
+         {% endif %}
+     {% if productName contains "discounted_yearly" %}
+     {% assign DiscountYear =  true %}
+       {% endif %}
+     {% if productName contains "full_monthly"%}
+     {% assign FullMonth =  true %}
+       {% endif %}
+     {% if productName contains "full_yearly"%}
+     {% assign FullYear =  true %}
+     {% endif %}
+      {% endfor %}
+      {% if DiscountMonth == false %}
+     {% assign productName =  "discounted_monthly" %}
+     {% elsif DiscountYear == false %}
+     {% assign productName =  "discounted_yearly" %}
+     {% elsif FullMonth == false %}
+     {% assign productName =  "full_monthly" %}
+     {% elsif FullYear == false %}
+     {% assign productName =  "full_yearly" %}
+     {% endif %}
+     {% assign productOriginal = product %}
+     {% if frequency == "Yearly" %}
+     {% for productHandle in metafieldData %}
+       {%- assign productNamee = productHandle | split: ":" | first -%}
+              {% assign productHandlenew = productHandle | split: ":" | last  %}
+     {% assign product = all_products[productHandlenew] %}
+      {% for variant in product.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{productNamee | strip}}" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+      {% endfor %}
+       {% for variant in productOriginal.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{ productName }}" data-selling="{{ productOriginal.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+       {% else %}
+       {% for variant in productOriginal.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{ productName }}" data-selling="{{ productOriginal.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+       {% for productHandle in metafieldData %}
+       {%- assign productNamee = productHandle | split: ":" | first -%}
+              {% assign productHandlenew = productHandle | split: ":" | last  %}
+     {% assign product = all_products[productHandlenew] %}
+      {% for variant in product.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{productNamee | strip}}" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+      {% endfor %}
+     {% endif %}
+   </div> 
+</div>      
+<style>
+                .t4s-swatch{display:none;}
+                </style>
+              <script>
+             $(".dropdown.student-meta.full-access-drop .select").click(function(){
+  $(this).next("ul").toggle();
+  $(this).toggleClass("open");
+})   
+   setTimeout(function() {
+                       var i = 0 ;
+        $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+          var ProductName = $(this).attr("data-name");
+          var VariantTitle = $(this).attr("data-tit");
+          if((ProductName == "full_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly Free Trial"))
+          {
+            
+            if(i==0)
+            {
+              var GetPrice = $(this).attr("data-price");
+              var variant_idGet = $(this).attr("data-id");
+              var selling_id = $(this).attr("data-selling");
+              $("input[name='selling_plan']").val(selling_id);
+              $("select.t4s-product__select option").val(variant_idGet);
+              $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+              $(this).addClass("active");
+              
+            }
+            
+            $(this).show();
+            i =0+1; 
+            $(".student-subcription-plan").show();
+          }
+           
+          else{
+            $(this).hide();
+          }
+        })
+     }, 1000);
+                var originPath = window.location.origin;
+  $(".purchasing-block.full-access-purchase ul .rest-listing").click(function(){
+   $(".full-access-drop").addClass("processing_loader");
+  $(this).siblings("li").removeClass("active");
+  $(this).addClass("active");
+  var studentname = $(this).text();
+  var stuName = $(this).attr("data-name");
+  var stusername = $(this).attr("data-username");
+  var studentMatch = false;
+  var data_access_check = $(this).attr("data-access");
+  var data_subscription_check = $(this).attr("data-subscription");
+  var data_subscription_checkNew = $(this).attr("data-subscriptionnew");
+  var data_teacheractive = $(this).attr("data-teacheractive");
+  var data_subactive = $(this).attr("data-subactive");
+  var data_fullprice = $(this).attr("data-fullprice");
+  var StudenCourceId = $(this).attr("data-courseId");
+  var GetSingleSKU = $(".t4s-sku-wrapper>span").html();
+  var studentID = $(this).attr("data-id");
+  var ProHandle = $(this).attr("data-handle");
+  $(".student_name").val(stuName);
+  $(".student_username").val(stusername);    
+  $(".single-products-btn button, .custom-btns button, .custom-grid-btns button").attr("data-StudentId",studentID);
+  $(".single-products-btn button, .custom-btns button").attr("data-CourID",StudenCourceId);
+    var combinedSingle = (studentID+combinedSingle);
+     $.ajax({
+    url: '/cart.js',
+    type: 'GET',
+    dataType: 'json',
+    success: function(cart){
+       setTimeout(function() {
+      var count = (cart['items'].length);
+      data = (cart['items']);
+      var arrayGet = [];
+      $.each(data, function(i, item) {
+        var getTitle = (data[i].title);
+        //console.log(getTitle);
+        var studentnamecart = (data[i].properties);
+        $.each(studentnamecart, function(ii, itemm) {
+        if(ii=="Student Name")
+        {
+          // if((itemm == stuName && getTitle == "Full Access Subscription Yearly - Yearly Free Trial") || (itemm == stuName && getTitle == "Full Access Subscription Monthly - Monthly Free Trial")){
+          //   studentMatch = true;
+          // }
+           if((getTitle == "Full Access Subscription Yearly - Yearly Free Trial") || (getTitle == "Full Access Subscription Monthly - Monthly Free Trial") || (getTitle == "Full Access Subscription Monthly - Monthly") || (getTitle == "Full Access Subscription Yearly - Yearly") ){
+            studentMatch = true;
+          }
+        }
+        })
+        arrayGet.push(getTitle);
+      })
+        var i = 0 ;
+           
+         if(data_teacheractive == "false")
+         {
+           if(count==0)
+           {
+             if(data_subscription_checkNew=="true")
+             {
+                    $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                      var ProductName = $(this).attr("data-name");
+                      var VariantTitle = $(this).attr("data-tit");
+                      if((ProductName == "full_monthly" &&  VariantTitle == "Monthly") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly"))
+                      {
+                        if(i==0)
+                        {
+                          var GetPrice = $(this).attr("data-price");
+                          var variant_idGet = $(this).attr("data-id");
+                          var selling_id = $(this).attr("data-selling");
+                          $("input[name='selling_plan']").val(selling_id);
+                          $("select.t4s-product__select option").val(variant_idGet);
+                          $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                          $(this).addClass("active");
+                        }
+                        $(this).show();
+                        i =0+1; 
+                      }
+                      else
+                      {
+                        $(this).hide();
+                      }
+                      })
+             }
+             else
+             {
+                    $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                      var ProductName = $(this).attr("data-name");
+                      var VariantTitle = $(this).attr("data-tit");
+                      if((ProductName == "full_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly Free Trial"))
+                      {
+                        if(i==0)
+                        {
+                          var GetPrice = $(this).attr("data-price");
+                          var variant_idGet = $(this).attr("data-id");
+                          var selling_id = $(this).attr("data-selling");
+                          $("input[name='selling_plan']").val(selling_id);
+                          $("select.t4s-product__select option").val(variant_idGet);
+                          $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                          $(this).addClass("active");
+                        }
+                        $(this).show();
+                        i =0+1; 
+                      }
+                      else
+                      {
+                        $(this).hide();
+                      }
+                      })               
+             }
+           }
+           else
+           {
+              if(studentMatch == false){
+                if(data_subscription_checkNew=="true")
+                   {
+                          $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                            var ProductName = $(this).attr("data-name");
+                            var VariantTitle = $(this).attr("data-tit");
+                            if((ProductName == "full_monthly" &&  VariantTitle == "Monthly") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly"))
+                            {
+                              if(i==0)
+                              {
+                                var GetPrice = $(this).attr("data-price");
+                                var variant_idGet = $(this).attr("data-id");
+                                var selling_id = $(this).attr("data-selling");
+                                $("input[name='selling_plan']").val(selling_id);
+                                $("select.t4s-product__select option").val(variant_idGet);
+                                $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                                $(this).addClass("active");
+                              }
+                              $(this).show();
+                              i =0+1; 
+                            }
+                            else
+                            {
+                              $(this).hide();
+                            }
+                            })               
+                   }
+                   else
+                   {
+                          $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                            var ProductName = $(this).attr("data-name");
+                            var VariantTitle = $(this).attr("data-tit");
+                            // if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly Free Trial"))
+                            if((ProductName == "full_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly Free Trial"))
+                            {
+                              if(i==0)
+                              {
+                                var GetPrice = $(this).attr("data-price");
+                                var variant_idGet = $(this).attr("data-id");
+                                var selling_id = $(this).attr("data-selling");
+                                $("input[name='selling_plan']").val(selling_id);
+                                $("select.t4s-product__select option").val(variant_idGet);
+                                $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                                $(this).addClass("active");
+                              }
+                              $(this).show();
+                              i =0+1; 
+                            }
+                            else
+                            {
+                              $(this).hide();
+                            }
+                            })              
+                }
+               
+             }else{
+                if(data_subscription_checkNew=="true")
+                   {
+                          $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                            var ProductName = $(this).attr("data-name");
+                            var VariantTitle = $(this).attr("data-tit");
+                            if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly"))
+                            {
+                              if(i==0)
+                              {
+                                var GetPrice = $(this).attr("data-price");
+                                var variant_idGet = $(this).attr("data-id");
+                                var selling_id = $(this).attr("data-selling");
+                                $("input[name='selling_plan']").val(selling_id);
+                                $("select.t4s-product__select option").val(variant_idGet);
+                                $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                                $(this).addClass("active");
+                              }
+                              $(this).show();
+                              i =0+1; 
+                            }
+                            else
+                            {
+                              $(this).hide();
+                            }
+                            })               
+                   }
+                   else
+                   {
+                          $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+                            var ProductName = $(this).attr("data-name");
+                            var VariantTitle = $(this).attr("data-tit");
+                            if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly Free Trial"))
+                            // if((ProductName == "full_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly Free Trial"))
+                            {
+                              if(i==0)
+                              {
+                                var GetPrice = $(this).attr("data-price");
+                                var variant_idGet = $(this).attr("data-id");
+                                var selling_id = $(this).attr("data-selling");
+                                $("input[name='selling_plan']").val(selling_id);
+                                $("select.t4s-product__select option").val(variant_idGet);
+                                $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                                $(this).addClass("active");
+                              }
+                              $(this).show();
+                              i =0+1; 
+                            }
+                            else
+                            {
+                              $(this).hide();
+                            }
+                            })              
+                   }
+             }
+             // if(data_subscription_checkNew=="true" && studentMatch == false )
+             // {
+             //        $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+             //          var ProductName = $(this).attr("data-name");
+             //          var VariantTitle = $(this).attr("data-tit");
+             //          if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly"))
+             //          {
+             //            if(i==0)
+             //            {
+             //              var GetPrice = $(this).attr("data-price");
+             //              var variant_idGet = $(this).attr("data-id");
+             //              var selling_id = $(this).attr("data-selling");
+             //              $("input[name='selling_plan']").val(selling_id);
+             //              $("select.t4s-product__select option").val(variant_idGet);
+             //              $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+             //              $(this).addClass("active");
+             //            }
+             //            $(this).show();
+             //            i =0+1; 
+             //          }
+             //          else
+             //          {
+             //            $(this).hide();
+             //          }
+             //          })               
+             // }
+             // else
+             // {
+             //        $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+             //          var ProductName = $(this).attr("data-name");
+             //          var VariantTitle = $(this).attr("data-tit");
+             //          if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly Free Trial"))
+             //          {
+             //            if(i==0)
+             //            {
+             //              var GetPrice = $(this).attr("data-price");
+             //              var variant_idGet = $(this).attr("data-id");
+             //              var selling_id = $(this).attr("data-selling");
+             //              $("input[name='selling_plan']").val(selling_id);
+             //              $("select.t4s-product__select option").val(variant_idGet);
+             //              $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+             //              $(this).addClass("active");
+             //            }
+             //            $(this).show();
+             //            i =0+1; 
+             //          }
+             //          else
+             //          {
+             //            $(this).hide();
+             //          }
+             //          })              
+             // }
+             
+           }
+         }
+          
+ 
+   else
+    {
+     if(data_subscription_checkNew == "true")
+     {
+        $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+          var ProductName = $(this).attr("data-name");
+          var VariantTitle = $(this).attr("data-tit");
+          if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly"))
+          {
+            if(i==0)
+            {
+              var GetPrice = $(this).attr("data-price");
+              var variant_idGet = $(this).attr("data-id");
+              var selling_id = $(this).attr("data-selling");
+              $("input[name='selling_plan']").val(selling_id);
+              $("select.t4s-product__select option").val(variant_idGet);
+              $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+              $(this).addClass("active");
+            }
+            $(this).show();
+            i =0+1; 
+          }
+          else
+          {
+            $(this).hide();
+          }
+          })       
+     }
+     else
+     {
+          $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+            var ProductName = $(this).attr("data-name");
+            var VariantTitle = $(this).attr("data-tit");
+            if((ProductName == "discounted_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "discounted_yearly" &&  VariantTitle == "Yearly Free Trial"))
+            {
+              if(i==0)
+              {
+                var GetPrice = $(this).attr("data-price");
+                var variant_idGet = $(this).attr("data-id");
+                var selling_id = $(this).attr("data-selling");
+                $("input[name='selling_plan']").val(selling_id);
+                $("select.t4s-product__select option").val(variant_idGet);
+                $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+                $(this).addClass("active");
+              }
+              $(this).show();
+              i =0+1; 
+            }
+            else
+            {
+              $(this).hide();
+            }
+            })       
+             }
+     
+         } 
+      
+       }, 1000);
+    },
+    error: function(status){
+    }
+  })
+    function CasesFull(){
+      if((data_access_check == "yes") && (data_subscription_check == "yes") && (enroll_access_check == "yes")){
+    $(".full-access").hide();
+    $(".student-subcription-plan").hide();
+    $(".access-text").html("This student already has an active Full Access membership.").show();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").show();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").hide();
+    $(".student-subcription-plan").hide();
+     $(".free-with-access").hide();
+    $(".full-access-drop").removeClass("processing_loader");
+  }
+    else if((data_access_check == "yes") && (data_subscription_check == "yes") && (enroll_access_check == "no")) {
+    $(".full-access").show();
+      $(".student-subcription-plan").hide();
+    $(".access-text").html("This student is already enrolled in this course under their Full Access subscription.").show();
+    $(".single-products-btn .student-enrolled-button").show();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").hide();
+    $(".student-subcription-plan").hide();
+      $(".free-with-access").show();
+      $(".full-access-drop").removeClass("processing_loader");
+    }
+      else if((data_access_check == "no") && (data_subscription_check == "yes") && (enroll_access_check == "yes")) {
+    $(".full-access").hide();
+    $(".student-subcription-plan").show();
+    $(".access-text").hide();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").show();
+    $(".student-subcription-plan").show();
+    $(".free-note").show();
+        $(".full-access-drop").removeClass("processing_loader");
+    }
+        else if((data_access_check == "no") && (data_subscription_check == "yes") && (enroll_access_check == "no")) {
+     $(".full-access").hide();
+     $(".student-subcription-plan").show();     
+    $(".access-text").hide();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").show();
+    $(".student-subcription-plan").show();
+    $(".free-note").show();
+          $(".full-access-drop").removeClass("processing_loader");
+    }
+    else if((data_access_check == "yes") && (data_subscription_check == "no") && (enroll_access_check == "yes")) {
+    $(".full-access").show();
+    $(".student-subcription-plan").hide();
+    $(".access-text").html("This student already has an active Full Access membership").show();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").show();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").hide();
+    $(".student-subcription-plan").hide();
+    $(".free-with-access").hide();
+      $(".full-access-drop").removeClass("processing_loader");
+    }
+      
+    else if((data_access_check == "yes") && (data_subscription_check == "no") && (enroll_access_check == "no")) {
+    $(".full-access").hide();
+    $(".student-subcription-plan").hide();
+    $(".access-text").html("This student is already enrolled in this course under their Full Access subscription.").show();
+    $(".single-products-btn .student-enrolled-button").show();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").hide();
+    $(".student-subcription-plan").hide();
+    $(".free-with-access").hide();
+    $(".full-access-drop").removeClass("processing_loader");
+    }    
+      else if((data_access_check == "no") && (data_subscription_check == "no") && (enroll_access_check == "no")) {
+    $(".full-access").hide();
+    $(".student-subcription-plan").show();    
+    $(".access-text").hide();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").show();
+    $(".student-subcription-plan").show();
+    $(".free-note").show();
+    $(".full-access-drop").removeClass("processing_loader");
+    }
+   else if((data_access_check == "no") && (data_subscription_check == "no") && (enroll_access_check == "yes")) {
+    $(".full-access").hide();
+     $(".student-subcription-plan").show();
+    $(".access-text").hide();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".single-products-btn .select-student-button").hide();
+    $(".single-products-btn .student-active-button").hide();
+    $(".single-products-btn .student-enroll-free-button").hide();
+    $(".custom-btns").show();
+    $(".student-subcription-plan").show();
+    $(".free-note").show();
+    $(".full-access-drop").removeClass("processing_loader");
+    }
+  else{
+    $(".access-text").hide();
+    $(".full-access").hide();
+    $(".student-subcription-plan").hide();
+    $(".single-products-btn .student-enrolled-button").hide();
+    $(".free-with-access").hide();
+    $(".free-note").hide();
+    $(".single-products-btn .select-student-button").show();
+    $(".full-access-drop").removeClass("processing_loader");
+  }
+    }
+    if (localStorage.getItem(combinedSingle) === null) {
+    var enroll_access_check = "no";
+    localStorage.setItem(combinedSingle, enroll_access_check);
+    ajaxUrl = originPath+'/apps/api/lms/student/enrollments?student_id='+studentID; 
+function reqListener() {
+  //console.log(this.responseText,'response');
+  var getstatus = this.responseText;
+  var data = this.responseText;
+    getstatus = JSON.parse(getstatus); //convert to javascript array
+  var arr = [], len;
+  for(key in data.getstatus) {
+      arr.push(key);
+  }
+  len = arr.length;
+  if (len != 0) {
+  $.each(getstatus, function (i) {
+    $.each(this, function (keyy, valuee) {
+    {
+      if(keyy == GetSingleSKU){
+        if(valuee == "enrolled"){
+          enroll_access_check = "yes";
+          localStorage.setItem(combinedSingle, enroll_access_check);
+        }
+      }
+    }
+    });
+  });
+  }
+  CasesFull();
+}
+      
+const req = new XMLHttpRequest(); 
+req.addEventListener("load", reqListener);
+req.open("GET", ajaxUrl); 
+req.setRequestHeader('ngrok-skip-browser-warning', "69420");
+req.send();
+   
+  }
+  else{
+    enroll_access_check = (localStorage.getItem(combinedSingle));
+     CasesFull();
+  }
+
+ 
+  
+    
+  var GetDropValue = $(this).text();
+  $(".static_val").html(GetDropValue);
+  $(".purchasing-block ul").hide();
+  $(".dropdown.student-meta .select").removeClass("open");
+  
+})
+ 
+              </script>
+{% elsif product.selected_or_first_available_variant.sku == "MONROBOTIFY" or product.selected_or_first_available_variant.sku == "MONROBOTIFYM"  and product.metafields.custom.digital_product == true%}              
+
+<div class="purchasing-block sku-purchase">
+  <div style="display:none;" class="free-with-access student-full-access-detail">
+                 	<h5><span>Free</span> with your Full Access </h5>
+                 	 {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign productt = all_products[productHandleyear] %}
+                 	<p>(Regularly {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency  }} or {{ productt.price | money }}{{ productt.metafields.custom.product_billing_frequency  }})</p>
+                   </div> 
+<h6>Purchasing For: <span class="full-access" style="display:none;">Full Access Member</span></h6>
+  
+
+<div class="dropdown student-meta sku-drop">
+   <span class="stydent-meta-loader"></span>
+          <div class="select">   <!-- when open drodown add class open -->
+            <span class="static_val">Select Student</span>
+          </div>
+          <ul style="display:none;">
+            {% for student in customer.metafields.custom.student_accounts.value %}
+              {% assign subscriptionactivecheck = "no" %}
+              {% assign expireDate = student.package_subscription_expiration | split: "T" | first%}
+              {% assign PackageActive = student.package_subscription %}
+              {% if currentTime < expireDate and PackageActive == "yes" or PackageActive == "true" %}
+              {% assign platformAcces = "yes" %}
+              {% else %}
+              {% assign platformAcces = "no" %}
+              {% endif %}
+              {% for activesubscription in customer.metafields.custom.active_subscriptions.value %}
+                {% if  activesubscription.student_id == student.student_id %}
+              {% for course in activesubscription.courses %}
+                {% assign activetilldate = course.course_expiration | split: "T" | first %}
+                {% if course.course_uuid == productuid and activetilldate > currentTime %}
+                  {% assign subscriptionactivecheck = "yes" %}
+                   {% break %}
+                  {% endif %}
+              {% endfor %}
+                  {% endif %}
+              {% endfor %}             
+            <li data-prohand="{{ product.handle }}" data-courseId="{{ productuid }}" data-id="{{ student.student_id }}" data-name="{{ student.first_name }} {{ student.last_name }}" data-username="{{ student.username }}"  class="rest-listing" data-access="{% if student.package_subscription_active == true %}yes{% else %}no{% endif %}" data-subscription="{% if student.robotify_subscription_active == true %}yes{% else %}no{% endif %}" data-enroll="">{{ student.first_name }} {{ student.last_name }}</li>
+            {% endfor %}
+  
+            <li class="addstudent">+ Add a Student</li>
+          </ul>
+</div>
+</div>
+<p class="access-text" style="display:none;"><svg width="19" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#6tkj592vna)">
+        <path d="M9.697 18a9 9 0 1 1 0-18 9 9 0 0 1 0 18zm-1.8-4.5 8.1-7.65-1.35-1.35-6.75 6.3-3.15-3.15L3.397 9l4.5 4.5z" fill="#5D9411"/>
+    </g>
+    <defs>
+        <clipPath id="6tkj592vna">
+            <path fill="#fff" transform="translate(.697)" d="M0 0h18v18H0z"/>
+        </clipPath>
+    </defs>
+</svg>
+This student is already enrolled in the course under their Full Access membership.</p>  
+  {% if product.metafields.custom.product_billing_frequency != blank %}
+<div class="student-subcription-plan">
+	<div class="subcription-title">Choose Your Subscription:</div>
+  <div class="student-subcription-plan-wrapper">
+   {% if product.metafields.custom.product_billing_frequency == "Monthly" %}
+    <div class="student-subcription-item active" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" data-price="{{ product.price | money }}" data-url="{{ product.url }}" data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+         </div>
+      </div>
+    {% if product.metafields.custom.associated_product_handle != blank %}
+    {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign product = all_products[productHandleyear] %}
+{% if product.compare_at_price_max > product.price %}
+  {% capture comparepriceoff  %}{{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+    {% endif %}
+    
+    <div class="student-subcription-item" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"  data-compare= "{{ product.compare_at_price_max | money }}" data-off="{{ comparepriceoff }}" data-price='{{ product.price| money }}' data-url="{{ product.url }}" data-sell="{{product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+           {% if product.compare_at_price_max > product.price %}
+             <div class="save-price">SAVE {{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%</div>
+          {% endif %}
+         </div>
+      </div>
+	  {% endif %}
+    
+      {% else %}
+     
+      {% if product.metafields.custom.associated_product_handle != blank %}
+    {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+    {% assign productt = all_products[productHandleyear] %}
+{% if productt.compare_at_price_max > productt.price %}
+  {% capture comparepriceoff  %}{{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+    {% endif %}
+    
+    <div class="student-subcription-item active" data-selling="{{ productt.selling_plan_groups[0].selling_plans[0].id }}"  data-compare= "{{ productt.compare_at_price_max | money }}" data-off="{{ comparepriceoff }}" data-price='{{ productt.price| money }}' data-url="{{ productt.url }}" data-sell="{{productt.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ productt.title }}" data-id="{{ productt.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ productt.price | money }}/{{ productt.metafields.custom.product_billing_frequency }}</div>
+           {% if productt.compare_at_price_max > productt.price %}
+             <div class="save-price">SAVE {{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%</div>
+          {% endif %}
+         </div>
+      </div>
+	  {% endif %}
+     <div class="student-subcription-item" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" data-price="{{ product.price | money }}" data-url="{{ product.url }}" data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}" data-tit="{{ product.title }}" data-id="{{ product.first_available_variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}</div>
+         </div>
+      </div>
+      {% endif %}
+      </div>
+       
+      
+</div>
+{% endif %}
+              <style>
+                .t4s-swatch{display:none;}
+                </style>
+  {% endif %}
+  <style>
+    .t4s-countdown-pr.t4s-text-start.t4s-dn{display:none;}
+    </style>

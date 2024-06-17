@@ -1,0 +1,50 @@
+{% assign counttag = 0  %}
+  <div class="all-tags">
+{% for tag in product.tags %}
+  {% if counttag < 2 %}
+  {% if tag == "Best Seller" %}
+    <div class="best-seller tag-custom">Best Seller</div>
+    {% assign counttag = counttag | plus: 1  %}
+    {% elsif tag == "Top Seller" %}
+    <div class="top-seller tag-custom">Top Seller</div>
+    {% assign counttag = counttag | plus: 1  %}
+    {% elsif tag == "Recommended" %}
+    <div class="recommended tag-custom">Recommended</div>
+    {% assign counttag = counttag | plus: 1  %}
+    {% elsif tag == "Popular" %}
+    <div class="popular tag-custom">Popular</div>
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "Newly Updated" %}
+    <div class="newly-updated tag-custom">Newly Updated</div>
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "Revised" %}
+    <div class="revised tag-custom">Revised</div>
+     {% assign counttag = counttag | plus: 1  %}         
+    {% elsif tag == "New" %}
+    <div class="new tag-custom">New</div>
+     {% assign counttag = counttag | plus: 1  %}         
+    {% elsif tag == "Featured" %}
+    <div class="featured tag-custom">Featured</div>
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "Sale" %}
+    <div class="sale tag-custom">Sale</div>
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "Good Value" %}
+    <div class="good-value tag-custom">Good Value</div>
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "10% Off" %}
+    <div class="off-ten tag-custom">10% Off</div>   
+     {% assign counttag = counttag | plus: 1  %}         
+    {% elsif tag == "15% Off" %} 
+    <div class="off-fifteen tag-custom">15% Off</div> 
+    {% assign counttag = counttag | plus: 1  %}          
+    {% elsif tag == "20% Off" %}
+    <div class="off-twenty tag-custom">20% Off</div>   
+   {% assign counttag = counttag | plus: 1  %}           
+    {% elsif tag == "Discontinued" %}  
+    <div class="discontinued tag-custom">Discontinued</div>     
+    {% assign counttag = counttag | plus: 1  %}          
+    {% endif %}
+    {% endif %}
+  {% endfor %}  
+  </div>

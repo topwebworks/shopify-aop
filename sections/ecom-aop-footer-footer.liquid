@@ -1,0 +1,571 @@
+{% comment %}
+ EComposer (https://ecomposer.io)
+ You SHOULD NOT modify source code in this page because
+ It is automatically generated from EComposer
+ At 2023-11-28 14:30:54
+ {% endcomment %} 
+ 
+ {% assign ecom_root_url = routes.root_url %}
+ {% if ecom_root_url != '/'%}
+ {% assign ecom_root_url = routes.root_url | append: '/' %}
+ {% endif %}
+ <link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=1.6" /><noscript><link rel="stylesheet" media="all" id="ecom-vendors-css_ecomposer_base" href="https://cdn.ecomposer.app/vendors/css/ecom-base.css?v=1.6" /></noscript>
+{%capture section_id %}ecom-aop-footer-footer{% endcapture%}{% if section and section_id == section.id and headless == true and false%}
+{{ content_for_header }}
+{% render 'ecom_header', ECOM_THEME: true %}{% endif %}<link href="https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=DM+Sans:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Cormorant:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet"/>
+{{'ecom-65656e4e91d37fe67403f144.css' | asset_url | stylesheet_tag }}
+<script src="{{'ecom-65656e4e91d37fe67403f144.js' | asset_url }}" defer="defer"></script>
+<script type="text/javascript" class="ecom-page-info">
+ window.EComposer = window.EComposer || {};
+ window.EComposer.TEMPLATE_ID="65656e4e91d37fe67403f144";
+ window.EComposer.FOOTER = {"template_id":"65656e4e91d37fe67403f144","title":"Aop Footer","type":"footer","slug":"ecom-aop-footer","plan_id":1};
+ </script>
+<div class="ecom-builder" id="ecom-aop-footer"><div class="ecom-sections" data-section-id="{{section.id}}"><section class="ecom-row ecom-core ecom-section ecom-grujg8ahuk" data-id="ecom-grujg8ahuk" style="z-index: inherit;"><div data-deep="1" class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-s9g8rnbr5to"><div class="core__column--wrapper"><div class="core__blocks" index="0"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-gy4ouzcoq6" data-core-is="block"><div class="ecom__element element__heading ecom-element ecom-html" data-stopdrag="true" deep="1"><h3 class="ecom__heading ecom-db">{{ 'sections.ecom-aop-footer-footer.headingtext_gy4ouzcoq6_html' | t }}</h3></div></div> <div class="ecom-block ecom-core core__block ecom-810jbiezlfd" data-core-is="block"><div class="ecom-element ecom-shopify-elements ecom-shopify__newsletter-form" deep="1"><div class="ecom-shopify__newsletter-form-wrapper ecom-w__full"><div class="ecom-shopify__newsletter-form-container"><div>
+ {% form 'customer', action:'/contact', class: 'ecom-shopify__newsletter-form' ,id:'newsletter-form-ecom-810jbiezlfd' %}
+ <input type="hidden" name="contact[tags]" value="newsletter" />
+ <div class="ecom-newsletter-form-content">
+ <input
+ id="ECom-NewsletterForm-ecom-810jbiezlfd"
+ type="email"
+ name="contact[email]"
+ class="ecom-shopify__newsletter-form-field--input"
+ value="{{ form.email }}"
+ aria-required="true"
+ autocorrect="off"
+ autocapitalize="off"
+ autocomplete="email"
+ {% if form.errors %}
+ autofocus
+ aria-invalid="true"
+ {% endif %}
+ placeholder="Enter Your Email"
+ required
+ >
+ <button type="submit" class="ecome-shopify__newsletter__button" name="commit">
+ <span> {{ 'sections.ecom-aop-footer-footer.submit_title_810jbiezlfd_html' | t }} </span>
+ <span class="ecom-shopify__newsletter__button-icon">{{ 'sections.ecom-aop-footer-footer.xv055fd443333722020221222030199203143434_810jbiezlfd_html' | t }} </span>
+ </button>
+ </div>
+ {%- if form.posted_successfully? or EComBuilderMode == true and false -%}
+ <div class="ecom-shopify__newsletter-form-success" {% unless EComBuilderMode %}tabindex="-1" autofocus{% endunless %}>
+ {{ 'sections.ecom-aop-footer-footer.success_message_810jbiezlfd_html' | t }}
+ </div>
+ {%- endif -%}
+ {%- if form.errors or EComBuilderMode == true and false -%}
+ <div class="ecom-shopify__newsletter-form-message">
+ <h2 class="ecom-shopify__newsletter-form-status-error" role="alert" {% unless EComBuilderMode %}tabindex="-1" autofocus{% endunless %}>
+ {{ 'sections.ecom-aop-footer-footer.error_title_810jbiezlfd_html' | t }}
+ </h2>
+ <p class="ecom-shopify__newsletter-form-detail-error">
+ {% if EComBuilderMode %}
+ This is example error text when missing email field
+ {% endif %}
+ {{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}
+ </p>
+ </div>
+ {%- endif -%}
+ <div class="ecom-shopify__newsletter-form-message ecom-dn">
+ <p class="ecom-shopify__newsletter-form-detail-error">
+ {{ 'sections.ecom-aop-footer-footer.error_already_810jbiezlfd_html' | t }}
+ </p>
+ </div>
+ {% endform %}
+ </div></div></div></div></div> <div class="ecom-animation ecom-block ecom-core core__block ecom-4ltum84i96c" data-core-is="block"><div class="ecom__element ecom-element element__text" data-stopdrag="" deep="1"><div class="text-content ecom-html has-drop-cap-view-default">{{ 'sections.ecom-aop-footer-footer.textcontent_4ltum84i96c_html' | t }}</div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> <div class="ecom-column ecom-core ecom-o2h90dmeetp"><div class="core__column--wrapper"><div class="core__blocks" index="1"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-udm6m45iwnp" data-core-is="block"><div class="ecom__element element__heading ecom-element ecom-html" data-stopdrag="true" deep="1"><h3 class="ecom__heading ecom-db">{{ 'sections.ecom-aop-footer-footer.headingtext_udm6m45iwnp_html' | t }}</h3></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-tpj19dq2y0f" data-core-is="block"><div class="ecom-element ecom-shopify ecom-shopify__menu" deep="1"><div class="ecom-element ecom-shopify ecom-shopify__menu-wrapper" data-show-all="false"><div class="ecom-element ecom-shopify ecom-shopify__menu-container">
+							{%- capture link_handle -%}footer-products{%- endcapture -%}
+							{%- unless link_handle == empty -%}
+								{%- assign menu = linklists[link_handle] -%}
+ {% if menu == blank %}
+ {%- assign menu = linklists['main-menu'] -%}
+ {% endif %}
+								{%- capture show_humber-%}false{%- endcapture -%}
+								{%- if show_humber == 'true' -%}
+ <div class="ecom-menu__icon-humber--wrapper">
+ <div class="ecom-menu__icon-humber">
+ 
+ </div>
+ </div>
+									<div class="ecom-shopify__menu-list--mobile--wrapper">
+										<ul class="ecom-shopify__menu-list--mobile" data-show-humber="undefined">
+											<div class="modal-header">
+												<span class="ecom-menu-collapse-close--mobile">
+													<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+												</span>
+											</div>
+											{% if menu and menu.links.size %}
+												{% for link in menu.links %}
+													{% assign child_link = link.links %}
+													<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} ">
+														<div class="ecom-menu_item ecom-items">
+															<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+																{{link.title}}
+																{%- if link.levels > 0 -%}
+																	<div class="ecom-element--menu_icon">
+																		<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																			
+																		</div>
+																		<div class="ecom-items--icon ecom-element--menu_icon--active">
+																			
+																		</div>
+																	</div>
+																{%- endif -%}
+															</a>
+														</div>
+														{% if child_link.size > 0 %}
+															<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+																{% for child in child_link %}
+																	{% assign grand_link = child.links %}
+																	<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} {% if child.active or child.child_active%} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" >
+																		<div class="ecom-menu_item ecom-items">
+																			<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																				{{child.title}}
+																				{%- if child.levels > 0 -%}
+																					<div class="ecom-element--menu_icon">
+																						<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																							
+																						</div>
+																						<div class="ecom-items--icon ecom-element--menu_icon--active">
+																							
+																						</div>
+																					</div>
+																				{%- endif -%}
+																			</a>
+																		</div>
+																		{% if grand_link.size > 0 %}
+																			<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																				{% for grand in grand_link %}
+																					<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																						<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																							{{grand.title}}
+																						</a>
+																					</li>
+																				{% endfor %}
+																			</ul>
+																		{%- endif -%}
+																	</li>
+																{% endfor %}
+															</ul>
+														{% endif %}
+													</li>
+												{% endfor %}
+											{% endif %}
+										</ul>	
+									</div>
+								{%- endif -%}
+								<div class="ecom-shopify__menu-list--wrapper ecom-flex">
+									<ul class="ecom-shopify__menu-list" data-menu-layout="vertical">
+										{% if menu and menu.links.size %}
+											{% for link in menu.links %}
+												{% assign child_link = link.links %}
+												<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}">
+													<div class="ecom-menu_item ecom-items">
+														<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+															{{link.title}}
+															{%- if link.levels > 0 -%}
+																<div class="ecom-element--menu_icon">
+																	<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																		
+																	</div>
+																	<div class="ecom-items--icon ecom-element--menu_icon--active">
+																		
+																	</div>
+																</div>
+															{%- endif -%}
+														</a>
+													</div>
+													{% if child_link.size > 0 %}
+														{%- capture layout -%}
+															vertical
+														{%- endcapture -%}
+														<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+															{% for child in child_link %}
+																{% assign grand_link = child.links %}
+																<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}" >
+																	<div class="ecom-menu_item ecom-items">
+																		<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																			{{child.title}}
+																			{%- if child.levels > 0 -%}
+																				<div class="ecom-element--menu_icon">
+																					<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																						
+																					</div>
+																					<div class="ecom-items--icon ecom-element--menu_icon--active">
+																						
+																					</div>
+																				</div>
+																			{%- endif -%}
+																		</a>
+																		{% if grand_link.size > 0 and layout == 'horizontal' %}
+																			{% for grand in grand_link %}
+																				<a class="ecom-menu_title ecom-element--menu_title {% if grand.active %} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" href="{{grand.url}}" title="{{grand.title | escape }}">
+																					{{grand.title}}
+																				</a>
+																			{% endfor %}
+																		{% endif %}
+																	</div>
+																	{% if grand_link.size > 0 and layout == 'vertical' %}
+																		<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																			{% for grand in grand_link %}
+																				<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																					<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																						{{grand.title}}
+																					</a>
+																				</li>
+																			{% endfor %}
+																		</ul>
+																	{%- endif -%}
+																</li>
+															{% endfor %}
+														</ul>
+													{% endif %}
+												</li>
+											{% endfor %}
+										{% endif %}
+									</ul>
+								</div>
+							{% else %}
+								<p>Select a menu to show</p>
+							{%- endunless -%}
+						</div></div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> <div class="ecom-column ecom-core ecom-rj2dleejijm"><div class="core__column--wrapper"><div class="core__blocks" index="2"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-k2jjv6xm7v" data-core-is="block"><div class="ecom__element element__heading ecom-element ecom-html" data-stopdrag="true" deep="1"><h3 class="ecom__heading ecom-db">{{ 'sections.ecom-aop-footer-footer.headingtext_k2jjv6xm7v_html' | t }}</h3></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-ql9uwgy5m7s" data-core-is="block"><div class="ecom-element ecom-shopify ecom-shopify__menu" deep="1"><div class="ecom-element ecom-shopify ecom-shopify__menu-wrapper" data-show-all="false"><div class="ecom-element ecom-shopify ecom-shopify__menu-container">
+							{%- capture link_handle -%}footer-customers{%- endcapture -%}
+							{%- unless link_handle == empty -%}
+								{%- assign menu = linklists[link_handle] -%}
+ {% if menu == blank %}
+ {%- assign menu = linklists['main-menu'] -%}
+ {% endif %}
+								{%- capture show_humber-%}false{%- endcapture -%}
+								{%- if show_humber == 'true' -%}
+ <div class="ecom-menu__icon-humber--wrapper">
+ <div class="ecom-menu__icon-humber">
+ 
+ </div>
+ </div>
+									<div class="ecom-shopify__menu-list--mobile--wrapper">
+										<ul class="ecom-shopify__menu-list--mobile" data-show-humber="undefined">
+											<div class="modal-header">
+												<span class="ecom-menu-collapse-close--mobile">
+													<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+												</span>
+											</div>
+											{% if menu and menu.links.size %}
+												{% for link in menu.links %}
+													{% assign child_link = link.links %}
+													<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} ">
+														<div class="ecom-menu_item ecom-items">
+															<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+																{{link.title}}
+																{%- if link.levels > 0 -%}
+																	<div class="ecom-element--menu_icon">
+																		<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																			
+																		</div>
+																		<div class="ecom-items--icon ecom-element--menu_icon--active">
+																			
+																		</div>
+																	</div>
+																{%- endif -%}
+															</a>
+														</div>
+														{% if child_link.size > 0 %}
+															<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+																{% for child in child_link %}
+																	{% assign grand_link = child.links %}
+																	<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} {% if child.active or child.child_active%} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" >
+																		<div class="ecom-menu_item ecom-items">
+																			<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																				{{child.title}}
+																				{%- if child.levels > 0 -%}
+																					<div class="ecom-element--menu_icon">
+																						<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																							
+																						</div>
+																						<div class="ecom-items--icon ecom-element--menu_icon--active">
+																							
+																						</div>
+																					</div>
+																				{%- endif -%}
+																			</a>
+																		</div>
+																		{% if grand_link.size > 0 %}
+																			<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																				{% for grand in grand_link %}
+																					<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																						<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																							{{grand.title}}
+																						</a>
+																					</li>
+																				{% endfor %}
+																			</ul>
+																		{%- endif -%}
+																	</li>
+																{% endfor %}
+															</ul>
+														{% endif %}
+													</li>
+												{% endfor %}
+											{% endif %}
+										</ul>	
+									</div>
+								{%- endif -%}
+								<div class="ecom-shopify__menu-list--wrapper ecom-flex">
+									<ul class="ecom-shopify__menu-list" data-menu-layout="vertical">
+										{% if menu and menu.links.size %}
+											{% for link in menu.links %}
+												{% assign child_link = link.links %}
+												<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}">
+													<div class="ecom-menu_item ecom-items">
+														<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+															{{link.title}}
+															{%- if link.levels > 0 -%}
+																<div class="ecom-element--menu_icon">
+																	<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																		
+																	</div>
+																	<div class="ecom-items--icon ecom-element--menu_icon--active">
+																		
+																	</div>
+																</div>
+															{%- endif -%}
+														</a>
+													</div>
+													{% if child_link.size > 0 %}
+														{%- capture layout -%}
+															vertical
+														{%- endcapture -%}
+														<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+															{% for child in child_link %}
+																{% assign grand_link = child.links %}
+																<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}" >
+																	<div class="ecom-menu_item ecom-items">
+																		<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																			{{child.title}}
+																			{%- if child.levels > 0 -%}
+																				<div class="ecom-element--menu_icon">
+																					<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																						
+																					</div>
+																					<div class="ecom-items--icon ecom-element--menu_icon--active">
+																						
+																					</div>
+																				</div>
+																			{%- endif -%}
+																		</a>
+																		{% if grand_link.size > 0 and layout == 'horizontal' %}
+																			{% for grand in grand_link %}
+																				<a class="ecom-menu_title ecom-element--menu_title {% if grand.active %} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" href="{{grand.url}}" title="{{grand.title | escape }}">
+																					{{grand.title}}
+																				</a>
+																			{% endfor %}
+																		{% endif %}
+																	</div>
+																	{% if grand_link.size > 0 and layout == 'vertical' %}
+																		<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																			{% for grand in grand_link %}
+																				<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																					<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																						{{grand.title}}
+																					</a>
+																				</li>
+																			{% endfor %}
+																		</ul>
+																	{%- endif -%}
+																</li>
+															{% endfor %}
+														</ul>
+													{% endif %}
+												</li>
+											{% endfor %}
+										{% endif %}
+									</ul>
+								</div>
+							{% else %}
+								<p>Select a menu to show</p>
+							{%- endunless -%}
+						</div></div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-lok4crt1kh"><div class="core__column--wrapper"><div class="core__blocks" index="3"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-otclijkx9b" data-core-is="block"><div class="ecom__element element__heading ecom-element ecom-html" data-stopdrag="true" deep="1"><h3 class="ecom__heading ecom-db">{{ 'sections.ecom-aop-footer-footer.headingtext_otclijkx9b_html' | t }}</h3></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-oosre56i1t" data-core-is="block"><div class="ecom-element ecom-shopify ecom-shopify__menu" deep="1"><div class="ecom-element ecom-shopify ecom-shopify__menu-wrapper" data-show-all="false"><div class="ecom-element ecom-shopify ecom-shopify__menu-container">
+							{%- capture link_handle -%}footer-resources{%- endcapture -%}
+							{%- unless link_handle == empty -%}
+								{%- assign menu = linklists[link_handle] -%}
+ {% if menu == blank %}
+ {%- assign menu = linklists['main-menu'] -%}
+ {% endif %}
+								{%- capture show_humber-%}false{%- endcapture -%}
+								{%- if show_humber == 'true' -%}
+ <div class="ecom-menu__icon-humber--wrapper">
+ <div class="ecom-menu__icon-humber">
+ 
+ </div>
+ </div>
+									<div class="ecom-shopify__menu-list--mobile--wrapper">
+										<ul class="ecom-shopify__menu-list--mobile" data-show-humber="undefined">
+											<div class="modal-header">
+												<span class="ecom-menu-collapse-close--mobile">
+													<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+												</span>
+											</div>
+											{% if menu and menu.links.size %}
+												{% for link in menu.links %}
+													{% assign child_link = link.links %}
+													<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} ">
+														<div class="ecom-menu_item ecom-items">
+															<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+																{{link.title}}
+																{%- if link.levels > 0 -%}
+																	<div class="ecom-element--menu_icon">
+																		<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																			
+																		</div>
+																		<div class="ecom-items--icon ecom-element--menu_icon--active">
+																			
+																		</div>
+																	</div>
+																{%- endif -%}
+															</a>
+														</div>
+														{% if child_link.size > 0 %}
+															<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+																{% for child in child_link %}
+																	{% assign grand_link = child.links %}
+																	<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %} {% if child.active or child.child_active%} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" >
+																		<div class="ecom-menu_item ecom-items">
+																			<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																				{{child.title}}
+																				{%- if child.levels > 0 -%}
+																					<div class="ecom-element--menu_icon">
+																						<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																							
+																						</div>
+																						<div class="ecom-items--icon ecom-element--menu_icon--active">
+																							
+																						</div>
+																					</div>
+																				{%- endif -%}
+																			</a>
+																		</div>
+																		{% if grand_link.size > 0 %}
+																			<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																				{% for grand in grand_link %}
+																					<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																						<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																							{{grand.title}}
+																						</a>
+																					</li>
+																				{% endfor %}
+																			</ul>
+																		{%- endif -%}
+																	</li>
+																{% endfor %}
+															</ul>
+														{% endif %}
+													</li>
+												{% endfor %}
+											{% endif %}
+										</ul>	
+									</div>
+								{%- endif -%}
+								<div class="ecom-shopify__menu-list--wrapper ecom-flex">
+									<ul class="ecom-shopify__menu-list" data-menu-layout="vertical">
+										{% if menu and menu.links.size %}
+											{% for link in menu.links %}
+												{% assign child_link = link.links %}
+												<li class="ecom-shopify__menu-item ecom-shopify__menu-item-type--{{link.type}} {% if child_link.size > 0 %}ecom-shopify__menu-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}">
+													<div class="ecom-menu_item ecom-items">
+														<a class="ecom-menu_title ecom-element--menu_title {% if link.active or link.child_active %} ecom-shopify__menu-item--active ecom-text-active {% endif %}" href="{{link.url}}" title="{{link.title | escape }}">
+															{{link.title}}
+															{%- if link.levels > 0 -%}
+																<div class="ecom-element--menu_icon">
+																	<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																		
+																	</div>
+																	<div class="ecom-items--icon ecom-element--menu_icon--active">
+																		
+																	</div>
+																</div>
+															{%- endif -%}
+														</a>
+													</div>
+													{% if child_link.size > 0 %}
+														{%- capture layout -%}
+															vertical
+														{%- endcapture -%}
+														<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{child_link.size}}" data-menu-level="{{child_link.level}}">
+															{% for child in child_link %}
+																{% assign grand_link = child.links %}
+																<li class="ecom-shopify__menu-child-link-item ecom-shopify__menu-child-link-item-type--{{child.type}} {% if grand_link.size > 0 %}ecom-shopify__menu-child-link-item--has-children {% else %} ecom-shopify__menu-item--link {% endif %}" >
+																	<div class="ecom-menu_item ecom-items">
+																		<a class="ecom-menu_title ecom-element--menu_title" href="{{child.url}}" title="{{child.title | escape }}">
+																			{{child.title}}
+																			{%- if child.levels > 0 -%}
+																				<div class="ecom-element--menu_icon">
+																					<div class="ecom-items--icon ecom-element--menu_icon--normal">
+																						
+																					</div>
+																					<div class="ecom-items--icon ecom-element--menu_icon--active">
+																						
+																					</div>
+																				</div>
+																			{%- endif -%}
+																		</a>
+																		{% if grand_link.size > 0 and layout == 'horizontal' %}
+																			{% for grand in grand_link %}
+																				<a class="ecom-menu_title ecom-element--menu_title {% if grand.active %} ecom-shopify__menu-child-link-item--active ecom-text-active{% endif %}" href="{{grand.url}}" title="{{grand.title | escape }}">
+																					{{grand.title}}
+																				</a>
+																			{% endfor %}
+																		{% endif %}
+																	</div>
+																	{% if grand_link.size > 0 and layout == 'vertical' %}
+																		<ul class="ecom-shopify__menu-sub-menu" data-menu-size="{{grand_link.size}}" data-menu-level="{{child_link.level}}">
+																			{% for grand in grand_link %}
+																				<li class="ecom-shopify__menu-grand-link-item ecom-menu_item ecom-items ecom-shopify__menu-grand-link-item-type--{{grand.type}} {% if grand.active or grand.child_active %}ecom-shopify__menu-grand-link-item--active ecom-text-active{% endif %}">
+																					<a class="ecom-menu_title ecom-element--menu_title" href="{{grand.url}}" title="{{grand.title | escape }}">
+																						{{grand.title}}
+																					</a>
+																				</li>
+																			{% endfor %}
+																		</ul>
+																	{%- endif -%}
+																</li>
+															{% endfor %}
+														</ul>
+													{% endif %}
+												</li>
+											{% endfor %}
+										{% endif %}
+									</ul>
+								</div>
+							{% else %}
+								<p>Select a menu to show</p>
+							{%- endunless -%}
+						</div></div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> <section class="ecom-row ecom-core ecom-section ecom-03vk8lxxr165" data-id="ecom-03vk8lxxr165" style="z-index: inherit;"><div data-deep="1" class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-1pjrvtti8a1"><div class="core__column--wrapper"><div class="core__blocks" index="0"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-7zj0boguxs5" data-core-is="row"><div class="ecom-row ecom-core core__block ecom-n9l902mvkp" data-id="ecom-n9l902mvkp" style="z-index: inherit;"><div data-deep="2" class="core__row--columns"><div class="ecom-column ecom-core core__column--first core__column--last ecom-2qt7gs1yjo9"><div class="core__column--wrapper"><div class="core__blocks" index="0"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-d1q01kvyu3a" data-core-is="block"><div class="ecom__element ecom-element element__divi" deep="2"><div class="ecom__element-divi"><div class="divi-line divi-style" style="display: block;"></div><div class="divi-cont" style="--divider-width: 100%; --divider-width-tablet: 100%; display: none;"><div class="divi-cont-before divi-style" style="display: block;"></div><div class="divi-cont-after divi-style" style="display: block;"></div></div></div></div></div> <div class="ecom-block ecom-core core__block elmspace ecom-nestgenip4q" data-core-is="block"><div class="ecom-row ecom-core core__block ecom-em4a7iguw7c" data-id="ecom-em4a7iguw7c" style="z-index: inherit;"><div data-deep="3" class="core__row--columns"><div class="ecom-column ecom-core core__column--first ecom-osix18gjhuk"><div class="core__column--wrapper"><div class="core__blocks" index="0"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-6qy87vd0krk" data-core-is="block"><div class="ecom__element ecom-element element__text" data-stopdrag="" deep="3"><div class="text-content ecom-html has-drop-cap-view-default">{{ 'sections.ecom-aop-footer-footer.textcontent_6qy87vd0krk_html' | t }}</div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> <div class="ecom-column ecom-core core__column--last ecom-ld9trmn2b69"><div class="core__column--wrapper"><div class="core__blocks" index="1"><div class="core__blocks--body"><div class="ecom-block ecom-core core__block elmspace ecom-3f08s7eqm26" data-core-is="block"><div class="ecom__element ecom-element element__social" deep="3"><div class="ecom__element-social custom" style="background-color: rgb(156, 163, 175);"><a alt="custom" class="element-social-link element-social-link__custom" target="_blank"><div class="social-icon"><span><svg version="1.1" id="lni_lni-facebook-filled" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" fill="currentColor"><path d="M47.4,25.8L47.4,25.8h-5.6h-2v-2v-6.2v-2h2H46c1.1,0,2-0.8,2-2V3c0-1.1-0.8-2-2-2h-7.3c-7.9,0-13.4,5.6-13.4,13.9v8.7v2h-2h-6.8c-1.4,0-2.7,1.1-2.7,2.7v7.2c0,1.4,1.1,2.7,2.7,2.7h6.6h2v2v20.1c0,1.4,1.1,2.7,2.7,2.7h9.4c0.6,0,1.1-0.3,1.5-0.7s0.7-1.1,0.7-1.7l0,0l0,0V40.3v-2h2.1H46c1.3,0,2.3-0.8,2.5-2v-0.1v-0.1l1.4-6.9c0.1-0.7,0-1.5-0.6-2.3C49.1,26.4,48.2,25.9,47.4,25.8z"></path></svg></span></div></a></div><div class="ecom__element-social custom" style="background-color: rgb(156, 163, 175);"><a alt="custom" class="element-social-link element-social-link__custom" target="_blank"><div class="social-icon"><span><svg version="1.1" id="lni_lni-instagram-filled" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" fill="currentColor"><g><ellipse cx="32.1" cy="32" rx="11.6" ry="11.6"></ellipse><path d="M44.7,1H19.3C9.2,1,1,9.2,1,19.3v25.2C1,54.8,9.2,63,19.3,63h25.2C54.8,63,63,54.8,63,44.7V19.3C63,9.2,54.8,1,44.7,1z M32.1,47.2c-8.5,0-15.2-6.9-15.2-15.2s6.8-15.2,15.2-15.2c8.3,0,15.1,6.9,15.1,15.2S40.5,47.2,32.1,47.2z M53.1,18.2c-1,1.1-2.5,1.7-4.2,1.7c-1.5,0-3-0.6-4.2-1.7C43.6,17.1,43,15.7,43,14s0.6-3,1.7-4.2C45.8,8.6,47.2,8,48.9,8c1.5,0,3.1,0.6,4.2,1.7c1,1.3,1.7,2.8,1.7,4.4C54.7,15.7,54.1,17.1,53.1,18.2z"></path><path d="M49,11.6c-1.3,0-2.4,1.1-2.4,2.4s1.1,2.4,2.4,2.4c1.3,0,2.4-1.1,2.4-2.4S50.4,11.6,49,11.6z"></path></g></svg></span></div></a></div><div class="ecom__element-social custom" style="background-color: rgb(156, 163, 175);"><a alt="custom" class="element-social-link element-social-link__custom" target="_blank"><div class="social-icon"><span><svg version="1.1" id="lni_lni-youtube" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 64 64" style="enable-background:new 0 0 64 64;" xml:space="preserve" fill="currentColor"><path d="M61.7,17.1c-0.7-2.7-2.8-4.8-5.5-5.5C51.4,10.3,32,10.3,32,10.3s-19.4,0-24.2,1.3c-2.7,0.7-4.8,2.8-5.5,5.5C1,22,1,32,1,32s0,10.1,1.3,14.9c0.7,2.7,2.8,4.8,5.5,5.5c4.8,1.3,24.2,1.3,24.2,1.3s19.4,0,24.2-1.3c2.7-0.7,4.8-2.8,5.5-5.5C63,42.1,63,32,63,32S63,22,61.7,17.1z M25.8,41.3V22.7L41.9,32L25.8,41.3z"></path></svg></span></div></a></div></div></div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></div> </div> </div></div></div><div class="ecom-column__overlay"><div class="ecom-overlay"></div></div></div> </div><div class="ecom-section__overlay"><div class="ecom-overlay"></div></div></section> 
+</div></div>
+{% schema %}
+{
+ "name": "Aop Footer",
+ "locales": {
+ "en": {
+ "submit_title_810jbiezlfd_html": " ",
+ "xv055fd443333722020221222030199203143434_810jbiezlfd_html": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 512 512\" fill=\"currentColor\"><path d=\"M335 408.1C330.3 404.3 328 398.2 328 392s2.344-12.28 7.031-16.97L430.1 280H24C10.75 280 0 269.2 0 255.1C0 242.7 10.75 232 24 232h406.1l-95.03-95.03c-9.375-9.375-9.375-24.56 0-33.94s24.56-9.375 33.94 0l136 136c9.375 9.375 9.375 24.56 0 33.94l-136 136C359.6 418.3 344.4 418.3 335 408.1z\"><\/path><\/svg>",
+ "success_message_810jbiezlfd_html": "Subscribed successfully!",
+ "error_title_810jbiezlfd_html": "Opps!. An error has occurred",
+ "error_already_810jbiezlfd_html": "Email have already subscribed!",
+ "headingtext_gy4ouzcoq6_html": "<div>Subscribe&nbsp;<span style=\"letter-spacing: 0px;\">to <br>Our Mailing List<\/span><\/div>",
+ "textcontent_4ltum84i96c_html": "By submitting, you agree to our Privacy Policy and consent to receive marketing communications.<div><\/div>",
+ "headingtext_udm6m45iwnp_html": "Products",
+ "headingtext_k2jjv6xm7v_html": "<h3 class=\"ecom__heading ecom-db\" spellcheck=\"false\" style=\"font-size: 14px; letter-spacing: 0.5px; font-family: &quot;Open Sans&quot;, sans-serif; text-transform: uppercase; outline: none !important; box-shadow: none !important;\">Customers<\/h3>",
+ "headingtext_otclijkx9b_html": "<h3 class=\"ecom__heading ecom-db\" spellcheck=\"false\" style=\"font-size: 14px; letter-spacing: 0.5px; font-family: &quot;Open Sans&quot;, sans-serif; text-transform: uppercase; outline: none !important; box-shadow: none !important;\">Resources<\/h3>",
+ "textcontent_6qy87vd0krk_html": "\u00a92023 AOP. All rights reserved. <a href=\"#\"><u>Privacy Policy<\/u><\/a> | <a href=\"#\"><u>Terms<\/u><\/a>"
+ }
+ },
+ "settings": [
+ {
+ "type": "header",
+ "content": "The section was generated by [Ecomposer](https:\/\/ecomposer.io).",
+ "info": "\n EComposer is a Visual Page Builder app on Shopify AppStore.\n It provides 100+ pre-built templates in library,\n so you can build unlimited pages that you can imagine with it.\n "
+ },
+ {
+ "type": "header",
+ "content": "[EDIT WITH EComposer APP \u2192](https:\/\/ecomposer.app\/shop\/builder?page=footer&id=65656e4e91d37fe67403f144&utm_source=theme-customize)",
+ "info": "(*You must install the app to start editing this section [Learn more](https:\/\/help.ecomposer.io\/docs\/getting-started\/installation\/))"
+ }
+ ]
+}
+{% endschema %}

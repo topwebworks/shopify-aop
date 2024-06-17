@@ -1,0 +1,139 @@
+<div class="il-forms">
+  <div class="t4s-container">
+    <div class="il-form-wrapper">
+      <div class="il-form-row {% if section.settings.pos_form == 'reverse' %}reverse-form{% endif %}">
+        {% if section.settings.formhtml != blank %}
+        <div class="il-form-col left {% if section.settings.formtextcolor == 'light' %}light-color {% endif %}">
+          {{ section.settings.formhtml }}
+        </div>
+          {% endif %}
+          {%- if section.settings.sub_heading != blank or section.settings.heading != blank or section.settings.text != blank or section.settings.button_link != blank and section.settings.button_label != blank  -%}
+         <div class="il-form-col right {% if section.settings.formtextcolor == 'light' %}light-color {% endif %}">
+               {%- if section.settings.sub_heading != blank -%}<p class="t4s-form-text-subheading">{{ section.settings.sub_heading }}</p>{%- endif -%}
+                        {%- if section.settings.heading != blank -%}<h2 class="t4s-form-text-heading" >{{ section.settings.heading }}</h2>{%- endif -%}
+                        {%- if section.settings.text -%}<div class="t4s-form-text-des t4s-rte">{{ section.settings.text }}</div>{%- endif -%}
+                        {%- if section.settings.button_link != blank and section.settings.button_label != blank -%}
+                        {%- assign use_button = true -%}
+                            <a class="t4s-btn-custom  {% if section.settings.button == 'primary' %}t4s-btn-style-primary{% else %} t4s-btn-style-outline t4s-btn-color-dark {% endif %} t4s-btn-effect-fade" href="{{ section.settings.button_link }}" >{{ section.settings.button_label }}</a>
+                        {%- endif -%}
+        </div>
+            {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+#shopify-section-{{section.id}} .il-forms {
+background-image:url({{section.settings.bgimage | img_url:'1920x'}});
+}
+  #shopify-section-{{section.id}} .il-form-col.right.light-color * ,   #shopify-section-{{section.id}} .il-form-col.left.light-color *{
+  color:#fff;
+  }
+ #shopify-section-{{section.id}} .il-form-col.left.light-color .two-col-form .lead-form-input-container input {
+  border-color:#fff;
+      color: #fff;
+  }
+   #shopify-section-{{section.id}} .il-form-col.left.light-color .two-col-form .lead-form-input-container input::-ms-input-placeholder { /* Edge 12-18 */
+  color: #fff;
+}
+
+ #shopify-section-{{section.id}} .il-form-col.left.light-color .two-col-form .lead-form-input-container input::placeholder {
+  color: #fff;
+}
+  {% if section.settings.mbbgimage != blank %}
+  @media(max-width:767px)
+  {
+#shopify-section-{{section.id}} .il-forms {
+background-image:url({{section.settings.mbbgimage | img_url:'1920x'}});
+}
+  }
+    {% endif %}
+</style>
+{% schema %}
+  {
+    "name": "IL-Forms",
+    "settings": [
+              {
+            "type": "select",
+            "id": "pos_form",
+            "label": "Position Form",
+            "default": "default",
+            "options": [
+                { "value": "default","label": "Default" },
+                { "value": "reverse","label": "Reverse" }
+            ]
+        },
+       {
+          "type": "image_picker",
+          "id": "bgimage",
+          "label": "Background image"
+       },
+             {
+          "type": "image_picker",
+          "id": "mbbgimage",
+          "label": "Mobile Background image"
+       },
+                  {
+                "type": "text",
+                "id": "sub_heading",
+                "label": "Sub heading"
+            },
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading",
+                "default": "Image with text"
+            },
+            {
+                "type": "richtext",
+                "id": "text",
+                "label": "Text",
+                "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+            },
+            {
+                "type": "text",
+                "id": "button_label",
+                "label": "Button label",
+                "info":"If set blank will not show",
+                "default": "Button label"
+            },
+            {
+                "type": "url",
+                "id": "button_link",
+                "label": "Button link",
+                "info":"If set blank will not show"
+            },
+                  {
+                "type": "html",
+                "id": "formhtml",
+                "label": "Form Html"
+            },
+      {
+            "type": "select",
+            "id": "button",
+            "label": "Button ",
+            "default": "primary",
+            "options": [
+                { "value": "primary","label": "primary" },
+                { "value": "secondary","label": "secondary" }
+            ]
+        },
+            {
+            "type": "select",
+            "id": "formtextcolor",
+            "label": "Form Text Color ",
+            "default": "dark",
+            "options": [
+                { "value": "light","label": "light" },
+                { "value": "dark","label": "dark" }
+            ]
+        }
+    ],
+        "presets": [
+        {
+            "category": "text",
+            "name":"IL-Forms"
+        }
+    ]
+  }
+{% endschema %}

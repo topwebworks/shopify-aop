@@ -1,0 +1,144 @@
+{{ 'shipping.css' | asset_url | stylesheet_tag }}
+<div class="t4s-shipping ia-shipping t4s-shipping-multiple">
+<div class="t4s-section-inner">
+<div class="t4s-container">
+{% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+{% assign found_a_collection = false %}
+{% for c in product.collections %}
+  {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+    {% assign found_a_collection = true %}
+    {% assign collection = c %}
+  {% endif %}
+{% endfor %}
+{% endif %}
+{% if collection.metafields.custom.highlight_1_icon != blank or collection.metafields.custom.highlight_2_icon != blank or collection.metafields.custom.highlight_3_icon != blank or collection.metafields.custom.highlight_4_icon != blank or collection.metafields.custom.featured_image != blank%}
+<div class="image-shipping-block">
+{% if collection.metafields.custom.highlight_1_icon != blank or collection.metafields.custom.highlight_2_icon != blank or collection.metafields.custom.highlight_3_icon != blank or collection.metafields.custom.highlight_4_icon != blank %}
+      <div class="t4s-shipping-list t4s-row t4s-row-cols-lg-1 t4s-row-cols-md-1 t4s-row-cols-1"  >
+         {% if collection.metafields.custom.highlight_1_icon != blank %}
+          <div class="t4s-shipping t4s-shipping-item t4s-col-item">
+            <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+                  <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" style="background-image:url({{ collection.metafields.custom.highlight_1_icon | img_url: "large" }});">
+                    <img src="{{ collection.metafields.custom.highlight_1_icon | img_url: "master" }}">
+                  </div>
+              <div class="t4s-col t4s-shipping-content">
+                <h3 class="t4s-shipping-title">{{ collection.metafields.custom.highlight_1_title }}</h3>
+                <div class="t4s-shipping-des t4s-rte--list"><p>{{ collection.metafields.custom.highlight_1_text }}</p></div>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+   {% if collection.metafields.custom.highlight_2_icon != blank %}
+                  <div class="t4s-shipping t4s-shipping-item t4s-col-item">
+            <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+                  <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" style="background-image:url({{ collection.metafields.custom.highlight_2_icon | img_url: "large" }});">
+                <img src="{{ collection.metafields.custom.highlight_2_icon | img_url: "master" }}">
+                  </div>
+              <div class="t4s-col t4s-shipping-content">
+                 <h3 class="t4s-shipping-title">{{ collection.metafields.custom.highlight_2_title }}</h3>
+                <div class="t4s-shipping-des t4s-rte--list"><p>{{ collection.metafields.custom.highlight_2_text }}</p></div>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+  {% if collection.metafields.custom.highlight_3_icon != blank %}
+                  <div class="t4s-shipping t4s-shipping-item t4s-col-item">
+            <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+                  <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" style="background-image:url({{ collection.metafields.custom.highlight_3_icon | img_url: "large" }});">
+                    <img src="{{ collection.metafields.custom.highlight_3_icon | img_url: "master" }}">
+                  </div>
+              <div class="t4s-col t4s-shipping-content">
+                <h3 class="t4s-shipping-title">{{ collection.metafields.custom.highlight_3_title }}</h3>
+                <div class="t4s-shipping-des t4s-rte--list"><p>{{ collection.metafields.custom.highlight_3_text }}</p></div>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+   {% if collection.metafields.custom.highlight_4_icon != blank %}
+                  <div class="t4s-shipping t4s-shipping-item t4s-col-item">
+            <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+                  <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" style="background-image:url({{ collection.metafields.custom.highlight_4_icon | img_url: "large" }});">
+                    <img src="{{ collection.metafields.custom.highlight_4_icon | img_url: "master" }}">
+                  </div>
+              <div class="t4s-col t4s-shipping-content">
+                <h3 class="t4s-shipping-title">{{ collection.metafields.custom.highlight_4_title }}</h3>
+                <div class="t4s-shipping-des t4s-rte--list"><p>{{ collection.metafields.custom.highlight_4_text }}</p></div>
+              </div>
+            </div>
+        </div>
+         {% endif %}
+  </div>
+  {% endif %}
+{% if collection.metafields.custom.featured_image != blank %}
+<div class="shipping-block-image">
+  <img src="{{ collection.metafields.custom.featured_image | img_url: "master" }}" class="desk-img">
+  <div class="shipping-block-rank">
+        <ul>
+          <li style="top:13%;left:24%;"><span class="rank"><span>{{ section.settings.number_1 }}</span></span></li>
+          <li style="top:22%;left:50%;"><span class="rank"><span>{{ section.settings.number_2 }}</span></span></li>
+          <li style="top:61%;left:34%;"><span class="rank"><span>{{ section.settings.number_3 }}</span></span></li>
+          <li style="top:74%;left:78%;"><span class="rank"><span>{{ section.settings.number_4 }}</span></span></li>
+        </ul>
+      </div>
+</div>  
+{% endif %}
+</div>
+{% endif %}
+</div>
+</div>
+</div>
+{% schema %}
+  {
+    "name": "Collection Icon Details",
+    "settings": [
+      {
+            "type": "range",
+            "label": "Number 1",
+            "id": "number_1",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "default": 1
+        },
+      {
+            "type": "range",
+            "label": "Number 2",
+            "id": "number_2",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "default": 2
+        },
+      {
+            "type": "range",
+            "label": "Number 3",
+            "id": "number_3",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "default": 3
+        },
+      {
+            "type": "range",
+            "label": "Number 4",
+            "id": "number_4",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "default": 4
+        }
+    ],
+    "presets": [
+      {
+        "name": "Icon Text and Title",
+        "category": "Collectionpage"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

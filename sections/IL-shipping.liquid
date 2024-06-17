@@ -1,0 +1,106 @@
+<!-- sections/shipping.liquid -->
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'shipping.css' | asset_url | stylesheet_tag }}
+{{ 'slider-settings.css' | asset_url | stylesheet_tag }}
+{{ 'pre_flickityt4s.min.css' | asset_url | stylesheet_tag }}
+<link href="{{ 't4s-animation.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- liquid
+  assign sid = section.id
+  assign se_stts = section.settings
+  assign se_blocks = section.blocks
+  assign stt_layout = se_stts.layout
+  if stt_layout == 't4s-se-container' 
+    assign html_layout = '<div class="t4s-container">__</div></div>' | split: '__'
+  elsif stt_layout == 't4s-container-wrap'
+    assign html_layout = '<div class="t4s-container">__</div>' | split: '__'
+  else
+    assign html_layout = '__' | split: '__'
+  endif
+
+  assign t4s_se_class = 't4s_nt_se_' | append: sid
+  if se_stts.use_cus_css and se_stts.code_cus_css != blank
+    render 'se_cus_css', code_cus_css: se_stts.code_cus_css, t4s_se_class: t4s_se_class
+  endif 
+
+  assign cl_ic_lightness  = se_stts.cl_ic | color_extract: 'lightness'
+  if cl_ic_lightness < 85
+    assign cl_ic2 = "#ffffff"
+  else 
+      assign cl_ic2 = "#222222"
+  endif
+ -%} 
+<div class="t4s-section-inner t4s_nt_se_{{ sid }} t4s_se_{{ sid }} t4s-container-wrap "  {% render 'section_style', se_stts: se_stts -%} >
+    {{- html_layout[0] -}}
+    <div class="t4s-container">
+      <div class="t4s-shipping-list t4s-row t4s-row-cols-lg-4 t4s-row-cols-md-2 t4s-row-cols-1"  data-flickityt4s-js='{"watchCSS":1,"setPrevNextButtons":false,"arrowIcon":"1","imagesLoaded": 0,"adaptiveHeight": 0, "contain": 1, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": false,"prevNextButtons": false,"percentPosition": 1,"pageDots": true, "autoPlay" : false, "pauseAutoPlayOnHover" : true }'>
+      {%- if section.blocks.size > 0 -%}
+        {%- for block in section.blocks -%}
+          {%- assign bk_stts = block.settings -%}
+          {%- assign image = bk_stts.image_icon -%}
+            <div class="t4s-shipping t4s-shipping-item t4s-col-item">
+              <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+                  {%- if image != blank -%}
+                    <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" data-bgset="{{ image | image_url: width: 1 }}" data-sizes="auto"  data-optimumx="2">
+                    <img src="{{  image | img_url:'master' }}" alt="{{image.alt}}">
+                    </div>
+                  {%- endif -%}
+                <div class="t4s-col t4s-shipping-content">
+                  <h3 class="t4s-shipping-title">{{ bk_stts.title }}</h3>
+                  <div class="t4s-shipping-des t4s-rte--list">{{ bk_stts.text }}</div>
+                  <div class="t4s-shipping-des t4s-rte--list">{{ bk_stts.html }}</div>
+                </div>
+              </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+    </div>
+    {{- html_layout[1] -}}
+</div> 
+{%- schema -%}
+  {
+    "name": "IL-Shipping",
+    "tag": "section",
+    "class": "t4s-section t4s-section-all t4s_tp_cdt t4s-shipping t4s_bk_flickity ia-shipping",
+    "settings": [
+    ],
+    "blocks": [
+      {
+        "type": "shipping",
+        "name": "Shipping",
+        "settings": [
+          {
+             "type": "image_picker",
+             "id": "image_icon",
+             "label": "Choose image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Add a heading"
+          },
+          {
+             "type": "richtext",
+             "id": "text",
+             "label": "Text",
+             "default": "<p>Use this text to describe.<\/p>"
+          },
+          {
+             "type": "textarea",
+             "id": "html",
+             "label": "HTML"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "IL-Shipping",
+        "category": "Homepage",
+        "blocks": [
+        ]
+      }
+    ]
+  }
+{% endschema %}

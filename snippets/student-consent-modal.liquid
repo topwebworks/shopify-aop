@@ -1,0 +1,157 @@
+{{ 'customer.min.css' | asset_url | stylesheet_tag }}
+{{ 'button-style.css' | asset_url | stylesheet_tag }}
+<!-- add show-popup class on body and html -->
+<div class="t4s-close-overlay t4s-op-0 student_cancel"></div>
+<!-- add open is--visible shadow -->
+<div id="t4s-consest-modal" class="t4s-drawer t4s-popup-show consent-modal  t4s-drawer__right" aria-hidden="true">
+   <!-- add open class for open -->
+   <div class="provide-consent-form" style="display:block;">
+      <div class="t4s-drawer__header">
+        {% if settings.coppa_consent_title != blank %}
+         <h2>{{ settings.coppa_consent_title }}</h2>
+        {% endif %}
+         <button class="t4s-drawer__close student_cancel" data-drawer-close="" aria-label="Close sidebar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="m7.114 7.822-5.246 5.246a.505.505 0 0 1-.344.15.467.467 0 0 1-.364-.15.491.491 0 0 1-.16-.354c0-.13.053-.247.16-.354l5.246-5.246L1.16 1.868a.505.505 0 0 1-.15-.344.467.467 0 0 1 .15-.364.491.491 0 0 1 .354-.16c.13 0 .247.053.354.16l5.246 5.246L12.36 1.16a.505.505 0 0 1 .344-.15.467.467 0 0 1 .364.15c.107.107.16.225.16.354 0 .13-.053.247-.16.354L7.822 7.114l5.246 5.246a.505.505 0 0 1 .15.344.467.467 0 0 1-.15.364.491.491 0 0 1-.354.16.491.491 0 0 1-.354-.16L7.114 7.822z" fill="currentColor" stroke="currentColor" stroke-width=".25"></path>
+            </svg>
+         </button>
+      </div>
+     {% if settings.coppa_consent_content != blank %}
+      <div class="t4s-drawer__content">
+        {{ settings.coppa_consent_content }}
+      </div>
+       {% endif %}
+      <button class="login-btn t4s-btn provide_consent">Provide Consent</button>
+   </div>
+ <div class="new-student-detail-form" style="display:none;">
+    <div class="t4s-drawer__content-new">
+               <div class="add-student-header">
+                 <h2>Add a New Student</h2>
+                 <p>Students are easy to add and remove at any time from the Account section.</p>
+               </div>
+      <div class="add-student-form t4s-customer">
+        <form id="Addstudentform">
+       <div class="t4s_field t4s-pr t4s_mb_10">      
+      <input class="t4s_frm_input" 
+        type="text"
+        name="customer[firstname]"
+        id="firstname"
+        autocomplete="given-name"
+        placeholder="First Name"
+      >
+      <label for="firstname">
+        First Name <span class="required">*</span>
+      </label>
+    </div>
+                 <div class="t4s_field t4s-pr t4s_mb_10">      
+      <input class="t4s_frm_input" 
+        type="text"
+        name="customer[lastname]"
+        id="lastname"
+        autocomplete="given-name"
+        placeholder="Last Name"
+      >
+      <label for="lastname">
+        Last Name <span class="required">*</span>
+      </label>
+    </div>
+          <div class="t4s_field t4s-pr t4s_mb_10 username_error">      
+      <input class="t4s_frm_input" 
+        type="text"
+        name="customer[username]"
+        id="username"
+        autocomplete="given-name"
+        placeholder="User Name"
+      >
+      <label for="username">
+        Username <span class="required">*</span>
+      </label>
+    </div>
+          <span class="student_error"></span>
+          <div class="t4s_field t4s-pr t4s_mb_10">          
+                    <input class="t4s_frm_input" 
+                      type="password"
+                      value=""
+                      name="customer[password]"
+                      id="CustomerPassword"
+                      autocomplete="current-password"
+                      {% if form.errors contains 'form' %}
+                        aria-invalid="true"
+                      {% endif %}
+                      placeholder="Password"
+                    required>
+                    <label for="CustomerPassword">
+                      Password <span class="required">*</span>
+                    </label>
+                  <span class="show-password">
+                    <img class="default-state" src="https://cdn.shopify.com/s/files/1/0631/1473/9875/files/View_Password___Default.png?v=1703760099">
+                    <img class="active-state" src="https://cdn.shopify.com/s/files/1/0631/1473/9875/files/View_Password___Variant2.png?v=1703760101">
+                  </span>
+                     <span class="error_msg pass"></span>
+                  </div>
+          <span class="password-note-text">(Password must be at least 8 characters long.)</span>
+              <div class="t4s_field t4s-pr t4s_mb_10">          
+                    <input class="t4s_frm_input" 
+                      type="password"
+                      value=""
+                      name="customer[password]"
+                      id="CustomerRecoverPassword"
+                      autocomplete="current-password"
+                      {% if form.errors contains 'form' %}
+                        aria-invalid="true"
+                      {% endif %}
+                      placeholder="Retype Password"
+                    required>
+                    <label for="CustomerRecoverPassword">
+                      Retype Password <span class="required">*</span>
+                    </label>
+                  <span class="show-password">
+                    <img class="default-state" src="https://cdn.shopify.com/s/files/1/0631/1473/9875/files/View_Password___Default.png?v=1703760099">
+                    <img class="active-state" src="https://cdn.shopify.com/s/files/1/0631/1473/9875/files/View_Password___Variant2.png?v=1703760101">
+                  </span>
+                     <span class="error_msg pass "></span>
+                  </div>
+          <div class="t4s_field t4s-pr t4s_mb_10 student-top">
+         
+          <button class="t4s_btn_submmit t4s-btn-custom   t4s-btn-full-width t4s-btn-style-primary AddStudentCustom "> <span class="stydent-meta-loader"></span>Add Student</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    </div>
+   <div class="student-added-form-detail" style="display:none;">
+      <div class="t4s-drawer__header">
+         <button class="t4s-drawer__close" data-drawer-close="" aria-label="Close sidebar">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="m7.114 7.822-5.246 5.246a.505.505 0 0 1-.344.15.467.467 0 0 1-.364-.15.491.491 0 0 1-.16-.354c0-.13.053-.247.16-.354l5.246-5.246L1.16 1.868a.505.505 0 0 1-.15-.344.467.467 0 0 1 .15-.364.491.491 0 0 1 .354-.16c.13 0 .247.053.354.16l5.246 5.246L12.36 1.16a.505.505 0 0 1 .344-.15.467.467 0 0 1 .364.15c.107.107.16.225.16.354 0 .13-.053.247-.16.354L7.822 7.114l5.246 5.246a.505.505 0 0 1 .15.344.467.467 0 0 1-.15.364.491.491 0 0 1-.354.16.491.491 0 0 1-.354-.16L7.114 7.822z" fill="currentColor" stroke="currentColor" stroke-width=".25"></path>
+            </svg>
+         </button>
+      </div>
+      <div class="t4s-drawer__content-new">
+         <div class="t4s-drawer__main">
+           <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#1j8m5e5tba)">
+        <path d="M13.5 26a13 13 0 1 1 0-26 13 13 0 0 1 0 26zm-2.6-6.5L22.6 8.45 20.65 6.5l-9.75 9.1-4.55-4.55L4.4 13l6.5 6.5z" fill="#5D9411"/>
+    </g>
+    <defs>
+        <clipPath id="1j8m5e5tba">
+            <path fill="#fff" transform="translate(.5)" d="M0 0h26v26H0z"/>
+        </clipPath>
+    </defs>
+</svg>
+<h2>Student Added</h2>
+              <p>You may complete your purchase now, or add additional students.</p>
+              <button class="t4s-btn-custom t4s-btn-style-primary">Add Another Student</button>
+              <span class="done-text student_cancel">I’m all done!</span>
+           </div>
+      </div>
+   </div>
+</div>
+</div>
+<script>
+  $(".student-added-form-detail .t4s-btn-custom.t4s-btn-style-primary").click(function(){
+    $(".provide-consent-form").show();
+    $(".new-student-detail-form").hide();
+    $(".student-added-form-detail").hide();
+  })
+</script>

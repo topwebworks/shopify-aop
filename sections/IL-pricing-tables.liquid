@@ -1,0 +1,250 @@
+<!-- sections/price-tables.liquid -->
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'price-tables.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sid = section.id
+  assign se_stts = section.settings
+  assign se_blocks = section.blocks
+ -%} 
+<div class="t4s-section-inner t4s_nt_se_{{ sid }} t4s_se_{{ sid }} t4s-se-container" >
+    {{- html_layout[0] -}}
+<div class="t4s-container">
+  <div class="t4s-container-inner">
+    {%- render 'section_tophead', se_stts: se_stts -%}
+    <div class="t4s-price-tables-list t4s-text-center t4s-row t4s-row-cols-lg-{{se_stts.col_dk}} t4s-row-cols-md-2 t4s-row-cols-1">
+      {%- if se_blocks.size > 0 -%}
+        {%- for block in se_blocks -%}
+          {%- assign bk_stts = block.settings -%}
+          {%- assign array_txt = bk_stts.txt | newline_to_br | split: '<br />' -%}
+            <div class="t4s-price-tables rank-{{forloop.index}} t4s-price-tables-item t4s-col-item t4s-price-tables-style-5 t4s-item-highlights-true" style="--item-cl: {{ bk_stts.item_cl }};">
+              <div class="t4s-price-tables-inner" timeline hdt-reveal="slide-in">
+                <div class="t4s-price-tables-wrap">
+                  <div class="t4s-price-tables-head t4s-pr t4s-oh" >
+                         {% if bk_stts.icon != blank %}      
+               <div class="t4s-price-icon">
+                 <img src="{{ bk_stts.icon | img_url:'148x'}}" alt="{{bk_stts.icon.alt}}">
+                </div>
+                {% endif %}
+               {%- if bk_stts.des != blank -%}
+                      <p class="t4s-price-tables-des">{{ bk_stts.des }}</p>
+                    {%- endif -%}
+        {% if bk_stts.pricetext != blank or  bk_stts.savepricetext != blank %}
+                  <div class="pricetable-price-block">
+        {% if bk_stts.pricetext != blank %}
+                          <div class="price-text">
+                             <h3>{{ bk_stts.pricetext }}</h3>
+                         </div>
+                  {% endif %}
+                 {% if bk_stts.savepricetext != blank %}
+                          <div class="save-price-text">
+                             <h4>{{ bk_stts.savepricetext }}</h4>
+                         </div>
+                  {% endif %}
+                  </div>
+          {% endif %}
+                            {%- if bk_stts.button_text != blank and bk_stts.button_link != blank -%}
+                    {{ 'button-style.css' | asset_url | stylesheet_tag }}
+                    <link href="{{ 'custom-effect.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+                    <div class="t4s-price-tables-footer">
+                      <a href="{{ bk_stts.button_link }}" class="t4s-price-tables-btn t4s-btn-custom t4s-button t4s-btn-style-primary t4s-btn-effect-default">{{ bk_stts.button_text }}</a>
+                    </div>
+                  {%- endif -%}
+                  </div>
+                  {%- if array_txt != blank -%}
+                    {%- assign item_size = array_txt.size | minus: 1 -%}
+                    <ul class="t4s-price-tables-content">
+                      {%- for i in (0.. item_size) -%}
+                        {%- if array_txt[i] contains '??' -%}
+                          {%- assign array_txt2 = array_txt[i] | split: '??' -%}
+                          <li class="t4s-price-tables-item{% if array_txt[i] contains '--' %} t4s-blur-text{% endif %}" data-tooltip="top" data-t4s-tooltip="{{ array_txt2[1] }}">
+                            {{ array_txt2[0] | remove: '--' }} <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+                               width="300.000000pt" height="300.000000pt" viewBox="0 0 300.000000 300.000000"
+                               preserveAspectRatio="xMidYMid meet">
+                              
+                              <g transform="translate(0.000000,300.000000) scale(0.050000,-0.050000)"
+                              fill="#000000" stroke="none">
+                              <path d="M2760 5991 c-16 -4 -111 -18 -210 -32 -1577 -211 -2746 -1766 -2520
+                              -3353 92 -646 482 -1476 651 -1385 55 29 48 95 -22 199 -1264 1875 75 4387
+                              2341 4390 2362 2 3679 -2721 2209 -4570 -894 -1125 -2538 -1394 -3739 -612
+                              -184 120 -143 130 -714 -179 -667 -362 -669 -361 -386 162 200 371 208 396
+                              135 444 -63 42 -91 4 -317 -415 -226 -421 -233 -484 -70 -594 103 -70 148 -59
+                              472 116 165 90 390 211 501 270 l200 107 90 -61 c1068 -723 2617 -603 3606
+                              281 1846 1649 1031 4671 -1397 5180 -183 39 -742 73 -830 52z"/>
+                              <path d="M2765 5200 c-562 -119 -998 -602 -1039 -1151 -24 -311 91 -474 336
+                              -474 202 0 320 126 355 381 88 638 863 775 1154 204 149 -293 -5 -645 -358
+                              -818 -398 -196 -539 -445 -541 -956 -2 -316 14 -364 114 -339 l50 13 8 315
+                              c11 476 105 639 475 825 511 256 639 840 271 1237 -460 497 -1281 222 -1344
+                              -451 -30 -322 -362 -345 -352 -25 24 843 972 1362 1696 929 778 -466 734
+                              -1597 -76 -1989 -278 -135 -314 -195 -314 -523 0 -295 -21 -333 -215 -388 -68
+                              -19 -64 -125 6 -142 226 -57 369 117 369 452 0 312 11 333 243 452 896 462
+                              968 1701 131 2255 -259 171 -679 255 -969 193z"/>
+                              <path d="M2910 1450 c-385 -136 -265 -699 141 -666 378 32 425 575 59 674 -99
+                              27 -102 27 -200 -8z m232 -208 c65 -66 72 -117 29 -201 -61 -117 -242 -115
+                              -303 3 -92 179 131 340 274 198z"/>
+                              </g>
+                              </svg>
+                          </li>
+                        {% else %}
+                          <li class="t4s-price-tables-item{% if array_txt[i] contains '--' %} t4s-blur-text{% endif %}">
+                            {{ array_txt[i] | remove: '--' }} 
+                          </li>
+                        {% endif %}
+                     
+                      {% endfor %}
+                    </ul>
+                  {%- endif -%}
+                </div>
+              </div>
+   <style>
+.t4s-price-tables-item.t4s-item-highlights-true.rank-{{forloop.index}} .t4s-price-tables-inner {
+  border-color:{{bk_stts.item_cl}};
+}
+.t4s-price-tables-item.rank-{{forloop.index}} .t4s-price-tables-footer .t4s-btn-custom {
+  border-color:{{bk_stts.item_cl}} !important;
+  background-color: {{bk_stts.item_cl}} !important;
+  color:{{bk_stts.item_cl_color}};
+ }
+</style>
+          </div>
+                              
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+      {% if section.settings.price_note != blank %}
+      <span class="price-note">{{section.settings.price_note}}</span>
+      {% endif %}
+      </div> 
+                                </div> 
+    {{- html_layout[1] -}}
+ </div>
+
+{%- schema -%}
+  {
+    "name": "IL-Price tables",
+    "tag": "section",
+    "class": "t4s-section t4s-section-all t4s_tp_cdt t4s-price-tables ia-price-tables",
+    "settings": [
+            {
+        "type": "select",
+        "id": "col_dk",
+        "label": "Items per row",
+        "default": "3",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ]
+      },
+      {
+          "type": "text",
+          "id": "top_heading",
+          "label": "+ Heading",
+          "default": "Pricing tables"
+      },
+      {
+          "type": "textarea",
+          "id": "top_subheading",
+          "label": "+ Subheading"
+      },
+      {
+          "type": "text",
+          "id": "price_note",
+          "label": "Price Note"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "package",
+        "name": "Package",
+        "settings": [
+                    {
+             "type": "image_picker",
+             "id": "icon",
+             "label": "Icon Name"
+          },
+         {
+             "type": "text",
+             "id": "pricetext",
+             "label": "Price Text"
+          },
+                   {
+             "type": "text",
+             "id": "savepricetext",
+             "label": "Save Price Text"
+          },
+          {
+             "type": "number",
+             "id": "price",
+             "label": "Price",
+             "default": 99
+          },
+          {
+             "type": "textarea",
+             "id": "des",
+             "label": "Description",
+             "default": "Enter description here..."
+          },
+          {
+            "type": "textarea",
+            "id": "txt",
+            "label": "Content",
+            "info": "Each rule must be in its own line. Use '??: ' to write content tooltip. Use '--' to write strikethrough text",
+            "default": "Enter text here...\n Enter text here..??[Tooltip here]\nStrikethrough text--"
+          },
+          {
+              "type":"text",
+              "id":"button_text",
+              "label":"Button label",
+              "default":"By now",
+              "info":"If set blank will not show"
+          },
+          {
+              "type":"url",
+              "id":"button_link",
+              "label":"Button link",
+              "info":"If set blank will not show"
+          },
+          {
+            "type": "color",
+            "id": "item_cl",
+            "label": "Background / border item color",
+            "default": "#28A77F"
+          },
+         {
+            "type": "color",
+            "id": "item_cl_color",
+            "label": "Button Color",
+            "default": "#28A77F"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "IL-Price tables",
+        "category": "Homepage"
+      }
+    ]
+  }
+{% endschema %}

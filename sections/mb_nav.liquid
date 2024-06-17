@@ -1,0 +1,523 @@
+{%- liquid
+assign only_icon = 't4s-only_icon_' | append: settings.only_icon
+assign routes_search_url = routes.search_url
+assign root_url = routes.root_url
+assign sid = section.id
+assign img_size = 40
+if sid == 'mb_nav'
+   assign show_code = true
+elsif sid != 'mb_nav' and request.design_mode or request.page_type == 'index' 
+   assign show_code = true
+else
+   assign show_code = false
+endif -%}
+
+{%- if show_code -%}
+<div class="mainMenu">
+ 
+<nav role="navigation">
+   <div class="nav-upper-part">
+      <div class="nav-toggle">
+         <span class="nav-back">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="m4.003 10.654-.532-.532L7.594 6 3.47 1.878l.532-.532L8.657 6l-4.654 4.654z" fill="#1B1C1E" stroke="#1B1C1E" stroke-width=".25"/>
+            </svg>
+            Back 
+         </span>
+         <span class="nav-logo">{%- render 't4s_logo', tag: 'div', isTransparent: h_transparent -%}</span>
+         <span class="nav-close">
+            <button class="t4s-drawer-menu__close t4s-pe-none t4s-op-0 t4s-pf" data-drawer-close aria-label="{{ 'general.mobile_menu.close' | t }}">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m12 12.708-5.246 5.246a.505.505 0 0 1-.344.15.467.467 0 0 1-.364-.15.491.491 0 0 1-.16-.354c0-.13.053-.247.16-.354L11.292 12 6.046 6.754a.505.505 0 0 1-.15-.344.467.467 0 0 1 .15-.364.491.491 0 0 1 .354-.16c.13 0 .247.053.354.16L12 11.292l5.246-5.246a.504.504 0 0 1 .344-.15.467.467 0 0 1 .364.15c.107.107.16.225.16.354 0 .13-.053.247-.16.354L12.708 12l5.246 5.246a.505.505 0 0 1 .15.344.467.467 0 0 1-.15.364.491.491 0 0 1-.354.16.491.491 0 0 1-.354-.16L12 12.708z" fill="#1B1C1E" stroke="#1B1C1E" stroke-width=".25"/>
+               </svg>
+            </button>
+         </span>
+      </div>
+   </div>
+   <ul class="first_level">
+  {% for block in section.blocks %}
+    {% if block.type == "menu" %}
+      {% if block.settings.menu != blank %}
+       <li class="has-dropdown new {% if forloop.index == 1 %} custom_nav_class {% endif %}">
+         <a href="{{ block.settings.url }}" style="color:{{ block.settings.lb_cl }};"><span class="main-div-span">{{ block.settings.title }} {% if block.settings.show_sale_ck %}<span class="nav-label t4s_lb_nav" style="background-color: {{ block.settings.nav_back_cl }};color:{{ block.settings.nav_lb_cl }}">{{ block.settings.lb }}</span>{% endif %}</span></a>
+         <ul class="second_level">
+           {% for link in linklists[block.settings.menu].links -%}
+             {% if link.links != blank %}
+               <li class="has-dropdown">
+               <a href="{{ link.url }}">{{ link.title }}</a>
+               <ul class="third_level">
+                  <li class="third-level-span">
+                    <span class="nav-title">{{ link.title }}</span>
+                    </li>
+                 {% for childlink in link.links %}
+                    <li><a href="{{ childlink.url }}">{{ childlink.title }}</a></li>
+                   {% endfor %}
+               {% if block.settings.image != blank %}
+                  <li class="html-banner">
+                      <div class="html-banner-block">
+                        <div class="html-banner-image">
+                          <img src="{{ block.settings.image | img_url:width:'768'}}">
+                        </div>
+                        <div class="html-banner-content">
+                          <h2>{{ block.settings.text }}</h2>
+                          <a href="{{ block.settings.btn_url }}" class="Text-Button">{{ block.settings.btn_text }}</a>
+                        </div>
+                      </div>
+                   </li>
+                 {% endif %}
+               </ul>
+            </li>
+           {% else %}
+            <li class="without_child">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+           {% endif %}
+          {%- endfor %}
+         </ul>
+      </li>
+     {% else %}
+        <li>
+         <a href="{{ block.settings.url }}">{{ block.settings.title }}</a>
+      </li>
+        {% endif %}
+      {% endif %}
+    
+    {% if block.type == "Login_Account" %}
+    <li class="otherlinks mobile-login">
+         {% if customer %}
+         {% if customer.name != blank %}
+         <h4>Hello, {{customer.name}}!</h4>
+         {% endif %}
+         {% else %}
+         {{ block.settings.svg }}
+        {% if block.settings.login_title != blank %} <a href="{{ block.settings.login_link }}" title="{{ block.settings.login_title }}">{{ block.settings.login_title }}</a>{% endif %} {% if block.settings.register_title != blank %}/ <a href="{{ block.settings.register_link }}" title="{{ block.settings.register_title }}">{{ block.settings.register_title }}</a>{% endif %}
+         {% endif %}
+      </li>
+      {% endif %}
+
+      {% if block.type == "Monarch_Access" %}
+         {% if customer %}
+            <li class="otherlinks monarch_link">
+         <a href="https://consumer-lms.cns-staging-shard-monarch.il-consumer.com/">
+            {{ block.settings.svg }}
+            {{ block.settings.Monarch_text }}
+         </a>
+            </li>
+         {% else %}
+            <li class="otherlinks">
+         <a href="{{ block.settings.Monarch_link }}">
+            {{ block.settings.svg }}
+             {{ block.settings.student_text_1 }}
+         </a>
+            </li>
+         {% endif %}
+       {% endif %}
+ {% if customer %}
+     {% if block.type == "deshboard" %}
+        <li class="otherlinks">
+         {% if customer %}
+         <a href="{{ block.settings.deshboard_link }}">
+            {{ block.settings.svg }}
+            {{ block.settings.deshboard_text }}
+         </a>
+         {% endif %}
+      </li>
+       {% endif %}
+    {% endif %}
+
+     {% if block.type == "wishlist" %}
+        <li class="otherlinks wishlist">
+        {%- if settings.wishlist_mode != '3' -%}	
+          <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="m12 20.215-.758-.684a134.99 134.99 0 0 1-4.05-3.83c-1.068-1.06-1.911-1.997-2.529-2.808-.617-.81-1.049-1.545-1.295-2.2A5.623 5.623 0 0 1 3 8.712c0-1.272.432-2.34 1.296-3.204.864-.864 1.932-1.296 3.204-1.296.88 0 1.705.225 2.475.675.77.45 1.445 1.104 2.025 1.963.58-.86 1.255-1.513 2.025-1.963a4.824 4.824 0 0 1 2.475-.675c1.272 0 2.34.432 3.204 1.296C20.568 6.372 21 7.44 21 8.712c0 .664-.123 1.324-.368 1.98-.246.656-.678 1.39-1.295 2.201-.618.811-1.458 1.747-2.52 2.808a116.302 116.302 0 0 1-4.06 3.83l-.757.684zm0-1.354c1.6-1.446 2.917-2.685 3.95-3.716 1.033-1.03 1.85-1.926 2.45-2.684.6-.76 1.017-1.43 1.25-2.016.233-.585.35-1.163.35-1.733 0-1-.333-1.834-1-2.5-.667-.667-1.5-1-2.5-1-.796 0-1.53.227-2.204.682-.673.454-1.276 1.138-1.808 2.053h-.976c-.545-.927-1.151-1.615-1.818-2.063A3.852 3.852 0 0 0 7.5 5.212c-.987 0-1.817.333-2.49 1-.673.666-1.01 1.5-1.01 2.5 0 .57.117 1.148.35 1.733.233.586.65 1.258 1.25 2.015.6.758 1.417 1.65 2.45 2.675A132.067 132.067 0 0 0 12 18.861z" fill="#003C51"/>
+</svg>
+       <span data-count-wishlist class="t4s-pa t4s-op-0 t4s-ts-op t4s-count-box">0</span>
+        <a data-link-wishlist class="t4s-pr" href="{{ block.settings.wishlist_link }}">{{ block.settings.wishlist_text }}</a>
+          {%- endif -%}
+      </li>
+       {% endif %}
+    
+      {% if block.type == "tel" %}
+         <li class="otherlinks">
+         {{ block.settings.svg }}
+         <a href="tel:{{ block.settings.tel_text }}">{{ block.settings.tel_text }}</a>
+      </li>
+        {% endif %}
+
+     {% if block.type == "logout" %}
+        <li class="otherlinks">
+         {% if customer %}
+         {{ block.settings.svg }}
+         <a href="/account/logout" title="{{ block.settings.logout_text }}">{{ block.settings.logout_text }}</a>
+         {% endif %}
+      </li>
+       {% endif %}
+     
+    {% endfor %}
+   </ul>
+</nav>
+ </div>
+{%- else -%}
+<div data-section-id="{{ sid }}"></div>
+{%- endif -%}
+{%- comment -%}
+{%- for i in (1..25) -%}
+      {"type": "paragraph","content": "#{{ i }} ——————————————"},{"label": " Collection #{{ i }}","id": "cat{{ i }}", "type": "collection"},{"type": "image_picker","id": "image{{ i }}","label": "Image #{{ i }}"},
+{%- endfor -%}
+{%- endcomment -%}
+<script>
+  (function($) {
+		this.MobileNav = function() {
+				this.curItem,
+						this.curLevel = 0,
+						this.transitionEnd = _getTransitionEndEventName();
+
+				var defaults = {
+						initElem: ".main-menu",
+						menuTitle: "Menu"
+				}
+
+				// Check if MobileNav was initialized with some options and assign them to the "defaults"
+				if (arguments[0] && typeof arguments[0] === "object") {
+						this.options = extendDefaults(defaults, arguments[0]);
+				}
+
+				// Add to the "defaults" ONLY if the key is already in the "defaults"
+				function extendDefaults(source, extender) {
+						for (option in extender) {
+								if (source.hasOwnProperty(option)) {
+										source[option] = extender[option];
+								}
+						}
+				}
+
+				MobileNav.prototype.getCurrentItem = function() {
+						return this.curItem;
+				};
+
+				MobileNav.prototype.setMenuTitle = function(title) {
+						defaults.menuTitle = title;
+						_updateMenuTitle(this);
+						return title;
+				};
+
+				// Init is an anonymous IIFE
+				(function(MobileNav) {
+						var initElem = ($(defaults.initElem).length) ? $(defaults.initElem) : false;
+
+						if (initElem) {
+								defaults.initElem = initElem;
+								_clickHandlers(MobileNav);
+								_updateMenuTitle(MobileNav);
+						} else {
+								console.log(defaults.initElem + " element doesn't exist, menu not initialized.");
+						}
+				}(this));
+
+				function _getTransitionEndEventName() {
+						var i,
+								undefined,
+								el = document.createElement('div'),
+								transitions = {
+										'transition': 'transitionend',
+										'OTransition': 'otransitionend', // oTransitionEnd in very old Opera
+										'MozTransition': 'transitionend',
+										'WebkitTransition': 'webkitTransitionEnd'
+								};
+
+						for (i in transitions) {
+								if (transitions.hasOwnProperty(i) && el.style[i] !== undefined) {
+										return transitions[i];
+								}
+						}
+				};
+
+				function _clickHandlers(menu) {
+						defaults.initElem.on('click', '.has-dropdown > a', function(e) {
+								e.preventDefault();
+								menu.curItem = $(this).parent();
+								_updateActiveMenu(menu);
+						});
+
+						defaults.initElem.on('click', '.nav-toggle', function() {
+								_updateActiveMenu(menu, 'back');
+						});
+				};
+
+				// TODO: Make this DRY (deal with waiting for transitionend event)
+				function _updateActiveMenu(menu, direction) {
+						_slideMenu(menu, direction);
+						if (direction === "back") {
+								/*defaults.initElem.children('ul').one(menu.transitionEnd, function(e) {
+										menu.curItem.removeClass('nav-dropdown-open nav-dropdown-active');
+										menu.curItem = menu.curItem.parent().closest('li');
+										menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+										_updateMenuTitle(menu);
+								});*/
+
+								menu.curItem.removeClass('nav-dropdown-open nav-dropdown-active');
+								menu.curItem = menu.curItem.parent().closest('li');
+								menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+								_updateMenuTitle(menu);
+						} else {
+								menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+								_updateMenuTitle(menu);
+						}
+				};
+
+				// Update main menu title to be the text of the clicked menu item
+				function _updateMenuTitle(menu) {
+						var title = defaults.menuTitle;
+						if (menu.curLevel > 0) {
+								title = menu.curItem.children('a').text();
+								defaults.initElem.find('.nav-toggle').addClass('back-visible');
+						} else {
+								defaults.initElem.find('.nav-toggle').removeClass('back-visible');
+						}
+						$('.nav-title').text(title);
+				};
+
+				// Slide the main menu based on current menu depth
+				function _slideMenu(menu, direction) {
+						if (direction === "back") {
+								menu.curLevel = (menu.curLevel > 0) ? menu.curLevel - 1 : 0;
+						} else {
+								menu.curLevel += 1;
+						}
+						defaults.initElem.children('ul').css({
+								"transform": "translateX(-" + (menu.curLevel * 100) + "%)"
+						});
+				};
+		}
+}(jQuery));
+
+$(document).ready(function() {
+		var MobileMenu = new MobileNav({
+				initElem: "nav",
+				menuTitle: "Push menu demo",
+		});
+	
+		$('.js-nav-toggle').on('click', function(e) {
+			e.preventDefault();
+			
+			$('.nav-wrapper').toggleClass('show-menu');
+		});
+});
+  </script>
+{% schema %}
+  {
+    "name": "Mobile Menu",
+    "class": "t4s-sp-section-mb-nav",
+    "max_blocks": 30,
+    "blocks": [
+      {
+        "type": "menu",
+        "name": "Menu item",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Heading",
+                "default": "Heading"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "Add menu"
+            },
+            {
+                "type":"text",
+                "id":"lb",
+                "label":"Label text"
+            },
+            {
+              "type":"checkbox",
+              "id":"show_sale_ck",
+              "label":"Show sale badge"
+            },
+            {
+                "type":"color",
+                "id":"lb_cl",
+                "label":"Label color"
+            },
+            {
+                "type":"color",
+                "id":"nav_lb_cl",
+                "label":"Nav Label color"
+            },
+            {
+                "type":"color",
+                "id":"nav_back_cl",
+                "label":"Nav Back color"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+              "type":"text",
+              "id":"text",
+              "label":"bottom text"
+            },
+            {
+              "type":"text",
+              "id":"btn_text",
+              "label":"Button text"
+            },
+            {
+                "type": "url",
+                "id": "btn_url",
+                "label": "Button Link"
+            }
+        ]
+      },
+      {
+        "type": "Login_Account",
+        "name": "Login/Create Account",
+        "settings": [
+          {
+            "type":"header",
+            "content":"login"
+          },
+          {
+            "type":"html",
+            "id":"svg",
+            "label":"Svg"
+          },
+          {
+            "type":"text",
+            "id":"login_title",
+            "label":"Login text"
+          },
+          {
+            "type":"url",
+            "id":"login_link",
+            "label":"Login url"
+          },
+          {
+            "type":"header",
+            "content":"Create Account"
+          },
+          {
+            "type":"text",
+            "id":"register_title",
+            "label":"Create Account text"
+          },
+          {
+            "type":"url",
+            "id":"register_link",
+            "label":"Register url"
+          }
+        ]
+      },
+      {
+        "type": "Monarch_Access",
+        "name": "Monarch Access",
+        "settings": [
+          {
+            "type":"html",
+            "id":"svg",
+            "label":"Svg"
+          },
+          {
+            "type":"text",
+            "id":"Monarch_text",
+            "label":"Monarch text",
+            "info":"After customer login text"
+          },
+          {
+            "type":"text",
+            "id":"student_text_1",
+            "label":"Student text",
+            "info":"Before customer login text"
+          },
+          {
+            "type":"url",
+            "id":"Monarch_link",
+            "label":"Monarch url"
+          }
+        ]
+      },
+      {
+        "type":"deshboard",
+        "name":"Dashboard",
+        "settings":[
+          {
+            "type":"html",
+            "id":"svg",
+            "label":"Svg"
+          },
+          {
+            "type":"text",
+            "id":"deshboard_text",
+            "label":"Dashboard text"
+          },
+          {
+            "type":"url",
+            "id":"deshboard_link",
+            "label":"Dashboard url"
+          }
+        ]
+      },
+      {
+        "type":"wishlist",
+        "name":"wishlist",
+        "settings":[
+          {
+            "type":"text",
+            "id":"wishlist_text",
+            "label":"wishlist text"
+          },
+          {
+            "type":"url",
+            "id":"wishlist_link",
+            "label":"wishlist url"
+          }
+        ]
+      },
+      {
+        "type":"tel",
+        "name":"Phone number",
+        "settings":[
+          {
+            "type":"html",
+            "id":"svg",
+            "label":"Svg"
+          },
+          {
+            "type":"text",
+            "id":"tel_text",
+            "label":"tel Number"
+          }
+        ]
+      },
+      {
+        "type":"logout",
+        "name":"Logout",
+        "settings":[
+          {
+            "type":"html",
+            "id":"svg",
+            "label":"Svg"
+          },
+          {
+            "type":"text",
+            "id":"logout_text",
+            "label":"Logout Number"
+          }
+        ]
+      }
+    ],
+    "default": {
+      "blocks": [
+        { "type": "menu" }
+      ]
+    }
+  }
+{% endschema %}

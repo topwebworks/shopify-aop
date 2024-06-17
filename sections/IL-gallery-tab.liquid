@@ -1,0 +1,282 @@
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sid = section.id
+  assign se_stts = section.settings
+ -%} 
+<div class="home-gallery-tab " >
+   <div class="t4s-container">
+      <div class="gallery-tab-wrapper t4s-section-inner" {% render 'section_style', se_stts: se_stts -%}>
+        
+         <div class="gallery-tab-list desktop t4s-d-l-none">
+           {% if section.settings.tab_title != blank %} <h5>{{ section.settings.tab_title }}</h5>{% endif %}
+            <ul id="tabContainer" class="main_tab">
+              {% for block in section.blocks %}
+               <li>
+                  <a href="javascript:void(0);" class="tabs" data-title="{{ block.settings.tab_heading }}">
+                     {% if block.settings.svg_html != blank %}
+                        {{ block.settings.svg_html }}
+                     {% endif %}
+                     <span>{{ block.settings.tab_heading }}</span>
+                  </a>
+               </li>
+              {% endfor %}
+            </ul>
+         </div>
+
+ 
+        
+         <div class="gallery-tab-list mobile t4s-d-md-none">
+           {% if section.settings.tab_title != blank %} <h5>{{ section.settings.tab_title }}</h5>{% endif %}
+           {% comment %}
+            <select id="tabContainer" class="main_tab">
+              {% for block in section.blocks %}
+               <option class="tabs_mob" data-title="{{ block.settings.tab_heading }}" >
+                    <span>{% if block.settings.svg_html != blank %}
+                       {{ block.settings.svg_html }}
+                     {% endif %}
+                    {{ block.settings.tab_heading }}</span>
+               </option>
+              {% endfor %}
+            </select>
+            {% endcomment %}
+                   <div class="dropdown t4s-d-md-none">
+          <div class="select">
+            <span class="static_val">Select format</span>
+          </div>
+          <input type="hidden" name="gender">
+          <ul id="tabContainer" class="main_tab dropdown-menu" style="display:none">
+              {% for block in section.blocks %}
+               <li>
+                  <a href="javascript:void(0);" class="tabs_mob" data-title="{{ block.settings.tab_heading }}">
+                     {% if block.settings.svg_html != blank %}
+                        {{ block.settings.svg_html }}
+                     {% endif %}
+                     <span>{{ block.settings.tab_heading }}</span>
+                  </a>
+               </li>
+              {% endfor %}
+            </ul>
+        </div> 
+         </div>
+        
+        
+         <div class="gallery-tab-content">
+           {% for block in section.blocks %}
+             {% assign tab_title = block.settings.tab_text | split:"," %}
+            <div class="gallery-tab-item" tab-text="{{ block.settings.tab_text }}" id="content_tab">
+               <div class="gallery-item-main">
+                  <div class="gallery-tab-image">
+                     <img src="{{ block.settings.image | img_url: '325x508' }}" alt="">
+                  </div>
+                 
+                  <div class="gallery-tab-icon">
+                     {{ block.settings.svg_html_icon }}
+                  </div>
+                                
+                  <div class="gallery-tab-button">
+                    <a href="{% if block.settings.btn_link != blank %}{{block.settings.btn_link}}{% else %}javascript:void(0);{% endif %}" class="button desktop t4s-d-l-none" style="background-color:{{ block.settings.back_color }};color:{{ block.settings.btn_color }};border-color:{{ block.settings.back_color }};">{{ block.settings.btn_text_desk }}</a>
+                    <a href="{% if block.settings.btn_link != blank %}{{block.settings.btn_link}}{% else %}javascript:void(0);{% endif %}" class="button mobile t4s-d-md-none" style="background-color:{{ block.settings.back_color }};color:{{ block.settings.btn_color }};border-color:{{ block.settings.back_color }};">{{ block.settings.btn_text_mob }}</a>
+                  </div>
+               </div>
+            </div>
+            {% endfor %}
+         </div>
+         <div class="tab-bottom">
+            {% if section.settings.bottom_text != blank %}<h4>{{ section.settings.bottom_text }}</h4>{% endif %}
+           {% if section.settings.btn_text_bottom != blank %} <a class="Text-Button" href="{{ section.settings.btn_link }}">{{ section.settings.btn_text_bottom }}</a>{% endif %}
+         </div>
+      </div>
+   </div>
+</div>
+<script>
+$(document).ready(function(){
+$(document).find(".tabs").on("click",function(){
+  $(".gallery-tab-item").addClass("disable");
+  $(".gallery-tab-item").removeClass("active");
+   $(".tabs").parent("li").removeClass("active");
+  $(this).parent("li").addClass("active");
+  var tab_name_1 = $(this).data("title");
+  console.log(tab_name_1);
+
+$(".gallery-tab-item").each(function(){
+  var val_tab = $(this).attr("tab-text");
+  if(val_tab.includes(tab_name_1))
+  {
+    $(this).addClass("active");
+    $(this).removeClass("disable");
+  }
+});
+});
+
+  $('.dropdown').on("click",function () {
+    $(this).find('.dropdown-menu').slideToggle(300);
+  });
+
+  $(document).find(".tabs_mob").on("click",function(){
+  $(".gallery-tab-item").addClass("disable");
+  $(".gallery-tab-item").removeClass("active");
+  var tab_name_li = $(this).data("title");
+    $(".gallery-tab-item").each(function(){
+  var val_tab = $(this).attr("tab-text");
+  if(val_tab.includes(tab_name_li))
+  {
+    $(this).addClass("active");
+    $(this).removeClass("disable");
+  }
+});
+    var get_selected_html = $(this).html();
+    // console.log(get_selected_html);
+    $(".static_val").html(get_selected_html);
+});
+});
+</script>
+{% schema %}
+  {
+    "name": "IL-Gallery Tab",
+    "settings": [
+      {
+        "type":"text",
+        "id":"tab_title",
+        "label":"Tab Title"
+      },
+      {
+        "type":"header",
+        "content":"bottom content"
+      },
+      {
+        "type":"text",
+        "id":"bottom_text",
+        "label":"Bottom text"
+      },
+      {
+        "type": "text",
+        "id": "btn_text_bottom",
+        "label": "Button Label"
+      },
+      {
+        "type":"url",
+        "id":"btn_link",
+        "label":"Button link"
+      },
+            {
+          "type": "text",
+          "id": "mg",
+          "label": "Margin",
+          "info":"Margin top, margin right, margin bottom, margin left. If you not use to blank",
+          "default": ",,50px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd",
+          "label": "Padding",
+          "info":"Padding top, padding right, padding bottom, padding left. If you not use to blank",
+          "placeholder": "50px,,50px,"
+      },
+      {
+        "type": "header",
+        "content": "+ Design Tablet Options"
+      },
+      {
+          "type": "text",
+          "id": "mg_tb",
+          "label": "Margin",
+          "default": ",,50px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd_tb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+      },
+      {
+        "type": "header",
+        "content": "+ Design mobile options"
+      },
+      {
+          "type": "text",
+          "id": "mg_mb",
+          "label": "Margin",
+          "default": ",,30px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd_mb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+      }
+    ],
+    "blocks": [
+      {
+        "name": "Images",
+        "type": "heading",
+        "settings":[
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "tab_text",
+            "label": "Tab text"
+          },
+           {
+            "type": "html",
+            "id": "svg_html",
+            "label": "Tab text Icon"
+          },
+          {
+            "type": "text",
+            "id": "tab_heading",
+            "label": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "btn_text_desk",
+            "label": "Button Label Desktop"
+          },
+          {
+            "type": "text",
+            "id": "btn_text_mob",
+            "label": "Button Label Mobile"
+          },
+          {
+            "type": "html",
+            "id": "svg_html_icon",
+            "label": "Logo icon"
+          },
+          {
+            "type":"url",
+            "id":"btn_link",
+            "label":"Button link"
+          },
+          {
+            "type":"color",
+            "id":"btn_color",
+            "label":"Button Color"
+          },
+          {
+            "type":"color",
+            "id":"back_color",
+            "label":"Button Background color"
+          }
+        ]
+      }
+          
+    ],
+    "presets": [
+      {
+        "name": "IL-Gallery Tab"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

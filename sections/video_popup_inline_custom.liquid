@@ -1,0 +1,967 @@
+<!-- sections/video_popup_inline.liquid -->
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'content-position.css' | asset_url | stylesheet_tag }}
+{{ 'hero.css' | asset_url | stylesheet_tag }}
+ {% assign ProductVendor = product.vendor | handleize  %}
+      {% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+  {% assign found_a_collection = false %}
+  {% for c in product.collections %}
+    {% if found_a_collection == false and c.handle == ProductVendor %}
+      {% assign found_a_collection = true %}
+      {% assign collection = c %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{%- liquid
+    assign image_fix = image_nt | image_tag
+	assign sid = section.id
+    assign se_blocks = section.blocks
+    assign se_stts = section.settings
+    assign stt_layout = se_stts.layout
+    assign image = se_stts.image
+    assign se_height = se_stts.se_height
+    assign text_size = se_stts.text_size | split: ","
+    assign design = se_stts.design
+    assign use_custom_h = se_stts.use_custom_h
+    assign video_url = collection.metafields.custom.featured_video 
+    
+
+
+    assign content_pd = se_stts.content_pd | remove: ' ' | split: ','  
+    assign content_pd_mb = se_stts.content_pd_mb | remove: ' ' | split: ','
+
+    assign br_opacity = se_stts.br_opacity | divided_by: 100.0
+    assign br_bg = se_stts.br_bg | color_modify: 'alpha', br_opacity 
+
+    assign ani_delay = 0   
+    assign percent_delay = se_stts.animation_delay | divided_by: 100.0
+    assign time_ani_delay = se_stts.time_animation | times: percent_delay
+
+    if stt_layout == 't4s-container-wrap' 
+        assign html_layout = '<div class="t4s-container">__</div>' | split: '__'
+    else
+        assign html_layout = '__' | split: '__'
+    endif
+
+    assign countdown = false
+    assign use_button = false
+    assign use_animation = false
+    assign general_block = false
+    assign t4s_se_class = 't4s_nt_se_' | append: sid
+    if se_stts.use_cus_css and se_stts.code_cus_css != blank
+        render 'se_cus_css', code_cus_css: se_stts.code_cus_css, t4s_se_class: t4s_se_class
+    endif 
+ -%}
+{%- if se_height != "t4s_ratio_fh" -%}
+    {%- capture append_style -%}--aspect-ratioapt: {{ image.aspect_ratio | default: 2 }};--aspect-ratio-cusdt : {{ se_stts.height_dk }}px;--aspect-ratio-custb : {{ se_stts.height_tb }}px;--aspect-ratio-cusmb :{{ se_stts.height_mb }}px;{%- endcapture -%}
+{%- endif -%}
+{%- if se_stts.border_bl -%}
+    {%- capture append_bg_border_style -%}--br-color:{{ se_stts.br_color }};--br-style:{{ se_stts.br_style }};--br-pd:{{ se_stts.br_pd }}px;--br-pd-mb:{{ se_stts.br_pd_mb }}px;--border-bg:{{ br_bg }};{%- endcapture -%}
+{%- endif -%}
+<div class="t4s-section-inner {{ t4s_se_class }} t4s_nt_se_{{ sid }} {{ stt_layout }}" {% render 'section_style', se_stts: se_stts, append_style: append_style -%} data-t4s-animate>
+    {{- html_layout[0] -}} 
+    <div class="t4s-container">
+        <div class="t4s-video-popup-inline t4s-bg-video t4s-pr t4s-row t4s-row-cols-1 t4s-gx-0 t4s-video {{ se_height }}  t4scuspx1_{{ se_stts.custom_mb }} t4scuspx2_{{ se_stts.custom_tb }} t4scuspx3_{{ se_stts.custom_dk }}" data-video-poster >
+            <div class="t4s-col-item">
+                <div class="t4s-hero-inner t4s-pr t4s-oh t4s_cover t4s_ratio" data-video-insert timeline hdt-reveal="slide-in"> 
+                    {%- if collection.metafields.custom.featured_video_image != blank -%}    
+                        <div data-parallax-t4s{{ IsParallax }} class="t4s-hero-block t4s_bg {% if IsParallax %}t4s-parallax t4s-parallax-bg{% endif %} lazyloadt4s" style="background-image: url({{ collection.metafields.custom.featured_video_image | image_url: width: 1 }}) {% if image.presentation.focal_point != '50.0% 50.0%' and IsParallax == false %};background-position: {{ image.presentation.focal_point }}{% endif %}" data-bgset="{{ collection.metafields.custom.featured_video_image | image_url: width: 1 }}" data-sizes="auto"  data-optimumx="2" ></div>                              
+                    {%- else -%}
+                        {{ 'lifestyle-1' | placeholder_svg_tag: 't4s-placeholder-svg t4s-svg-bg1' }} 
+                    {%- endif -%}
+                    <div class="t4s-content-wrap t4s-bg-cl-wrap t4s-pe-none t4s-full-width-link t4s-z-100">
+                        <div class="t4s-content-position t4s-auto t4s-pa t4s-text-md-center t4s-text-center t4s-bg-content-true t4s-br-content-{{ se_stts.border_bl }}" style="--time-animation:{{ se_stts.time_animation }}s;">
+                            {%- for block in se_blocks -%} 
+                                {%- assign bk_stts = block.settings -%}
+                                {%- case block.type -%}
+                                    {%- when 'custom_button' -%}
+                                        {%- if bk_stts.button_text != blank -%}
+                                            {%- if bk_stts.animation != 'none' -%}{%- assign use_animation = true -%} {%- endif -%}
+                                            {%- assign use_button = true -%}
+                                            {%- assign button_style = bk_stts.button_style -%}
+                                            {%- assign enable_btn_close = bk_stts.btn_close -%}
+                                            {%- capture data_options -%}
+                                              {% assign idget = video_url | split: "?v=" | last %}
+                                                {"type": "{%- if bk_stts.source == "1" -%}youtube{%- else -%}html5{%- endif -%}","vid": "{{ idget }}","autoplay": {{ bk_stts.au_video }},"loop":{{ bk_stts.loop_video }},"accent_color":"{{ settings.accent_color | remove_first: '#' }}","srcDefault":{{ bk_stts.file_link | default: 'https://cdn.shopify.com/s/files/1/0610/5209/2628/files/Share_your_brand_story_by_adding_a_video_to_your_store.mp4?v=1641630446' | json }}, "id":"#tmp-video-{{ sid }}" }
+                                            {%- endcapture -%}
+                                            {%- if bk_stts.source_btn == "btn_custom" -%}
+                                                <button class="t4s-bl-item t4s-animation-{{ bk_stts.animation }} t4s-btn t4s-btn-custom t4s-pe-auto t4s-fnt-fm-{{ bk_stts.fontf }} t4s-animation-{{ bk_stts.animation }} t4s-hidden-mobile-{{ bk_stts.hidden_mobile }} t4s-btn-style-{{ button_style }} {% if button_style == 'default' or button_style == 'outline' %}t4s-btn-effect-{{ bk_stts.button_effect }}{% endif %}" {{ bk_stts.click_action }} data-options='{{ data_options }}' {%- render 'bk_cus_style', type: 'custom_button', bk_stts: bk_stts, ani_delay: ani_delay -%}>
+                                                    {{ bk_stts.button_text }} {%- if bk_stts.button_icon_w > 0 -%}<svg class="t4s-btn-icon"><use xlink:href="#t4s-icon-btn"></use></svg>{%- endif -%}
+                                                </button>
+                                            {%- else -%}
+                                                <div class="t4s-video-btn__icon t4s-pe-auto" {{ bk_stts.click_action }} data-options='{{ data_options }}'>
+<svg width="89" height="88" viewBox="0 0 89 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g opacity=".5" clip-path="url(#gfz9zz1o0a)" filter="url(#39xyev3qkb)">
+        <path d="M44.5 0a40 40 0 1 1 0 80 40 40 0 0 1 0-80zM12 40a32.5 32.5 0 1 0 65 0 32.5 32.5 0 0 0-65 0zm24.395-13.865 21.32 12.795a1.25 1.25 0 0 1 0 2.14l-21.32 12.795a1.25 1.25 0 0 1-1.895-1.07V27.21a1.25 1.25 0 0 1 1.895-1.075z" fill="#fff"/>
+    </g>
+    <defs>
+        <clipPath id="gfz9zz1o0a">
+            <path fill="#fff" transform="translate(4.5)" d="M0 0h80v80H0z"/>
+        </clipPath>
+        <filter id="39xyev3qkb" x=".5" y="0" width="88" height="88" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+            <feOffset dy="4"/>
+            <feGaussianBlur stdDeviation="2"/>
+            <feComposite in2="hardAlpha" operator="out"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+            <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_499_21265"/>
+            <feBlend in="SourceGraphic" in2="effect1_dropShadow_499_21265" result="shape"/>
+        </filter>
+    </defs>
+</svg>
+                                                </div> 
+                                            {%- endif -%}
+
+                                            {%- if bk_stts.source == "3" and collection.metafields.custom.featured_video != blank -%}
+                                            <template id="tmp-video-{{ sid }}" class="t4s-d-none">{{ collection.metafields.custom.featured_video  | video_tag: image_size: '1x1', autoplay: bk_stts.au_video, loop: bk_stts.loop_video, muted: false, controls: true, controlsList: 'nodownload', preload: 'auto', playsinline: '' }}</template>
+                                            {%- endif -%}
+
+                                        {%- endif -%}
+                                {%- endcase -%}
+                                {%- if bk_stts.animation != 'none' %}{% assign ani_delay = ani_delay | plus: time_ani_delay %}{% endif -%}
+                            {%- endfor -%} 
+                        </div>
+                    </div>
+                </div>
+                {%- if enable_btn_close -%}
+                    <button class="t4s-btn-cl-vi t4s-pa t4s-t-0" data-video-poster-close title="{{ 'general.popup.close' | t }}"><svg class="t4s-iconsvg-close" role="presentation" viewBox="0 0 16 14"><path d="M15 0L1 14m14 0L1 0" stroke="currentColor" fill="none" fill-rule="evenodd"></path></svg></button>
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+    {{- html_layout[1] -}}
+</div>
+{%- if general_block -%}
+    {{ 'general-block.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if use_button -%}
+    {{ 'button-style.css' | asset_url | stylesheet_tag }}
+    <link href="{{ 'custom-effect.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- if use_animation -%}
+    <link href="{{ 't4s-animation.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- schema -%}
+{
+    "name": "Video Popup Custom",
+    "tag": "section",
+    "class": "t4s-section t4s-section-all t4s_tp_parallax t4s_tp_cd t4s_tp_mfps t4s_tp_video product_video",
+    "settings":[
+        {
+            "type": "header",
+            "content": "1. General options"
+        },
+        {
+            "type": "select",
+            "id": "se_height",
+            "label": "Section height",
+            "default": "t4s_ratio16_9",
+            "options": [
+                {
+                    "value": "t4s_ratio_fh",
+                    "label": "Full screen height"
+                },
+                {
+                    "value": "t4s_ratioadapt",
+                    "label": "Adapt to image"
+                },
+                {
+                    "value": "t4s_ratio_cuspx",
+                    "label": "Custom height"
+                },
+                {
+                    "value": "t4s_ratio16_9",
+                    "label": "16:9"
+                },
+                {
+                    "value": "t4s_ratio4_3",
+                    "label": "4:3"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "custom_dk",
+            "label": "Use custom height (Desktop)",
+            "default": true
+        },
+        {
+            "type": "number",
+            "id": "height_dk",
+            "label": "Section height (Desktop)",
+            "default": 600
+        },
+        {
+            "type": "checkbox",
+            "id": "custom_tb",
+            "label": "Use custom height (Tablet)",
+            "default": true
+        },
+        {
+            "type": "number",
+            "id": "height_tb",
+            "label": "Section height (Tablet)",
+            "default": 400
+        },
+        {
+            "type": "checkbox",
+            "id": "custom_mb",
+            "label": "Use custom height (Mobile)",
+            "default": true
+        },
+        {
+            "type": "number",
+            "id": "height_mb",
+            "label": "Section height (Mobile)",
+            "default": 250
+        }, 
+        {                   
+            "type":"image_picker",
+            "id":"image",
+            "label":"Choose image",
+            "info": "Not support focal point when use parallax"                  
+        }, 
+          {
+              "type": "paragraph",
+              "content": "Warning: \"Content horizontal position\" options doesn't work when using \"Content width\" is 'Container'"
+          },
+        {
+            "type":"range",
+            "id":"ch_pos_mb",
+            "label":"Content horizontal position",
+            "info":" <= 50: Left position , > 50 right position",
+            "max":100,
+            "min":0,
+            "step":1,
+            "unit":"%",
+            "default":50
+        },
+        {
+            "type": "number",
+            "id": "content_pd_tb",
+            "label": "Content padding top/bottom (px)",
+            "default":15,
+            "info":"Working on the Desktop"   
+        },
+        {
+            "type": "number",
+            "id": "content_pd_lr",
+            "label": "Content padding left/right (px)",
+            "default":15 ,
+            "info":"Working on the Desktop"   
+        },
+        {
+            "type": "number",
+            "id": "content_pd_tb_mb",
+            "label": "Content padding top/bottom (px)",
+            "default":10,
+            "info":"Working on the Mobile"    
+        },
+        {
+            "type": "number",
+            "id": "content_pd_lr_mb",
+            "label": "Content padding left/right (px)",
+            "default":10,
+            "info":"Working on the mobile"
+        },
+        {"type": "paragraph","content": "————————————————"},
+        {
+            "type": "checkbox",
+            "id": "border_bl",
+            "label": "Use border content",
+            "default": false
+        },
+        {
+            "type": "color",
+            "id": "br_color",
+            "label": "Border color",
+            "default": "#222"
+        },
+        {
+            "type": "color",
+            "id": "br_bg",
+            "label": "Background border",
+            "default": "#fff"
+        },
+        {
+            "type": "range",
+            "id": "br_opacity",
+            "label": "Border opacity",
+            "default": 0,
+            "min": 0,
+            "default": 50,
+            "max": 100,
+            "step": 1,
+            "unit": "%"
+        },
+        {
+            "type": "select",
+            "id": "br_style",
+            "label": "Border style",
+            "default":"solid",
+            "options": [
+                {
+                    "value": "none",
+                    "label": "None"
+                },
+                {
+                    "value": "solid",
+                    "label": "Solid"
+                },
+                {
+                    "value": "dashed",
+                    "label": "Dashed"
+                },
+                {
+                    "value": "double",
+                    "label": "Double"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "br_pd",
+            "label": "Border padding (Desktop)",
+            "default": 20,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "br_pd_mb",
+            "label": "Border padding (Mobile)",
+            "default": 10,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "header",
+            "content": "--Animation Options--"
+        },
+        {
+            "type":"range",
+            "id":"time_animation",
+            "label":"Duration animation each block",
+            "max":5,
+            "min":1,
+            "default":1,
+            "unit":"s",
+            "step":0.5
+        },
+        {
+            "type":"range",
+            "id":"animation_delay",
+            "label":"Time animation delay",
+            "max":110,
+            "min":10,
+            "step":10,
+            "unit":"%",
+            "default":40,
+            "info":"Defines the number of time to wait when the animation previous end, before the animation next will start."
+        },
+        {
+            "type": "header",
+            "content": "2. Design options"
+        },
+        {
+            "type": "select","id": "layout","default": "t4s-container-fluid","label": "Layout",
+            "options": [
+                {"value": "t4s-container-wrap", "label": "Wrapped container"},
+                { "value": "t4s-container-fluid", "label": "Full width"}
+            ]
+        },
+        {
+            "type": "color",
+            "id": "cl_bg",
+            "label": "Background"
+        },
+        {
+            "type": "color_background",
+            "id": "cl_bg_gradient",
+            "label": "Background gradient"
+        },
+        {
+            "type": "text",
+            "id": "mg",
+            "label": "Margin",
+            "info":"Margin top, margin right, margin bottom, margin left. If you not use to blank",
+            "default": ",,50px,",
+            "placeholder": ",,50px,"
+        },
+        {
+            "type": "text",
+            "id": "pd",
+            "label": "Padding",
+            "info":"Padding top, padding right, padding bottom, padding left. If you not use to blank",
+            "placeholder": "50px,,50px,"
+        },
+        {
+          "type": "header",
+          "content": "+ Design Tablet Options"
+        },
+        {
+          "type": "text",
+          "id": "mg_tb",
+          "label": "Margin",
+          "placeholder": ",,50px,"
+        },
+        {
+          "type": "text",
+          "id": "pd_tb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+        },
+        {
+            "type": "header",
+            "content": "+ Design Mobile Options"
+        },
+        {
+            "type": "text",
+            "id": "mg_mb",
+            "label": "Margin",
+            "default": ",,30px,",
+            "placeholder": ",,50px,"
+        },
+        {
+            "type": "text",
+            "id": "pd_mb",
+            "label": "Padding",
+            "placeholder": ",,50px,"
+        },
+        {
+            "type": "header",
+            "content": "3. Custom css"
+        },
+        {
+            "id": "use_cus_css",
+            "type": "checkbox",
+            "label": "Use custom css",
+            "default":false,
+            "info": "If you want custom style for this section."
+        },
+        { 
+            "id": "code_cus_css",
+            "type": "textarea",
+            "label": "Code custom css",
+            "info": "Use selector .SectionID to style css"
+            
+        }
+    ],
+    "blocks":[
+        {
+            "type":"custom_button",
+            "name":"Button",
+            "limit":1,
+            "settings":[
+                {
+                    "type": "select",
+                    "id": "source",
+                    "label": "Source video",
+                    "default": "1",
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Youtube"
+                        },
+                        {
+                          "value": "3",
+                          "label": "Shopify-hosted"
+                        }
+                    ]
+                },
+                {
+                    "type":"checkbox",
+                    "id":"au_video",
+                    "label":"Enable video autoplay",
+                    "default":true
+                },
+                {
+                    "type":"checkbox",
+                    "id":"loop_video",
+                    "label":"Enable video looping",
+                    "default":true
+                },
+                {
+                    "type": "checkbox",
+                    "id": "btn_close",
+                    "label": "Show button close when video inline playing",
+                    "default": true
+                },
+                {
+                    "type":"select",
+                    "id":"source_btn",
+                    "label":"Choose button",
+                    "default":"btn_custom",
+                    "options":[
+                        {
+                            "label":"Button icon",
+                            "value":"btn_icon"
+                        },
+                        {
+                            "label":"Button custom",
+                            "value":"btn_custom"
+                        }
+                    ]                   
+                },
+                {
+                    "type":"select",
+                    "id":"click_action",
+                    "label":"Click action",
+                    "default":"data-open-mfp-video",
+                    "options":[
+                        {
+                            "label":"Video popup",
+                            "value":"data-open-mfp-video"
+                        },
+                        {
+                            "label":"Video inline",
+                            "value":"data-video-poster-btn"
+                        }
+                    ]                   
+                },
+                {
+                    "type": "header",
+                    "content": "+ Options for button custom"
+                },
+                {
+                    "type":"text",
+                    "id":"button_text",
+                    "label":"Button label",
+                    "default":"Watch the video",
+                    "info":"If set blank will not show"
+                },
+                {
+                    "type": "select",
+                    "id": "fontf",
+                    "default":"inherit",
+                    "label": "Font family",
+                    "options": [
+                        {
+                            "label": "Inherit",
+                            "value": "inherit"
+                        },
+                        {
+                            "label": "Font Family #1",
+                            "value": "1"
+                        },
+                        {
+                            "label": "Font Family #2",
+                            "value": "2"
+                        },
+                        {
+                            "label": "Font Family #3",
+                            "value": "3"
+                        }
+                    ]
+                },
+                {
+                    "type":"range",
+                    "id":"button_icon_w",
+                    "label":"Button icon width",
+                    "min":0,
+                    "max":50,
+                    "step":1,
+                    "unit":"px",
+                    "default":0
+                },
+                {
+                    "type": "select",
+                    "id": "button_style",
+                    "label": "Button style",
+                    "options": [
+                        {
+                            "label": "Default",
+                            "value": "default"
+                        },
+                        {
+                            "label": "Outline",
+                            "value": "outline"
+                        },
+                        {
+                            "label": "Bordered bottom",
+                            "value": "bordered"
+                        },
+                        {
+                            "label": "Link",
+                            "value": "link"
+                        }
+                    ]
+                },
+                {
+                    "type":"select",
+                    "id":"button_effect",
+                    "label":"Button hover effect",
+                    "default":"default",
+                    "info":"Only working button style default, outline",
+                    "options":[
+                        {
+                            "label":"Default",
+                            "value":"default"
+                        },
+                        {
+                            "label":"Fade",
+                            "value":"fade"
+                        },
+                        {
+                            "label":"Rectangle out",
+                            "value":"rectangle-out"
+                        },
+                        {
+                            "label":"Sweep to right",
+                            "value":"sweep-to-right"
+                        },
+                        {
+                            "label":"Sweep to left",
+                            "value":"sweep-to-left"
+                        },
+                        {
+                            "label":"Sweep to bottom",
+                            "value":"sweep-to-bottom"
+                        },
+                        {
+                            "label":"Sweep to top",
+                            "value":"sweep-to-top"
+                        },
+                        {
+                            "label":"Shutter out horizontal",
+                            "value":"shutter-out-horizontal"
+                        },
+                        {
+                            "label":"Outline",
+                            "value":"outline"
+                        },
+                        {
+                            "label":"Shadow",
+                            "value":"shadow"
+                        }
+                    ]
+                },
+                {
+                    "type":"color",
+                    "id":"pri_cl",
+                    "label":"Primary color",
+                    "default":"#222"
+                },
+                {
+                    "type":"color",
+                    "id":"second_cl",
+                    "label":"Secondary color",
+                    "info":"Only working button style default",
+                    "default":"#fff"
+                },
+                {
+                    "type":"color",
+                    "id":"pri_cl_hover",
+                    "label":"Primary color hover",
+                    "default":"#56cfe1"
+                },
+                {
+                    "type":"color",
+                    "id":"second_cl_hover",
+                    "label":"Secondary color hover",
+                    "info":"Only working button style default, outline",
+                    "default":"#fff"
+                },
+                {
+                    "type":"range",
+                    "id":"fsbutton",
+                    "label":"Font size",
+                    "max":50,
+                    "min":0,
+                    "step":1,
+                    "unit":"px",
+                    "default":14
+                },
+                {
+                    "type":"range",
+                    "id":"fwbutton",
+                    "label":"Font weight",
+                    "min":100,
+                    "max":900,
+                    "step":100,
+                    "default":400
+                },
+                {
+                    "type":"range",
+                    "id":"button_ls",
+                    "label":"Letter spacing",
+                    "min":0,
+                    "max":10,
+                    "step":0.1,
+                    "unit":"px",
+                    "default":0
+                },
+                {
+                    "type":"range",
+                    "id":"button_mh",
+                    "label":"Min height",
+                    "min":30,
+                    "max":80,
+                    "step":0.5,
+                    "unit":"px",
+                    "default":42
+                },
+                {
+                    "type":"range",
+                    "id":"button_bdr",
+                    "label":"Border radius",
+                    "min":0,
+                    "max":40,
+                    "step":1,
+                    "unit":"px",
+                    "default":0,
+                    "info":"Only working button style default, outline"
+                },
+                {
+                    "type":"range",
+                    "id":"button_pd_lr",
+                    "label":"Padding left/right",
+                    "min":0,
+                    "max":100,
+                    "step":1,
+                    "unit":"px",
+                    "default":20
+                },
+                {
+                    "type": "number",
+                    "id": "button_mgb",
+                    "label": "Margin bottom",
+                    "default": 0
+                },
+                {
+                    "type":"header",
+                    "content":"+ Option Mobile"
+                },
+                {
+                    "type":"checkbox",
+                    "id":"hidden_mobile",
+                    "label":"Hidden on mobile",
+                    "default":false
+                },
+                {
+                    "type":"range",
+                    "id":"button_icon_w_mb",
+                    "label":"Button icon width (Mobile)",
+                    "min":0,
+                    "max":50,
+                    "step":1,
+                    "unit":"px",
+                    "default":0
+                },
+                {
+                    "type":"range",
+                    "id":"fsbutton_mb",
+                    "label":"Font size (Mobile)",
+                    "max":50,
+                    "min":0,
+                    "step":1,
+                    "unit":"px",
+                    "default":10
+                },
+                {
+                    "type":"range",
+                    "id":"button_mh_mb",
+                    "label":"Min height (Mobile)",
+                    "min":10,
+                    "max":50,
+                    "step":0.5,
+                    "unit":"px",
+                    "default":36
+                },
+                {
+                    "type":"range",
+                    "id":"button_pd_lr_mb",
+                    "label":"Padding left/right (Mobile)",
+                    "min":0,
+                    "max":100,
+                    "step":1,
+                    "unit":"px",
+                    "default":15
+                },
+                {
+                    "type":"range",
+                    "id":"button_ls_mb",
+                    "label":"Letter spacing (Mobile)",
+                    "min":0,
+                    "max":10,
+                    "step":0.1,
+                    "unit":"px",
+                    "default":0
+                },
+                {
+                    "type": "number",
+                    "id": "button_mgb_mb",
+                    "label": "Margin bottom (Mobile)",
+                    "default": 0
+                },
+                {
+                    "type": "paragraph",
+                    "content": "————————————————"
+                },
+                {
+                    "type":"select",
+                    "id":"animation",
+                    "label":"Animation",
+                    "default":"none",
+                    "options":[
+                        {
+                            "label":"None",
+                            "value":"none"
+                        },
+                        {
+                            "label":"fadeIn",
+                            "value":"fadeIn"
+                        },
+                        {
+                            "label":"fadeInDown",
+                            "value":"fadeInDown"
+                        },
+                        {
+                            "label":"fadeInDownBig",
+                            "value":"fadeInDownBig"
+                        },
+                        {
+                            "label":"fadeInLeft",
+                            "value":"fadeInLeft"
+                        },
+                        {
+                            "label":"fadeInLeftBig",
+                            "value":"fadeInLeftBig"
+                        },
+                        {
+                            "label":"fadeInRight",
+                            "value":"fadeInRight"
+                        },
+                        {
+                            "label":"fadeInRightBig",
+                            "value":"fadeInRightBig"
+                        },
+                        {
+                            "label":"fadeInUp",
+                            "value":"fadeInUp"
+                        },
+                        {
+                            "label":"fadeInUpBig",
+                            "value":"fadeInUpBig"
+                        },
+                        {
+                            "label":"fadeInTopLeft",
+                            "value":"fadeInTopLeft"
+                        },
+                        {
+                            "label":"fadeInTopRight",
+                            "value":"fadeInTopRight"
+                        },
+                        {
+                            "label":"fadeInBottomLeft",
+                            "value":"fadeInBottomLeft"
+                        },
+                        {
+                            "label":"fadeInBottomRight",
+                            "value":"fadeInBottomRight"
+                        },
+                        {
+                            "label":"bounceIn",
+                            "value":"bounceIn"
+                        },
+                        {
+                            "label":"bounceInDown",
+                            "value":"bounceInDown"
+                        },
+                        {
+                            "label":"bounceInLeft",
+                            "value":"bounceInLeft"
+                        },
+                        {
+                            "label":"bounceInRight",
+                            "value":"bounceInRight"
+                        },
+                        {
+                            "label":"bounceInUp",
+                            "value":"bounceInUp"
+                        },
+                        {
+                            "label":"zoomIn",
+                            "value":"zoomIn"
+                        },
+                        {
+                            "label":"zoomInDown",
+                            "value":"zoomInDown"
+                        },
+                        {
+                            "label":"zoomInLeft",
+                            "value":"zoomInLeft"
+                        },
+                        {
+                            "label":"zoomInRight",
+                            "value":"zoomInRight"
+                        },
+                        {
+                            "label":"zoomInUp",
+                            "value":"zoomInUp"
+                        },
+                        {
+                            "label":"slideInDown",
+                            "value":"slideInDown"
+                        },
+                        {
+                            "label":"slideInLeft",
+                            "value":"slideInLeft"
+                        },
+                        {
+                            "label":"slideInRight",
+                            "value":"slideInRight"
+                        },
+                        {
+                            "label":"slideInUp",
+                            "value":"slideInUp"
+                        },
+                        {
+                            "label":"lightSpeedInRight",
+                            "value":"lightSpeedInRight"
+                        },
+                        {
+                            "label":"lightSpeedInLeft",
+                            "value":"lightSpeedInLeft"
+                        },
+                        {
+                            "label":"lightSpeedOutRight",
+                            "value":"lightSpeedOutRight"
+                        },
+                        {
+                            "label":"lightSpeedOutLeft",
+                            "value":"lightSpeedOutLeft"
+                        },
+                        {
+                            "label":"jello",
+                            "value":"jello"
+                        },
+                        {
+                            "label":"tada",
+                            "value":"tada"
+                        },
+                        {
+                            "label":"pulse",
+                            "value":"pulse"
+                        }
+                    ]
+                }
+            ]
+
+        }
+    ],
+    "presets": [
+        {
+            "name": "Video Popup & Inline Custom",
+            "category": "Collection Page",
+            "blocks":[
+            ]
+        }
+    ]
+}
+{% endschema %}

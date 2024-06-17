@@ -1,0 +1,53 @@
+/*-----------------------------------------------------------------------------/
+/ Custom Theme CSS
+/-----------------------------------------------------------------------------*/
+/*---------------- Global Custom CSS -------------------*/
+body#recharge-novum .t4s-website-wrapper header, body body#recharge-novum .t4s-website-wrapper .site-header {
+    z-index: 1 !important;
+}
+
+header .t4s-type__mega > .t4s-sub-menu {
+  padding-top: 30px;
+  padding-bottom: 35px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.shopify-section {
+  scroll-margin-top: 220px;
+}
+
+footer .t4s-section-footer .t4s-bottom-bar .t4s-coppy-right {
+    margin-right: 0;
+}
+
+@media (max-width: 767px) {
+
+ .t4s-section-footer .t4s-bottom-bar .t4s-coppy-right a, 
+.t4s-footer-menu.t4s-footer-menu-style2 ul li+li:before {
+        font-size: 11px;
+ }
+
+}
+
+/*---------------- Custom CSS for only desktop -------------------*/
+@media (min-width: 1025px) {
+  
+}
+
+/*---------------- Custom CSS for tablet, mobile -------------------*/
+@media (max-width: 1024px) {
+  
+}
+
+/*---------------- Custom CSS for only tablet -------------------*/
+@media (min-width: 768px) and (max-width: 1024px) {
+  
+}
+
+/*---------------- Custom CSS for only mobile -------------------*/
+@media (max-width: 767px){
+  
+}

@@ -1,0 +1,59 @@
+{% comment %}{% assign ProductVendor = product.vendor | handleize  %}{% endcomment %}
+{% assign ProductVendor = product.vendor | downcase  %}
+      {% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}        
+  {% assign found_a_collection = false %}
+  {% for c in product.collections %} 
+    {% assign c_title_down = c.title | downcase %}
+    {% comment %}{% if found_a_collection == false and c.handle == ProductVendor %}{% endif %}{% endcomment %}
+    {% if found_a_collection == false and c_title_down == ProductVendor %}
+      {% assign found_a_collection = true %}
+      {% assign collection = c %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% if collection.metafields.custom.highlight_image != blank %}
+<div class="product-media-bottom-block">
+  <div class="marketing-text-future">
+    {{ collection.metafields.custom.collection_marketing | metafield_tag }}
+  </div>
+</div>
+{% endif %}
+<div class="t4s-shipping ia-shipping product-top-shipping">
+<div class="t4s-section-inner  t4s-container-wrap">
+    <div class="t4s-container">
+      <div class="t4s-shipping-list t4s-row t4s-row-cols-lg-2 t4s-row-cols-md-2 t4s-row-cols-2">
+          
+    {% for i in (1..4) %}
+     {% assign highlight = "highlight_" | append: i %}
+     {% assign highlight_icon = highlight | append: "_icon" %}
+     {% assign highlight_title = highlight | append: "_title" %}
+     {% assign highlight_text = highlight | append: "_text" %}
+  
+    {% if collection.metafields.custom[highlight_icon] != blank or collection.metafields.custom[highlight_title] != blank or collection.metafields.custom[highlight_text]  != blank %}
+      <div class="t4s-shipping t4s-shipping-item t4s-col-item"
+        highlight_icon="{{ collection.metafields.custom[highlight_icon] }}"
+        highlight_title="{{ collection.metafields.custom[highlight_title] }}"
+        highlight_text="{{ collection.metafields.custom[highlight_text] }}"
+        >
+          <div class="t4s-shipping-inner" timeline hdt-reveal="slide-in">
+            {% if collection.metafields.custom[highlight_icon] != blank %}
+                <div class="t4s-col-auto t4s-shipping-icon t4s-shipping-icon-img t4s-ship-img lazyloadt4s" style="background-image:url({{ collection.metafields.custom[highlight_icon] | img_url: "large"}});">
+                 <img src="{{ collection.metafields.custom[highlight_icon] | img_url: "master"}}">
+                </div>
+            {% endif %}
+            <div class="t4s-col t4s-shipping-content">
+              {% if collection.metafields.custom[highlight_title] != blank %}
+              <h3 class="t4s-shipping-title">{{ collection.metafields.custom[highlight_title] }}</h3>
+              {% endif %}
+              {% if collection.metafields.custom[highlight_text]  != blank %}
+              <div class="t4s-shipping-des t4s-rte--list"><p>{{ collection.metafields.custom[highlight_text] }}</p></div>
+              {% endif %}
+                </div>
+          </div>
+            </div>
+          {% endif %}
+          {% endfor %}
+      </div>
+    </div>
+</div> 
+</div>

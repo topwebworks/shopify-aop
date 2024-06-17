@@ -1,0 +1,132 @@
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'collection-products.css' | asset_url | stylesheet_tag }}
+{{ 'slider-settings.css' | asset_url | stylesheet_tag }}
+{{ 'pre_flickityt4s.min.css' | asset_url | stylesheet_tag }}
+<link href="{{ 'loading.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- liquid
+ assign se_stts = section.settings
+ assign show_vendor = se_stts.show_vendor
+ assign enable_rating = settings.enable_rating
+ assign show_img = settings.show_img
+ assign isGrowaveWishlist = false  
+ if settings.wishlist_mode == "3" and shop.customer_accounts_enabled
+  assign isGrowaveWishlist = true
+endif
+ -%}
+
+   
+
+                   
+
+{% assign prohandle = product.handle %}
+{% assign flag = false %}
+{% capture Wholediv %}
+                    {% assign final_value_list = product.metafields.custom.grade_level | remove: "[" | remove: "]" | split:"," %}
+  {% for product in collections.all.products %}
+    {% assign index = forloop.index %}
+    {% unless product.metafields.seo.hidden == 1 %}
+    {% unless product.handle == prohandle %}
+    {% assign flagMatch = false %}
+  {% for final_value in final_value_list %}
+  {% if flagMatch == false %}
+    
+                          
+                          {% assign final_value_list_grid = product.metafields.custom.grade_level | remove: "[" | remove: "]" | split:"," %}
+                          {% for final_value_list_grid_new in final_value_list_grid %}
+                          {% if  final_value == final_value_list_grid_new %}
+                             {% assign flag = true %}
+{%- render 'custom-product-grid-item6',index:index, product: product, product: product, isGrowaveWishlist: isGrowaveWishlist, show_img: show_img, show_vendor: show_vendor, use_link_vendor: use_link_vendor, enable_pr_color: enable_pr_color, show_cl_type: show_cl_type, get_color: get_color, enable_pr_size: enable_pr_size, pr_size_pos: pr_size_pos, get_size: get_size, show_size_type: show_size_type, price_varies_style: price_varies_style, app_review: app_review, enable_rating: enable_rating, use_countdown: use_countdown, imgatt: imgatt, show_list_btns: false-%}
+                          {% assign flagmatch = true %}
+                          {% break %}
+                          {% endif %}
+                          {% endfor %}
+                          
+                      
+ {% endif %} 
+    {% if flagmatch == true %}
+                          {% break %}
+      {% endif %}
+ {% endfor %}
+      {% endunless %}
+      {% endunless %}
+ {% endfor %} 
+  {% endcapture %}
+{% unless flag == false %}
+  <div class="t4s-section-inner">
+    <div class="t4s-container">
+      <div class="t4s-container-inner">
+        <div class="heading-custom-related ">
+		
+		<h2 class="t4s-section-title t4s-title h3"><span>{{ section.settings.heading }}</span></h2></div>
+        <div class="all-link">
+          {% if product.metafields.custom.grade_level != blank %} 
+            {% assign final_value_list = product.metafields.custom.grade_level | remove: "[" | remove: "]" | split:"," %}
+            {% for final_value in final_value_list %}
+              {% if forloop.last %}{% assign numberindex = forloop.index %}{% endif %}
+            {% endfor %}
+            {% if numberindex > 1 %}
+              {% assign url = 'https://aop-chs.myshopify.com/collections/all-products' %}
+              {% for final_value in final_value_list %}
+                {% assign ff_value = final_value | strip | remove: '"' | remove: "Grade " %}
+                {% if url contains '?' %}
+                  {% assign url = url | append:'&filter.p.m.custom.grade_level=Grade+' | append:ff_value %}
+                {% else %}
+                  {% assign url = url | append:'?filter.p.m.custom.grade_level=Grade+' | append:ff_value %}
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              {% assign url = 'https://aop-chs.myshopify.com/collections/all-products' %}
+              {% assign ff_value = product.metafields.custom.grade_level | remove: "[" | remove: "]" | strip | remove: '"' | remove: "Grade " %}
+              {% assign url = url | append:'?filter.p.m.custom.grade_level=Grade+' | append:ff_value %}
+            {% endif %}
+          {% endif %}
+                  <!-- &filter.p.m.custom.grade_level=Grade+10&filter.p.m.custom.grade_level=Grade+11 -->
+     <a href="{% if url %}{{ url }}{% else %}{{ section.settings.link }}{% endif %}">{{ section.settings.sub_heading }}</a>
+              </div>
+
+        {% comment %}
+                <div  data-t4s-resizeobserver class="t4s-flicky-slider relateds-prouct-slidr t4s_box_pr_slider t4s-products t4s-text-default t4s_rationt t4s_position_8 t4s_nt_cover t4s-slider-btn-style-outline t4s-slider-btn-round t4s-slider-btn-small t4s-slider-btn-cl-dark t4s-slider-btn-vi-always t4s-slider-btn-hidden-mobile-false t4s-row t4s-row-cols-lg-5 t4s-row-cols-md-3 t4s-row-cols-2 t4s-gx-md-20 t4s-gy-md-0 t4s-gx-20 t4s-gy-0 flickityt4s flickityt4s-later flickityt4s-enabled is-draggable t4s-enabled" data-flickityt4s-js='{"setPrevNextButtons":true,"arrowIcon":"{{ arrow_icon }}","imagesLoaded": 0,"adaptiveHeight": 0, "contain": 1, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": 1,"pageDots": false, "autoPlay" : {{ se_stts.au_time | times: 1000 }}, "pauseAutoPlayOnHover" : true }' style="--space-dots: {{ se_stts.dots_space }}px;--flickity-btn-pos: {{ se_stts.space_h_item }}px;--flickity-btn-pos-mb: {{ se_stts.space_h_item_mb }}px;">
+{{ Wholediv }}
+                    </div>
+  {% endcomment %}
+        <div data-t4s-resizeobserver class="relateds-prouct-slidr t4s-flicky-slider t4s_box_pr_slider t4s-products t4s-text-default t4s_rationt t4s_position_8 t4s_nt_cover t4s-slider-btn-style-outline t4s-slider-btn-round t4s-slider-btn-small t4s-slider-btn-cl-dark t4s-slider-btn-vi-always t4s-slider-btn-hidden-mobile-false  {% if se_stts.nav_dot == true %}   t4s-dots-style-{{ se_stts.dot_owl }} t4s-dots-cl-{{ se_stts.dots_cl }} t4s-dots-round-{{ se_stts.dots_round }} t4s-dots-hidden-mobile-{{ se_stts.dots_hidden_mobile }}{% endif %} t4s-row t4s-row-cols-lg-5 t4s-row-cols-md-3 t4s-row-cols-2 t4s-gx-md-20 t4s-gy-md-0 t4s-gx-20 t4s-gy-0 flickityt4s flickityt4s-later" data-flickityt4s-js='{"setPrevNextButtons":true,"arrowIcon":"1","imagesLoaded": 0,"adaptiveHeight": 0, "contain": 1, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": 1,"pageDots": false, "autoPlay" : 0, "pauseAutoPlayOnHover" : true }' style="--space-dots: 10px;--flickity-btn-pos: 20px;--flickity-btn-pos-mb: 105px;">
+          {{ Wholediv }}
+        </div>
+        
+    </div>
+  </div>
+    </div>
+   {% endunless %}
+              
+{%- schema -%}
+{
+  "name": "Custom Related Products",
+  "class": "t4s-section id_product-recommendations id_product-related",
+  "settings": [
+    
+      {
+        "type": "liquid",
+        "id": "heading",
+        "label": "Heading",
+        "default": "More Grade 8 Courses"
+    },
+      {
+        "type": "liquid",
+        "id": "sub_heading",
+        "label": "Sub Heading",
+        "default": "Shop All Grade 8"
+    },
+      {
+        "type": "url",
+        "id": "link",
+        "label": "Link"
+    }
+  ],
+    "presets": [
+      {
+        "name": "Custom Related Products",
+        "category": "Productpage"
+      }
+    ]
+}
+{% endschema %}

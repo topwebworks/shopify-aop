@@ -1,0 +1,383 @@
+{% if product.metafields.custom.digital_product == true
+  and product.metafields.custom.product_type != 'Online Full Access'
+  and product.selected_or_first_available_variant.sku != 'MONROBOTIFY'
+  and product.selected_or_first_available_variant.sku != 'MONROBOTIFYM'
+%}
+  {% if product.metafields.custom.product_billing_frequency != blank %}
+    <div class="student-subcription-plan">
+      <div class="subcription-title">Choose Your Subscription:</div>
+      <div class="student-subcription-plan-wrapper">
+        {% if product.metafields.custom.product_billing_frequency == 'Monthly' %}
+          <div
+            class="student-subcription-item active"
+            data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+            data-price="{{ product.price | money }}"
+            data-url="{{ product.url }}"
+            data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}"
+            data-tit="{{ product.title }}"
+            data-id="{{ product.first_available_variant.id }}"
+          >
+            <div class="student-subcription-item-inner">
+              <h6 class="student-course">Single Course<span>1 Student</span></h6>
+              <div class="student-price">
+                {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+              </div>
+            </div>
+          </div>
+          {% if product.metafields.custom.associated_product_handle != blank %}
+            {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+            {% assign product = all_products[productHandleyear] %}
+            {% if product.compare_at_price_max > product.price %}
+              {% capture comparepriceoff %}{{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+            {% endif %}
+
+            <div
+              class="student-subcription-item"
+              data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+              data-compare="{{ product.compare_at_price_max | money }}"
+              data-off="{{ comparepriceoff }}"
+              data-price="{{ product.price| money }}"
+              data-url="{{ product.url }}"
+              data-sell="{{product.selling_plan_groups[0].selling_plans[1].id}}"
+              data-tit="{{ product.title }}"
+              data-id="{{ product.first_available_variant.id }}"
+            >
+              <div class="student-subcription-item-inner">
+                <h6 class="student-course">Single Course<span>1 Student</span></h6>
+                <div class="student-price">
+                  {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+                </div>
+                {% if product.compare_at_price_max > product.price %}
+                  <div class="save-price">
+                    SAVE
+                    {{
+                      product.compare_at_price_max
+                      | minus: product.price
+                      | times: 100.0
+                      | divided_by: product.compare_at_price_max
+                      | money_without_currency
+                      | times: 100
+                      | remove: '.0'
+                    -}}
+                    %
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+        {% else %}
+          {% if product.metafields.custom.associated_product_handle != blank %}
+            {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+            {% assign productt = all_products[productHandleyear] %}
+            {% if productt.compare_at_price_max > productt.price %}
+              {% capture comparepriceoff %}{{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+            {% endif %}
+
+            <div
+              class="student-subcription-item active"
+              data-selling="{{ productt.selling_plan_groups[0].selling_plans[0].id }}"
+              data-compare="{{ productt.compare_at_price_max | money }}"
+              data-off="{{ comparepriceoff }}"
+              data-price="{{ productt.price| money }}"
+              data-url="{{ productt.url }}"
+              data-sell="{{productt.selling_plan_groups[0].selling_plans[1].id}}"
+              data-tit="{{ productt.title }}"
+              data-id="{{ productt.first_available_variant.id }}"
+            >
+              <div class="student-subcription-item-inner">
+                <h6 class="student-course">Single Course<span>1 Student</span></h6>
+                <div class="student-price">
+                  {{ productt.price | money }}/{{ productt.metafields.custom.product_billing_frequency }}
+                </div>
+                {% if productt.compare_at_price_max > productt.price %}
+                  <div class="save-price">
+                    SAVE
+                    {{
+                      productt.compare_at_price_max
+                      | minus: productt.price
+                      | times: 100.0
+                      | divided_by: productt.compare_at_price_max
+                      | money_without_currency
+                      | times: 100
+                      | remove: '.0'
+                    -}}
+                    %
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+          <div
+            class="student-subcription-item"
+            data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+            data-price="{{ product.price | money }}"
+            data-url="{{ product.url }}"
+            data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}"
+            data-tit="{{ product.title }}"
+            data-id="{{ product.first_available_variant.id }}"
+          >
+            <div class="student-subcription-item-inner">
+              <h6 class="student-course">Single Course<span>1 Student</span></h6>
+              <div class="student-price">
+                {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% elsif product.metafields.custom.product_type == 'Online Full Access'
+  and product.metafields.custom.digital_product == true
+%}
+   {% assign metafieldData = product.metafields.custom.associated_product_handle | split: "," %}
+          {% assign frequency =  product.metafields.custom.product_billing_frequency   %} 
+    <div class="student-subcription-plan">
+    <div class="subcription-title">Choose Your Subscription:</div>
+   <div class="student-subcription-plan-wrapper free-trial-product">
+     {% assign DiscountMonth = false %}
+     {% assign DiscountYear = false %}
+     {% assign FullMonth = false %}
+     {% assign FullYear = false %}
+     {% for productHandle in metafieldData %}
+       
+     {% assign productName = productHandle | split: ":" | first  %}
+       {% if productName contains "discounted_monthly" %}
+     {% assign DiscountMonth =  true %}
+         {% endif %}
+     {% if productName contains "discounted_yearly" %}
+     {% assign DiscountYear =  true %}
+       {% endif %}
+     {% if productName contains "full_monthly"%}
+     {% assign FullMonth =  true %}
+       {% endif %}
+     {% if productName contains "full_yearly"%}
+     {% assign FullYear =  true %}
+     {% endif %}
+      {% endfor %}
+      {% if DiscountMonth == false %}
+     {% assign productName =  "discounted_monthly" %}
+     {% elsif DiscountYear == false %}
+     {% assign productName =  "discounted_yearly" %}
+     {% elsif FullMonth == false %}
+     {% assign productName =  "full_monthly" %}
+     {% elsif FullYear == false %}
+     {% assign productName =  "full_yearly" %}
+     {% endif %}
+     {% assign productOriginal = product %}
+     {% if frequency == "Yearly" %}
+     {% for productHandle in metafieldData %}
+       {%- assign productNamee = productHandle | split: ":" | first -%}
+              {% assign productHandlenew = productHandle | split: ":" | last  %}
+     {% assign product = all_products[productHandlenew] %}
+      {% for variant in product.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{productNamee | strip}}" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+      {% endfor %}
+       {% for variant in productOriginal.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{ productName }}" data-selling="{{ productOriginal.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+       {% else %}
+       {% for variant in productOriginal.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{ productName }}" data-selling="{{ productOriginal.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+       {% for productHandle in metafieldData %}
+       {%- assign productNamee = productHandle | split: ":" | first -%}
+              {% assign productHandlenew = productHandle | split: ":" | last  %}
+     {% assign product = all_products[productHandlenew] %}
+      {% for variant in product.variants %}
+      <div style="display:none;" data-price='{{ variant.price| money }}' data-name="{{productNamee | strip}}" data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}" class="student-subcription-item" data-tit="{{ variant.title }}" data-id="{{ variant.id }}">
+         <div class="student-subcription-item-inner">
+            <h6 class="student-course">Single Course<span>1 Student</span></h6>
+            <div class="student-price">{{ variant.price | money }}/{{ variant.title }}</div>
+           {% if variant.compare_at_price %} <div class="save-price">SAVE {{ variant.compare_at_price | money }}%</div>{% endif %}
+         </div>
+      </div>
+       {% endfor %}
+      {% endfor %}
+     {% endif %}
+   </div> 
+</div>      
+<style>
+                .t4s-swatch{display:none;}
+                </style>
+              <script>  
+   setTimeout(function() {
+                       var i = 0 ;
+        $(".student-subcription-plan-wrapper .student-subcription-item").each(function(){
+          var ProductName = $(this).attr("data-name");
+          var VariantTitle = $(this).attr("data-tit");
+          if((ProductName == "full_monthly" &&  VariantTitle == "Monthly Free Trial") || (ProductName == "full_yearly" &&  VariantTitle == "Yearly Free Trial"))
+          {
+            
+            if(i==0)
+            {
+              var GetPrice = $(this).attr("data-price");
+              var variant_idGet = $(this).attr("data-id");
+              var selling_id = $(this).attr("data-selling");
+              $("input[name='selling_plan']").val(selling_id);
+              $("select.t4s-product__select option").val(variant_idGet);
+              $(".t4s-product__info-container .t4s-product-price").html(GetPrice);
+              $(this).addClass("active");
+              
+            }
+            
+            $(this).show();
+            i =0+1; 
+            $(".student-subcription-plan").show();
+          }
+           
+          else{
+            $(this).hide();
+          }
+        })
+     }, 1000);
+  </script>
+{% elsif product.selected_or_first_available_variant.sku == 'MONROBOTIFY'
+  or product.selected_or_first_available_variant.sku == 'MONROBOTIFYM'
+  and product.metafields.custom.digital_product == true
+%}
+  {% if product.metafields.custom.product_billing_frequency != blank %}
+    <div class="student-subcription-plan">
+      <div class="subcription-title">Choose Your Subscription:</div>
+      <div class="student-subcription-plan-wrapper">
+        {% if product.metafields.custom.product_billing_frequency == 'Monthly' %}
+          <div
+            class="student-subcription-item active"
+            data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+            data-price="{{ product.price | money }}"
+            data-url="{{ product.url }}"
+            data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}"
+            data-tit="{{ product.title }}"
+            data-id="{{ product.first_available_variant.id }}"
+          >
+            <div class="student-subcription-item-inner">
+              <h6 class="student-course">Single Course<span>1 Student</span></h6>
+              <div class="student-price">
+                {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+              </div>
+            </div>
+          </div>
+          {% if product.metafields.custom.associated_product_handle != blank %}
+            {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+            {% assign product = all_products[productHandleyear] %}
+            {% if product.compare_at_price_max > product.price %}
+              {% capture comparepriceoff %}{{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+            {% endif %}
+            <div
+              class="student-subcription-item"
+              data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+              data-compare="{{ product.compare_at_price_max | money }}"
+              data-off="{{ comparepriceoff }}"
+              data-price="{{ product.price| money }}"
+              data-url="{{ product.url }}"
+              data-sell="{{product.selling_plan_groups[0].selling_plans[1].id}}"
+              data-tit="{{ product.title }}"
+              data-id="{{ product.first_available_variant.id }}"
+            >
+              <div class="student-subcription-item-inner">
+                <h6 class="student-course">Single Course<span>1 Student</span></h6>
+                <div class="student-price">
+                  {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+                </div>
+                {% if product.compare_at_price_max > product.price %}
+                  <div class="save-price">
+                    SAVE
+                    {{
+                      product.compare_at_price_max
+                      | minus: product.price
+                      | times: 100.0
+                      | divided_by: product.compare_at_price_max
+                      | money_without_currency
+                      | times: 100
+                      | remove: '.0'
+                    -}}
+                    %
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+
+        {% else %}
+          {% if product.metafields.custom.associated_product_handle != blank %}
+            {% assign productHandleyear = product.metafields.custom.associated_product_handle %}
+            {% assign productt = all_products[productHandleyear] %}
+            {% if productt.compare_at_price_max > productt.price %}
+              {% capture comparepriceoff %}{{ productt.compare_at_price_max | minus: productt.price | times: 100.0 | divided_by: productt.compare_at_price_max | money_without_currency | times: 100 | remove: '.0'}}%{% endcapture %}
+            {% endif %}
+
+            <div
+              class="student-subcription-item active"
+              data-selling="{{ productt.selling_plan_groups[0].selling_plans[0].id }}"
+              data-compare="{{ productt.compare_at_price_max | money }}"
+              data-off="{{ comparepriceoff }}"
+              data-price="{{ productt.price| money }}"
+              data-url="{{ productt.url }}"
+              data-sell="{{productt.selling_plan_groups[0].selling_plans[1].id}}"
+              data-tit="{{ productt.title }}"
+              data-id="{{ productt.first_available_variant.id }}"
+            >
+              <div class="student-subcription-item-inner">
+                <h6 class="student-course">Single Course<span>1 Student</span></h6>
+                <div class="student-price">
+                  {{ productt.price | money }}/{{ productt.metafields.custom.product_billing_frequency }}
+                </div>
+                {% if productt.compare_at_price_max > productt.price %}
+                  <div class="save-price">
+                    SAVE
+                    {{
+                      productt.compare_at_price_max
+                      | minus: productt.price
+                      | times: 100.0
+                      | divided_by: productt.compare_at_price_max
+                      | money_without_currency
+                      | times: 100
+                      | remove: '.0'
+                    -}}
+                    %
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+          <div
+            class="student-subcription-item"
+            data-selling="{{ product.selling_plan_groups[0].selling_plans[0].id }}"
+            data-price="{{ product.price | money }}"
+            data-url="{{ product.url }}"
+            data-sell="{{ product.selling_plan_groups[0].selling_plans[1].id}}"
+            data-tit="{{ product.title }}"
+            data-id="{{ product.first_available_variant.id }}"
+          >
+            <div class="student-subcription-item-inner">
+              <h6 class="student-course">Single Course<span>1 Student</span></h6>
+              <div class="student-price">
+                {{ product.price | money }}/{{ product.metafields.custom.product_billing_frequency }}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

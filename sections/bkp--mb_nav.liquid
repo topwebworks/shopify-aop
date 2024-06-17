@@ -1,0 +1,920 @@
+{%- liquid
+assign only_icon = 't4s-only_icon_' | append: settings.only_icon
+assign routes_search_url = routes.search_url
+assign root_url = routes.root_url
+assign sid = section.id
+assign img_size = 40
+if sid == 'mb_nav'
+   assign show_code = true
+elsif sid != 'mb_nav' and request.design_mode or request.page_type == 'index' 
+   assign show_code = true
+else
+   assign show_code = false
+endif -%}
+
+{%- if show_code -%}
+<div class="mainMenu">
+  {% comment %}
+<ul id="menu-mb__ul" class="t4s-mb__menu" data-section-id="{{ sid }}">
+   {%- if section.blocks.size > 0 -%}
+      {%- for block in section.blocks -%}
+         {%- assign block_stts = block.settings -%}
+         {%- case block.type -%}
+            {%- when 'help' -%}
+               <li id="item_mb_help" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-infos"><p class="t4s-menu_infos_title">{{ block_stts.title }}</p><div class="t4s-menu_infos_text t4s-rte--list">{{ block_stts.text }}</div></li>
+            
+            {%- when 'cur' -%}
+
+              {%- liquid 
+                if settings.flag_currency
+                  assign fl = 'flagst4s'
+                endif
+                assign sz = settings.size_currency
+                assign cart_iso_code = cart.currency.iso_code
+              -%}
+
+              {%- if settings.flag_currency %}
+                <style>.flagst4s>img {margin-inline-end: 7px;border-radius: 2px;height: 15px;width: auto;}.flagst4s [data-current]{display: inline-block;}.flagst4s [data-img-current]{margin-inline-end: 0; margin-bottom: 2px;}[data-flagst4s="sm"] img[data-img-current] {height: 12px;width: auto;}[data-flagst4s="md"] img {height: 18.5px;width: auto;margin-inline-end: 7px;}.flagst4s[data-flagst4s="md"] [data-img-current]{height: 15.5px;}</style>
+              {% endif -%}
+
+              {%- if shop.enabled_currencies.size > 1 and settings.currency_type == '1' -%}
+                {%- if linklists.currency-the4.links.size > 0 -%}
+                  {%- assign ck_iso_code = '#' | append: cart_iso_code -%}{%- assign links_cur = linklists.currency-the4.links | where: "url", ck_iso_code -%}
+                  <li data-currency-wrap id="item_mb_cur" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-has-children t4s-only_icon_false t4s-currencies" {{ block.shopify_attributes }}>
+                    <a rel="nofollow" data-no-instant href="{{ routes.root_url }}">
+                      <span data-flagst4s="{{ sz }}" class="t4s-d-inline-block {{ fl }}">
+                        {%- if settings.flag_currency %}{{ localization.country | image_url: width: 30 | image_tag: loading: 'lazy', data-img-current: '' }}{% endif %}
+                        <span data-current>{{- localization.country.currency.iso_code }}</span>
+                      </span>
+                      <span class="t4s-mb-nav__icon"></span>
+                    </a>
+                    <ul class="t4s-sub-menu">
+                    {%- assign list_curr = linklists.currency-the4.links | map: 'url' | join: ',' | remove: routes.root_url | remove: '#' | remove: ' ' | upcase | split: ',' | json -%}
+                    {%- for country in localization.available_countries -%}
+                      {%- unless list_curr contains country.currency.iso_code -%}{%- continue -%}{%- endunless -%}
+                      <li>
+                        <a data-flagst4s="{{ sz }}" data-currency-item class="t4s-currency-item {{ fl }}{% if country.iso_code == localization.country.iso_code %} is--selected{% endif %}" href="/" data-no-instant data-iso="{{ country.currency.iso_code }}" data-country="{{ country.iso_code }}">
+                          {%- if settings.flag_currency %}{{ country | image_url: width: 30 | image_tag: loading: 'lazy' }}{% endif %}
+                          <span>{{ country.name }} - {{ country.currency.iso_code }} {{ country.currency.symbol }}</span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                    </ul>
+                  </li>
+                {%- else -%}
+                  <li data-currency-wrap id="item_mb_cur" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-has-children t4s-only_icon_false t4s-currencies" {{ block.shopify_attributes }}>
+                    <a rel="nofollow" data-no-instant href="/">
+                      <span data-flagst4s="{{ sz }}" class="t4s-d-inline-block {{ fl }}">
+                        {%- if settings.flag_currency %}{{ localization.country | image_url: width: 30 | image_tag: loading: 'lazy', data-img-current: '' }}{% endif %}
+                        <span data-current>{{- localization.country.currency.iso_code }}</span>
+                      </span>
+                      <span class="t4s-mb-nav__icon"></span>
+                    </a>
+                    <ul class="t4s-sub-menu">
+                      {% for country in localization.available_countries %}
+                        <li>
+                          <a data-flagst4s="{{ sz }}" data-currency-item class="t4s-currency-item {{ fl }}{% if country.iso_code == localization.country.iso_code %} is--selected{% endif %}" href="/" data-no-instant data-iso="{{ country.currency.iso_code }}" data-country="{{ country.iso_code }}">
+                            {%- if settings.flag_currency %}{{ country | image_url: width: 30 | image_tag: loading: 'lazy' }}{% endif %}
+                            <span>{{ country.name }} - {{ country.currency.iso_code }} {{ country.currency.symbol }}</span>
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </li>
+                {%- endif -%}
+
+               {%- elsif settings.currency_type == '2' -%}
+                {% comment %} {%- if settings.flag_currency %}{{ 'currencies.min.css' | asset_url | stylesheet_tag }}{% endif -%} {% endcomment %}
+                {%- # theme-check-enable RemoteAsset -%}
+                  {%- assign supported_codes = settings.supported_currencies | split: '|' -%}
+                  <li data-currency-wrap id="item_mb_cur" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-has-children t4s-only_icon_false t4s-currencies" {{ block.shopify_attributes }}>
+                     <a rel="nofollow" data-no-instant href="/">
+                      <span data-flagst4s="{{ sz }}" class="t4s-d-inline-block {{ fl }}">
+                        {%- if settings.flag_currency %}<img data-img-current width="30" height="23" src="//cdn.shopify.com/static/images/flags/{{ cart_iso_code | slice: 0, 2 | join: '' | downcase }}.svg" alt="{{ cart_iso_code }}" loading="lazy">{% endif %}
+                        <span data-current>{{- localization.country.currency.iso_code }}</span>
+                      </span>
+                      <span class="t4s-mb-nav__icon"></span>
+                    </a>
+                     <ul class="t4s-sub-menu">
+                      <li>
+                        <a data-flagst4s="{{ sz }}" data-currency-item class="t4s-currency-item {{ fl }} t4s-d-none" href="/" data-no-instant rel="nofollow" data-currency-temp>
+                          {%- if settings.flag_currency %}<img width="30" height="22.5" src="//cdn.shopify.com/static/images/flags/{{ cart_iso_code | slice: 0, 2 | downcase }}.svg" alt="{{ cart_iso_code }}" loading="lazy">{% endif %}
+                          <span>{{ cart_iso_code }}</span>
+                        </a>
+                      </li>
+                      {%- for code in supported_codes -%}
+                        {%- assign array_money = code | split: '-' -%}
+                        {%- assign data_currency = array_money | first | upcase | strip | remove: ' ' -%}
+                        {%- assign name_money = array_money | last | strip -%}
+                          <li>
+                            <a data-flagst4s="{{ sz }}" data-currency-item class="t4s-currency-item {{ fl }} flagst4s-{{ data_currency }}{% if data_currency == cart_iso_code %} is--selected{% endif %}" href="/" data-no-instant rel="nofollow" data-currency="{{ data_currency }}">
+                              {%- if settings.flag_currency %}<img width="30" height="22.5" src="//cdn.shopify.com/static/images/flags/{{ name_money | slice: 0, 2 | downcase }}.svg" alt="{{ name_money }}" loading="lazy">{% endif %}
+                              <span>{{ name_money }}</span>
+                            </a>
+                          </li>
+                      {%- endfor -%}
+                    </ul>
+                  </li>
+                  {%- # theme-check-enable RemoteAsset -%}
+                {%- endif -%}
+
+            {%- when 'lang' -%}
+                {%- liquid
+                  unless shop.published_locales.size > 1
+                    continue
+                  endunless
+                  assign fl = ''
+                  assign current_locale = request.locale
+                  assign current_locale_iso_code = current_locale.iso_code
+                  -%}
+                <li data-locale-wrap id="item_mb_lang" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-has-children t4s-only_icon_false t4s-languages" {{ block.shopify_attributes }}>
+                   <a rel="nofollow" data-no-instant href="/"><span data-flagst4s="{{ sz }}" data-current class="t4s-languages__current t4s-d-inline-block {{ fl }} lazyloadt4s flagst4s-{{ current_locale_iso_code }}">{{ current_locale.endonym_name }}</span><span class="t4s-mb-nav__icon"></span></a>
+                   <ul class="t4s-sub-menu">
+                    {%- for locale in shop.published_locales -%}{%- assign iso_code = locale.iso_code -%}
+                      <li><a data-flagst4s="{{ sz }}" data-locale-item class="t4s-lang-item {{ fl }} lazyloadt4s flagst4s-{{ iso_code }}{% if iso_code == current_locale_iso_code %} is--selected{% endif %}" href="/" data-no-instant rel="nofollow" data-iso="{{ iso_code }}">{{ locale.endonym_name }}</a></li>
+                   {%- endfor -%}
+                   </ul>
+               </li>
+            
+            {%- when 'wis' -%}{% if settings.wishlist_mode == '0' %}{% continue %}{% endif -%} 
+               <li id="item_mb_wis" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-btns t4s-menu-item-wishlist"><a data-link-wishlist href="{% if settings.wishlist_mode != '3' %}{{ routes_search_url }}/?view=wishlist{%- else -%}/pages/wishlist{%- endif -%}"><span class="t4s-d-inline-block"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>{{ 'general.mobile_menu.wishlist' | t }}</span></a></li>
+            
+            {%- when 'compe' -%}
+              {%- unless settings.enable_compe %}{% continue %}{% endunless %}<li id="item_mb_compe" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-btns t4s-menu-item-compare"><a data-link-compare href="{{ routes_search_url }}/?view=compare"><span class="t4s-d-inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>{{ 'general.mobile_menu.compare' | t }}</span></a></li>
+
+            {%- when 'sea' -%}<li id="item_mb_sea" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-btns t4s-menu-item-sea" data-drawer-delay- data-drawer-options='{ "id":"#t4s-search-hidden" }'><a href="{{ routes_search_url }}"><span class="t4s-d-inline-block"><svg width="24" viewBox="0 0 18 19" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.03 11.68A5.784 5.784 0 112.85 3.5a5.784 5.784 0 018.18 8.18zm.26 1.12a6.78 6.78 0 11.72-.7l5.4 5.4a.5.5 0 11-.71.7l-5.41-5.4z" fill="currentColor"></path></svg>{{ 'general.mobile_menu.search' | t }}</span></a></li>
+            
+            {%- when 'acc' -%}
+              {%- unless shop.customer_accounts_enabled %}{% continue %}{% endunless -%}
+
+                {%- capture the_snippet_auth %}{% render 'socialshopwave-widget-auth' %}{% endcapture -%}
+                 {%- if the_snippet_auth contains 'Liquid error' or settings.growave_social_login == false or settings.enable_growave == false %}
+                    {%- if customer -%}
+                      <li id="item_mb_acc" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-btns t4s-menu-item-acount t4s-menu-item-has-children t4s-only_icon_false">
+                         <a href="{{ routes.account_url }}"><span class="t4s-d-inline-block"><svg width="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>{{ 'general.mobile_menu.my_account' | t }}</span><span class="t4s-mb-nav__icon"></span></a>
+                         <ul class="t4s-sub-menu">
+                            <li><a href="{{ routes.account_url }}">{{ 'customer.menu.dashboard' | t }}</a></li>
+                            <li><a href="{{ routes.account_addresses_url }}">{{ 'customer.menu.addresses' | t }}</a></li>
+                            <li><a href="{{ routes.account_logout_url }}" data-no-instant>{{ 'customer.menu.logout' | t }}</a></li>
+                         </ul>
+                      </li>
+                    {%- else -%}
+                      <li id="item_mb_acc" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-btns t4s-menu-item-acount"><a href="{{ routes.account_login_url }}" {% unless customer or request.page_type contains 'customers' or settings.login_side == false %} data-drawer-delay- data-drawer-options='{ "id":"#t4s-login-sidebar" }' {% endunless %}><svg width="24" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span class="t4s-d-inline-block">{{ 'general.mobile_menu.login_register' | t }}</span></a></li>
+                    {%- endif -%}
+
+                 {%- else -%}
+                  
+                    {%- if customer -%}
+                    <li class="ssw-tprofile ssw-dropdown">
+                      <a class="ssw-dropdown-toggle" data-toggle="ssw-dropdown" href="javascript:void(0);">
+                        <i class="ssw-icon-user"></i>
+                        {{ customer.first_name }}
+                        {% if customer.last_name != 'Unknown' %}
+                        {{ customer.last_name | slice: 0 | upcase }}.
+                        {% endif %}
+                        <i class="ssw-icon-down-open-big"></i>
+                      </a>
+                      <ul class="ssw-dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li id="customer_myorders_li"><a tabindex="-1" href="{{ routes.account_url }}">{{ 'socialshopwave.my_orders' | t }}</a></li>
+                        {% render 'ssw-widget-dropdown' %}
+                        <li class="ssw-divider"></li>
+                        <li><a id="customer_logout_link" tabindex="-1" href="{{ routes.account_logout_url }}" data-no-instant>{{ 'socialshopwave.logout' | t }}</a></li>
+                      </ul>
+                    </li>
+                    {%- else -%}
+                    <li>
+                      <a id="customer_login_link" href="javascript:void(0);" data-toggle="ssw-modal" data-target="#login_modal" onclick="trackShopStats('login_popup_view', 'all')">{{ 'socialshopwave.log_in' | t }}</a>
+                    </li>
+                    <li>
+                      <a id="customer_register_link" data-toggle="ssw-modal" data-target="#signup_modal" href="javascript:void(0);" onclick="trackShopStats('login_popup_view', 'all')">{{ 'socialshopwave.sign_up' | t }}</a>
+                    </li>
+                    {%- endif -%}
+
+                 {%- endif -%}
+            
+            {%- when 'menu' -%}
+
+               {%- if linklists[block_stts.menu].links.size > 0 -%}
+                   <li id="item_{{ block.id }}" class="t4s-menu-item t4s-item-level-0 t4s-menu-item-has-children {{ only_icon }}" {{ block.shopify_attributes }}>
+                     <a href="{{ block_stts.url }}" target="{{ block_stts.open_link }}"><span class="t4s-nav_link_txt t4s-d-flex t4s-align-items-center">
+                        {%- if block_stts.icons_op == '2' and block_stts.icon != blank %}<i class="{{ block_stts.icon | strip }}"></i>
+                           {%- elsif block_stts.icons_op == '1' and block_stts.image != blank %}
+                               {%- assign image = block_stts.image -%}
+                              <i class="t4s-d-inline-block t4s-pr">
+                                 <img class="t4s-img_catk_mb lazyloadt4s" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" data-src="{{ image | image_url: width: img_size }}" alt="{{ image.alt | escape }}">
+                                 <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                               </i>
+                        {% endif -%}
+                        {{ block_stts.title }}{% if block_stts.lb != blank %}<span class="t4s-lb_nav_mb" style="background-color: {{ block_stts.lb_cl | default: '#01bad4' }}">{{ block_stts.lb }}</span>{% endif %}</span><span class="t4s-mb-nav__icon"></span></a>
+                     <ul class="t4s-sub-menu">
+                        {%- for link in linklists[block_stts.menu].links -%}
+
+                           {%- assign arrlt = link.title | split: '[' -%}
+                           {%- if link.links != blank -%}
+                              <li class="t4s-menu-item t4s-item-level-1 t4s-menu-item-has-children {{ only_icon }}{% if link.active %} is--current{% endif %}">
+                                 <a href="{{ link.url }}"><span class="t4s-nav_link_txt t4s-d-flex t4s-align-items-center">{%- render 'lb_inc_mb', arrlt: arrlt -%}</span><span class="t4s-mb-nav__icon"></span></a>
+                                 <ul class="t4s-sub-sub-menu">
+                                    {%- for child_link in link.links -%}
+
+                                       {%- assign arrlt = child_link.title | split: '[' -%}
+                                       {%- if child_link.links != blank -%}
+                                          <li id="item_{{ block.id }}" class="t4s-menu-item t4s-item-level-2 t4s-menu-item-has-children {{ only_icon }}{% if child_link.active %} is--current{% endif %}">
+                                             <a href="{{ child_link.url }}"><span class="t4s-nav_link_txt t4s-d-flex t4s-align-items-center">{%- render 'lb_inc_mb', arrlt: arrlt -%}</span><span class="t4s-mb-nav__icon"></span></a>
+                                             <ul class="t4s-sub-sub-sub-menu">
+
+                                                {%- for grandchild_link in child_link.links -%}
+                                                {%- assign arrlt = grandchild_link.title | split: '[' -%}
+                                                <li class="t4s-menu-item t4s-item-level-3{% if grandchild_link.active %} is--current{% endif %}"><a href="{{ grandchild_link.url }}">{%- render 'lb_inc_mb', arrlt: arrlt -%}</a></li>
+                                                {%- endfor -%}
+
+                                             </ul>
+                                          </li>
+                                       {%- else -%}
+                                           <li class="t4s-menu-item t4s-item-level-2{% if child_link.active %} is--current{% endif %}"><a href="{{ child_link.url }}">{%- render 'lb_inc_mb', arrlt: arrlt -%}</a></li>
+                                       {%- endif -%}
+
+                                    {%- endfor -%}
+                                 </ul>
+                              </li>
+                           {%- else -%}
+                              <li class="t4s-menu-item t4s-item-level-1{% if link.active %} is--current{% endif %}"><a href="{{ link.url }}">{%- render 'lb_inc_mb', arrlt: arrlt -%}</a></li>
+                           {%- endif -%}
+
+                        {%- endfor -%}
+                     </ul>
+                  </li>
+               {%- else -%}
+                   <li id="item_{{ block.id }}" class="t4s-menu-item t4s-item-level-0"><a href="{% if block_stts.url contains '#homet4' %}{{ root_url }}{% else %}{{ block_stts.url }}{% endif %}" target="{{ block_stts.open_link }}">
+                        {%- if block_stts.icons_op == '2' and block_stts.icon != blank %}<i class="{{ block_stts.icon | strip }}"></i>
+                           {%- elsif block_stts.icons_op == '1' and block_stts.image != blank %}
+                               {%- assign image = block_stts.image -%}
+                              <i class="t4s-d-inline-block t4s-pr">
+                                 <img class="t4s-img_catk_mb lazyloadt4s" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" data-src="{{ image | image_url: width: img_size }}" alt="{{ image.alt | escape }}">
+                                 <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                               </i>
+                        {% endif -%}
+                    {{ block_stts.title }}{% if block_stts.lb != blank %}<span class="t4s-lb_nav_mb" style="background-color: {{ block_stts.lb_cl | default: '#01bad4' }}">{{ block_stts.lb }}</span>{% endif %}</a></li>
+               {%- endif -%}
+
+            {%- when 'catpr' -%}
+            
+               {%- capture get_sub_cat -%}
+                      {%- for i in (1..25) -%}
+                      {%- assign cat = 'cat' | append: i -%}
+                      {%- assign url = 'url' | append: i -%}
+                      {%- assign image = 'image' | append: i -%}
+                      {%- assign cat_id = block_stts[cat] -%}
+                      {%- assign url_id = block_stts[url] -%}
+                      {%- assign image_id = block_stts[image] -%}
+                      {%- assign collec = collections[cat_id] -%}
+
+                          {%- if collec == blank and url_id == blank %}{% continue %}{% endif %}{% assign image = image_id | default: collec.image -%}
+                           <div class="t4s-cat_grid_item t4s-cat_space_item">
+                            <div class="t4s-cat_grid_item__content t4s-pr t4s-oh">
+                               <a href="{{ url_id | default: collec.url }}" class="t4s-d-block t4s_ratio t4s-cat_grid_item__link" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.7777 }}">
+                                {%- if image != blank -%}
+                                 	<img class="lazyloadt4s" data-src="{{ image | image_url: width: 1 }}" data-widths="[100,200,400,600,700,800,900,1000,1200,1400,1600]" data-optimumx="2" data-sizes="auto" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.alt | escape }}">    
+                                 	<span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                                {%- else -%}
+                                	{{ 'image' | placeholder_svg_tag: 't4s-placeholder-svg t4s-obj-eff' }}
+                                {%- endif -%}
+                               </a>
+                               <div class="t4s-cat_grid_item__wrapper t4s-pe-none"><div class="t4s-cat_grid_item__title h3">{{ collec.title }}</div></div>
+                            </div>
+                           </div>
+                         
+                      {%- endfor -%}
+               {%- endcapture -%}
+
+               {%- if get_sub_cat != blank -%}
+                   <li id="item_{{ block.id }}" class="t4s-menu-item t4s-menu-item-cat t4s-item-level-0 t4s-menu-item-has-children {{ only_icon }}" {{ block.shopify_attributes }}>
+                     <a href="{{ block_stts.url }}" target="{{ block_stts.open_link }}">
+                       <span class="t4s-nav_link_txt t4s-d-flex t4s-align-items-center">
+                            {%- if block_stts.icons_op == '2' and block_stts.icon != blank %}<i class="{{ block_stts.icon | strip }}"></i>
+                            {%- elsif block_stts.icons_op == '1' and block_stts.image != blank %}
+                                {%- assign image = block_stts.image -%}
+                                <i class="t4s-d-inline-block t4s-pr">
+                                    <img class="t4s-img_catk_mb lazyloadt4s" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" data-src="{{ image | image_url: width: img_size }}" alt="{{ image.alt | escape }}">
+                                    <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                                </i>
+                            {% endif -%}
+                         {{ block_stts.title }}{% if block_stts.lb != blank %}<span class="t4s-lb_nav_mb" style="background-color: {{ block_stts.lb_cl | default: '#01bad4' }}">{{ block_stts.lb }}</span>{% endif %}</span><span class="t4s-mb-nav__icon"></span></a>
+                     <ul class="t4s-sub-menu t4s_ratioadapt t4s_position_8 t4s_cover t4s-cat_design_2">{{ get_sub_cat }}</ul>
+                  </li>
+               {%- else -%}
+                   <li id="item_{{ block.id }}" class="t4s-menu-item t4s-item-level-0"><a href="{{ block_stts.url }}" target="{{ block_stts.open_link }}">
+                        {%- if block_stts.icons_op == '2' and block_stts.icon != blank %}<i class="{{ block_stts.icon | strip }}"></i>
+                        {%- elsif block_stts.icons_op == '1' and block_stts.image != blank %}
+                               {%- assign image = block_stts.image -%}
+                              <i class="t4s-d-inline-block t4s-pr">
+                                 <img class="t4s-img_catk_mb lazyloadt4s" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" data-src="{{ image | image_url: width: img_size }}" alt="{{ image.alt | escape }}">
+                                 <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                               </i>
+                        {% endif -%}
+                   {{ block_stts.title }}{% if block_stts.lb != blank %}<span class="t4s-lb_nav_mb" style="background-color: {{ block_stts.lb_cl | default: '#01bad4' }}">{{ block_stts.lb }}</span>{% endif %}</a></li>
+               {%- endif -%}
+
+         {%- endcase -%}
+      {%- endfor -%}
+   {%- else -%}
+      <li><a href="/admin/themes/" style="font-size:10px;">Create your mobile menu sidebar and config from Section > Mobile Menu</a></li>
+   {%- endif -%}
+</ul>
+                {% endcomment %}
+<nav role="navigation">
+   <div class="nav-upper-part">
+      <div class="nav-toggle">
+         <span class="nav-back">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="m4.003 10.654-.532-.532L7.594 6 3.47 1.878l.532-.532L8.657 6l-4.654 4.654z" fill="#1B1C1E" stroke="#1B1C1E" stroke-width=".25"/>
+            </svg>
+            Back 
+         </span>
+         <span class="nav-logo">{%- render 't4s_logo', tag: 'div', isTransparent: h_transparent -%}</span>
+         <span class="nav-close">
+            <button class="t4s-drawer-menu__close t4s-pe-none t4s-op-0 t4s-pf" data-drawer-close aria-label="{{ 'general.mobile_menu.close' | t }}">
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="m12 12.708-5.246 5.246a.505.505 0 0 1-.344.15.467.467 0 0 1-.364-.15.491.491 0 0 1-.16-.354c0-.13.053-.247.16-.354L11.292 12 6.046 6.754a.505.505 0 0 1-.15-.344.467.467 0 0 1 .15-.364.491.491 0 0 1 .354-.16c.13 0 .247.053.354.16L12 11.292l5.246-5.246a.504.504 0 0 1 .344-.15.467.467 0 0 1 .364.15c.107.107.16.225.16.354 0 .13-.053.247-.16.354L12.708 12l5.246 5.246a.505.505 0 0 1 .15.344.467.467 0 0 1-.15.364.491.491 0 0 1-.354.16.491.491 0 0 1-.354-.16L12 12.708z" fill="#1B1C1E" stroke="#1B1C1E" stroke-width=".25"/>
+               </svg>
+            </button>
+         </span>
+      </div>
+   </div>
+   <ul>
+      <li class="has-dropdown">
+         <a href="#" style="color:#00829b;"><span class="main-div-span">Shop Homeschool Curriculum <span class="nav-label t4s_lb_nav" style="background-color: #f15a37;color: #fff">Sale</span></span></a>
+         <ul>
+            <li class="has-dropdown">
+               <a href="#">By BRAND</a>
+               <ul>
+                      <li class="third-level-span">
+       <span class="nav-title">title</span>
+     </li>
+                  <li><a href="#">Monarch   (3-12)</a></li>
+                  <li><a href="#">LIFEPAC   (K-12)</a></li>
+                  <li><a href="#">Horizons   (Pre K-12)</a></li>
+                  <li><a href="#">Ignite Academy   (3-12)</a></li>
+                  <li><a href="#">View All</a></li>
+                  <li class="html-banner">
+                      <div class="htrml-banner-block">
+                        <div class="html-banner-image">
+                          <img src="https://cdn.shopify.com/s/files/1/0631/1473/9875/files/Frame_258_2x_f0d25116-954a-48bc-8250-e7b4081adba6.jpg">
+                        </div>
+                        <div class="html-banner-content">
+                          <h2>Lorem ipsum dolor sit amet consectetur.</h2>
+                          <a href="#" class="Text-Button">Shop Now</a>
+                        </div>
+                      </div>
+                   </li>
+               </ul>
+            </li>
+             <li class="has-dropdown">
+               <a href="#">By BRAND1</a>
+               <ul>
+                  <li class="third-level-span">
+       <span class="nav-title">title</span>
+     </li>
+                  <li><a href="#">Monarch   (3-12)</a></li>
+                  <li><a href="#">LIFEPAC   (K-12)</a></li>
+                  <li><a href="#">Horizons   (Pre K-12)</a></li>
+                  <li><a href="#">Ignite Academy   (3-12)</a></li>
+                  <li><a href="#">View All</a></li>
+               </ul>
+            </li>
+             <li class="has-dropdown">
+               <a href="#">By BRAND2</a>
+               <ul>
+                  <li class="third-level-span">
+       <span class="nav-title">title</span>
+     </li>
+                  <li><a href="#">Monarch   (3-12)</a></li>
+                  <li><a href="#">LIFEPAC   (K-12)</a></li>
+                  <li><a href="#">Horizons   (Pre K-12)</a></li>
+                  <li><a href="#">Ignite Academy   (3-12)</a></li>
+                  <li><a href="#">View All</a></li>
+               </ul>
+            </li>
+             <li class="has-dropdown">
+               <a href="#">By BRAND3</a>
+               <ul>
+                  <li class="third-level-span">
+       <span class="nav-title">title</span>
+     </li>
+                  <li><a href="#">Monarch   (3-12)</a></li>
+                  <li><a href="#">LIFEPAC   (K-12)</a></li>
+                  <li><a href="#">Horizons   (Pre K-12)</a></li>
+                  <li><a href="#">Ignite Academy   (3-12)</a></li>
+                  <li><a href="#">View All</a></li>
+               </ul>
+            </li>
+         </ul>
+      </li>
+      <li class="has-dropdown">
+         <a href="#">Apparel</a>
+         <ul>
+            <li class="has-dropdown">
+               <a href="#">Loremus</a>
+               <ul>
+                  <li><a href="#">Item 1</a></li>
+                  <li><a href="#">Item 2</a></li>
+                  <li><a href="#">Item 3</a></li>
+               </ul>
+            </li>
+            <li><a href="#">Aliquam</a></li>
+            <li><a href="#">Vestibulum</a></li>
+         </ul>
+      </li>
+      <li>
+         <a href="#">Clients</a>
+      </li>
+      <li class="has-dropdown">
+         <a href="#">Contact Us</a>
+         <ul>
+            <li class="has-dropdown">
+               <a href="#">By mail</a>
+               <ul>
+                  <li><a href="#">mail 1</a></li>
+                  <li><a href="#">mail 2</a></li>
+                  <li><a href="#">mail 3</a></li>
+               </ul>
+            </li>
+            <li><a href="#">Anything</a></li>
+            <li><a href="#">Tester</a></li>
+         </ul>
+      </li>
+      <li class="otherlinks mobile-login">
+         {% if customer %}
+         {% if customer.name != blank %}
+         <h4>{{customer.name}}</h4>
+         {% endif %}
+         {% else %}
+         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5zm6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13v-1.5zM11.5 5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" fill="#003C51"></path>
+         </svg>
+         <a href="/account/login" title="#">Log In</a> / <a href="/account/register" title="#">Create Account</a>
+         {% endif %}
+      </li>
+      <li class="otherlinks">
+         {% if customer %}
+         <a href="https://monarch-app.aop.com/">
+            <svg width="24" height="23" viewbox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <g clip-path="url(#m5fr9wymba)">
+                  <path d="M7.67 17.736S.37 15.18.024 8.716c-.344-6.44 2.96-8.68 2.96-8.68S10.545 2.545 11.4 6.93c.854 4.389-1.208 7.322-1.732 8.555-.979 2.313-2 2.248-2 2.248v.003z" fill="#29B4CC"></path>
+                  <path d="M7.599 17.25s-4.48-1.537-5.546-5.999C.987 6.783 4.177 4.442 4.177 4.442s5.252 1.205 6.115 5.1c.688 3.108-.942 5.136-1.314 6.016-.697 1.647-1.382 1.695-1.382 1.695l.003-.003z" fill="url(#and1v9trpb)"></path>
+                  <path d="M4.662 16.01c-.392 1.08 1.038 1.878 5.498 3.522 4.91 1.811 9.102 3.661 9.587 2.82.631-1.09-5.094-3.787-9.398-5.807-2.327-1.091-5.227-1.8-5.687-.536z" fill="#45447F"></path>
+                  <path d="M7.655 17.27s-4.372-6.555-.688-12.024C10.639-.204 14.697 0 14.697 0s4.615 6.676 2.618 10.769c-1.997 4.092-5.472 5.215-6.653 5.898-2.215 1.28-3.004.603-3.004.603h-.003z" fill="#F05A34"></path>
+                  <path d="M7.895 16.833s-2.49-3.9-.624-8.185c1.873-4.29 5.822-4.124 5.822-4.124s3.407 3.997 1.72 7.692c-1.345 2.95-3.914 3.599-4.758 4.087-1.576.91-2.163.53-2.163.53h.003z" fill="url(#9a3e9usftc)"></path>
+                  <path d="M7.604 17.191s2.29-3.049 4.677-4.538c2.386-1.49 4.662-2.6 6.258-2.643 1.597-.042 3.867 1.614 4.886 4.296 1.015 2.685.48 4.078-.003 4.88-.765 1.266-2.217 1.652-3.681 1.965-1.467.313-5.697.437-8.738-1.12-2.728-1.396-3.396-2.843-3.396-2.843l-.003.003z" fill="#F05A34"></path>
+                  <path d="M8.092 17.061s2.166-2.081 3.873-3.142c1.703-1.063 2.956-1.348 4.403-1.37 1.258-.02 3.018.677 3.892 2.699.812 1.881.474 2.953-.056 3.782-.564.886-1.648 1.219-2.708 1.357-2.567.338-4.36.087-6.152-.64-2.152-.875-3.252-2.686-3.252-2.686z" fill="url(#i8ae0wd41d)"></path>
+               </g>
+               <defs>
+                  <lineargradient id="and1v9trpb" x1="4.382" y1="6.698" x2="9.677" y2="17.832" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#29B4CC"></stop>
+                  </lineargradient>
+                  <lineargradient id="9a3e9usftc" x1="12.049" y1="7.74" x2="7.979" y2="18.63" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#FBB03B"></stop>
+                  </lineargradient>
+                  <lineargradient id="i8ae0wd41d" x1="17.047" y1="16.469" x2="5.652" y2="17.259" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#FBB03B"></stop>
+                  </lineargradient>
+                  <clippath id="m5fr9wymba">
+                     <path fill="#fff" d="M0 0h24v22.561H0z"></path>
+                  </clippath>
+               </defs>
+            </svg>
+            Monarch Access
+         </a>
+         {% else %}
+         <a href="https://monarch-app.aop.com/">
+            <svg width="24" height="23" viewbox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <g clip-path="url(#m5fr9wymba)">
+                  <path d="M7.67 17.736S.37 15.18.024 8.716c-.344-6.44 2.96-8.68 2.96-8.68S10.545 2.545 11.4 6.93c.854 4.389-1.208 7.322-1.732 8.555-.979 2.313-2 2.248-2 2.248v.003z" fill="#29B4CC"></path>
+                  <path d="M7.599 17.25s-4.48-1.537-5.546-5.999C.987 6.783 4.177 4.442 4.177 4.442s5.252 1.205 6.115 5.1c.688 3.108-.942 5.136-1.314 6.016-.697 1.647-1.382 1.695-1.382 1.695l.003-.003z" fill="url(#and1v9trpb)"></path>
+                  <path d="M4.662 16.01c-.392 1.08 1.038 1.878 5.498 3.522 4.91 1.811 9.102 3.661 9.587 2.82.631-1.09-5.094-3.787-9.398-5.807-2.327-1.091-5.227-1.8-5.687-.536z" fill="#45447F"></path>
+                  <path d="M7.655 17.27s-4.372-6.555-.688-12.024C10.639-.204 14.697 0 14.697 0s4.615 6.676 2.618 10.769c-1.997 4.092-5.472 5.215-6.653 5.898-2.215 1.28-3.004.603-3.004.603h-.003z" fill="#F05A34"></path>
+                  <path d="M7.895 16.833s-2.49-3.9-.624-8.185c1.873-4.29 5.822-4.124 5.822-4.124s3.407 3.997 1.72 7.692c-1.345 2.95-3.914 3.599-4.758 4.087-1.576.91-2.163.53-2.163.53h.003z" fill="url(#9a3e9usftc)"></path>
+                  <path d="M7.604 17.191s2.29-3.049 4.677-4.538c2.386-1.49 4.662-2.6 6.258-2.643 1.597-.042 3.867 1.614 4.886 4.296 1.015 2.685.48 4.078-.003 4.88-.765 1.266-2.217 1.652-3.681 1.965-1.467.313-5.697.437-8.738-1.12-2.728-1.396-3.396-2.843-3.396-2.843l-.003.003z" fill="#F05A34"></path>
+                  <path d="M8.092 17.061s2.166-2.081 3.873-3.142c1.703-1.063 2.956-1.348 4.403-1.37 1.258-.02 3.018.677 3.892 2.699.812 1.881.474 2.953-.056 3.782-.564.886-1.648 1.219-2.708 1.357-2.567.338-4.36.087-6.152-.64-2.152-.875-3.252-2.686-3.252-2.686z" fill="url(#i8ae0wd41d)"></path>
+               </g>
+               <defs>
+                  <lineargradient id="and1v9trpb" x1="4.382" y1="6.698" x2="9.677" y2="17.832" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#29B4CC"></stop>
+                  </lineargradient>
+                  <lineargradient id="9a3e9usftc" x1="12.049" y1="7.74" x2="7.979" y2="18.63" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#FBB03B"></stop>
+                  </lineargradient>
+                  <lineargradient id="i8ae0wd41d" x1="17.047" y1="16.469" x2="5.652" y2="17.259" gradientunits="userSpaceOnUse">
+                     <stop stop-color="#fff"></stop>
+                     <stop offset="1" stop-color="#FBB03B"></stop>
+                  </lineargradient>
+                  <clippath id="m5fr9wymba">
+                     <path fill="#fff" d="M0 0h24v22.561H0z"></path>
+                  </clippath>
+               </defs>
+            </svg>
+            Student Access
+         </a>
+         {% endif %}
+      </li>
+      <li class="otherlinks">
+         {% if customer %}
+         <a href="https://monarch-app.aop.com/dashboard_school/index">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M13 4h8v6h-8V4zm0 17V11h8v10h-8zm-9 0v-6h8v6H4zm0-7V4h8v10H4zm1-9v8h6V5H5zm9 0v4h6V5h-6zm0 7v8h6v-8h-6zm-9 4v4h6v-4H5z" fill="#003C51"></path>
+            </svg>
+            My Dashboard 
+         </a>
+         {% endif %}
+      </li>
+      <li class="otherlinks">
+         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.826 21.2a1.373 1.373 0 0 0 1.374-1.374v-3.205a1.374 1.374 0 0 0-1.374-1.374 9.796 9.796 0 0 1-3.132-.503 1.382 1.382 0 0 0-1.392.338l-1.318 1.32a13.527 13.527 0 0 1-5.394-5.395l1.31-1.31c.375-.356.512-.888.347-1.4a9.948 9.948 0 0 1-.494-3.123A1.374 1.374 0 0 0 7.379 3.8H4.174A1.374 1.374 0 0 0 2.8 5.174C2.8 14.01 9.99 21.2 18.826 21.2zM4.174 4.716h3.205a.458.458 0 0 1 .458.458c0 1.172.183 2.317.54 3.406a.435.435 0 0 1-.11.458l-1.804 1.795c1.511 2.958 3.728 5.175 6.695 6.704l1.785-1.804a.47.47 0 0 1 .468-.12c1.098.367 2.243.55 3.415.55a.458.458 0 0 1 .458.458v3.205a.458.458 0 0 1-.458.458c-8.333 0-15.11-6.777-15.11-15.11a.458.458 0 0 1 .458-.458z" fill="#003C51"></path>
+         </svg>
+         <a href="tel:+01 234 567 8910">+01 234 567 8910</a>
+      </li>
+      <li class="otherlinks">
+         {% if customer %}
+         <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#wlho7pqsia)">
+               <path d="M8 3h6a3 3 0 0 1 3 3v4h-1V6a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-4h1v4a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3zm3 9h11.25L19 8.75l.66-.75 4.5 4.5-4.5 4.5-.66-.75L22.25 13H11v-1z" fill="#003C51"></path>
+            </g>
+            <defs>
+               <clippath id="wlho7pqsia">
+                  <path fill="#fff" d="M0 0h24v24H0z"></path>
+               </clippath>
+            </defs>
+         </svg>
+         <a href="/account/logout" title="#">Log Out</a>
+         {% endif %}
+      </li>
+   </ul>
+</nav>
+              </div>
+{%- else -%}
+<div data-section-id="{{ sid }}"></div>
+{%- endif -%}
+{%- comment -%}
+{%- for i in (1..25) -%}
+      {"type": "paragraph","content": "#{{ i }} ——————————————"},{"label": " Collection #{{ i }}","id": "cat{{ i }}", "type": "collection"},{"type": "image_picker","id": "image{{ i }}","label": "Image #{{ i }}"},
+{%- endfor -%}
+{%- endcomment -%}
+<script>
+  (function($) {
+		this.MobileNav = function() {
+				this.curItem,
+						this.curLevel = 0,
+						this.transitionEnd = _getTransitionEndEventName();
+
+				var defaults = {
+						initElem: ".main-menu",
+						menuTitle: "Menu"
+				}
+
+				// Check if MobileNav was initialized with some options and assign them to the "defaults"
+				if (arguments[0] && typeof arguments[0] === "object") {
+						this.options = extendDefaults(defaults, arguments[0]);
+				}
+
+				// Add to the "defaults" ONLY if the key is already in the "defaults"
+				function extendDefaults(source, extender) {
+						for (option in extender) {
+								if (source.hasOwnProperty(option)) {
+										source[option] = extender[option];
+								}
+						}
+				}
+
+				MobileNav.prototype.getCurrentItem = function() {
+						return this.curItem;
+				};
+
+				MobileNav.prototype.setMenuTitle = function(title) {
+						defaults.menuTitle = title;
+						_updateMenuTitle(this);
+						return title;
+				};
+
+				// Init is an anonymous IIFE
+				(function(MobileNav) {
+						var initElem = ($(defaults.initElem).length) ? $(defaults.initElem) : false;
+
+						if (initElem) {
+								defaults.initElem = initElem;
+								_clickHandlers(MobileNav);
+								_updateMenuTitle(MobileNav);
+						} else {
+								console.log(defaults.initElem + " element doesn't exist, menu not initialized.");
+						}
+				}(this));
+
+				function _getTransitionEndEventName() {
+						var i,
+								undefined,
+								el = document.createElement('div'),
+								transitions = {
+										'transition': 'transitionend',
+										'OTransition': 'otransitionend', // oTransitionEnd in very old Opera
+										'MozTransition': 'transitionend',
+										'WebkitTransition': 'webkitTransitionEnd'
+								};
+
+						for (i in transitions) {
+								if (transitions.hasOwnProperty(i) && el.style[i] !== undefined) {
+										return transitions[i];
+								}
+						}
+				};
+
+				function _clickHandlers(menu) {
+						defaults.initElem.on('click', '.has-dropdown > a', function(e) {
+								e.preventDefault();
+								menu.curItem = $(this).parent();
+								_updateActiveMenu(menu);
+						});
+
+						defaults.initElem.on('click', '.nav-toggle', function() {
+								_updateActiveMenu(menu, 'back');
+						});
+				};
+
+				// TODO: Make this DRY (deal with waiting for transitionend event)
+				function _updateActiveMenu(menu, direction) {
+						_slideMenu(menu, direction);
+						if (direction === "back") {
+								/*defaults.initElem.children('ul').one(menu.transitionEnd, function(e) {
+										menu.curItem.removeClass('nav-dropdown-open nav-dropdown-active');
+										menu.curItem = menu.curItem.parent().closest('li');
+										menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+										_updateMenuTitle(menu);
+								});*/
+
+								menu.curItem.removeClass('nav-dropdown-open nav-dropdown-active');
+								menu.curItem = menu.curItem.parent().closest('li');
+								menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+								_updateMenuTitle(menu);
+						} else {
+								menu.curItem.addClass('nav-dropdown-open nav-dropdown-active');
+								_updateMenuTitle(menu);
+						}
+				};
+
+				// Update main menu title to be the text of the clicked menu item
+				function _updateMenuTitle(menu) {
+						var title = defaults.menuTitle;
+						if (menu.curLevel > 0) {
+								title = menu.curItem.children('a').text();
+								defaults.initElem.find('.nav-toggle').addClass('back-visible');
+						} else {
+								defaults.initElem.find('.nav-toggle').removeClass('back-visible');
+						}
+						$('.nav-title').text(title);
+				};
+
+				// Slide the main menu based on current menu depth
+				function _slideMenu(menu, direction) {
+						if (direction === "back") {
+								menu.curLevel = (menu.curLevel > 0) ? menu.curLevel - 1 : 0;
+						} else {
+								menu.curLevel += 1;
+						}
+						defaults.initElem.children('ul').css({
+								"transform": "translateX(-" + (menu.curLevel * 100) + "%)"
+						});
+				};
+		}
+}(jQuery));
+
+$(document).ready(function() {
+		var MobileMenu = new MobileNav({
+				initElem: "nav",
+				menuTitle: "Push menu demo",
+		});
+	
+		$('.js-nav-toggle').on('click', function(e) {
+			e.preventDefault();
+			
+			$('.nav-wrapper').toggleClass('show-menu');
+		});
+});
+  </script>
+{% schema %}
+  {
+    "name": "Mobile Menu",
+    "class": "t4s-sp-section-mb-nav",
+    "max_blocks": 30,
+    "blocks": [
+      {
+        "type": "menu",
+        "name": "Menu item",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Heading",
+                "default": "Heading"
+            },
+            {
+                "type": "url",
+                "id": "url",
+                "label": "Link"
+            },
+            {
+                "type": "select",
+                "id": "open_link",
+                "options": [
+                {
+                    "value": "_self",
+                    "label": "Current window (_self)"
+                },
+                {
+                    "value": "_blank",
+                    "label": "New window (_blank)"
+                }
+                ],
+                "label": "Open link in"
+            },
+            {
+                "type": "link_list",
+                "id": "menu",
+                "label": "Add menu"
+            },
+            {
+                "type":"text",
+                "id":"lb",
+                "label":"Label text"
+            },
+            {
+                "type":"color",
+                "id":"lb_cl",
+                "label":"Label color"
+            },
+            {
+                "type": "select",
+                "id": "icons_op",
+                "options": [
+                    {
+                        "value": "0",
+                        "label": "None"
+                    },
+                    {
+                        "value": "1",
+                        "label": "Image"
+                    },
+                    {
+                        "value": "2",
+                        "label": "Icon"
+                    }
+                ],
+                "label": "Show icons option",
+                "default": "2"
+            },
+            {
+                "type": "image_picker",
+                "id": "image",
+                "label": "Image"
+            },
+            {
+                "id": "icon",
+                "type": "text",
+                "label": "Icon",
+                "default":"las la-chair",
+                "info":"[Line awesome icons](https://kalles.the4.co/font-lineawesome/)"
+            }
+        ]
+      },
+      {
+        "type": "catpr",
+        "name": "Collection Image List",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Collection title"
+          },
+          {
+             "type": "url",
+             "id": "url",
+             "label": "Link"
+          },
+          {
+            "type":"text",
+            "id":"lb",
+            "label":"Label text"
+          },
+          {
+            "type":"color",
+            "id":"lb_cl",
+            "label":"Label color"
+          },
+          {
+             "type": "select",
+             "id": "icons_op",
+             "options": [
+               {
+                 "value": "0",
+                 "label": "None"
+               },
+               {
+                 "value": "1",
+                 "label": "Image"
+               },
+               {
+                 "value": "2",
+                 "label": "Icon"
+               }
+             ],
+             "label": "Show icons option",
+             "default": "2"
+           },
+           {
+               "type": "image_picker",
+               "id": "image",
+               "label": "Image"
+           },
+           {
+              "id": "icon",
+              "type": "text",
+              "label": "Icon",
+              "default":"las la-user",
+              "info":"[Line awesome icons](https://kalles.the4.co/font-lineawesome/)"
+           },
+          {
+            "type": "header",
+            "content": "+ List collection"
+          },
+          {"type": "paragraph","content": "Leave link empty to use 'collection url'."},
+          {"type": "paragraph","content": "#1 ——————————————"},{"label": " Collection #1","id": "cat1", "type": "collection"},{"label": "Link #1 (optional)","id": "url1", "type": "url"},{"type": "image_picker","id": "image1","label": "Image #1"},{"type": "paragraph","content": "#2 ——————————————"},{"label": " Collection #2","id": "cat2", "type": "collection"},{"label": "Link #2 (optional)","id": "url2", "type": "url"},{"type": "image_picker","id": "image2","label": "Image #2"},{"type": "paragraph","content": "#3 ——————————————"},{"label": " Collection #3","id": "cat3", "type": "collection"},{"label": "Link #3 (optional)","id": "url3", "type": "url"},{"type": "image_picker","id": "image3","label": "Image #3"},{"type": "paragraph","content": "#4 ——————————————"},{"label": " Collection #4","id": "cat4", "type": "collection"},{"label": "Link #4 (optional)","id": "url4", "type": "url"},{"type": "image_picker","id": "image4","label": "Image #4"},{"type": "paragraph","content": "#5 ——————————————"},{"label": " Collection #5","id": "cat5", "type": "collection"},{"label": "Link #5 (optional)","id": "url5", "type": "url"},{"type": "image_picker","id": "image5","label": "Image #5"},{"type": "paragraph","content": "#6 ——————————————"},{"label": " Collection #6","id": "cat6", "type": "collection"},{"label": "Link #6 (optional)","id": "url6", "type": "url"},{"type": "image_picker","id": "image6","label": "Image #6"},{"type": "paragraph","content": "#7 ——————————————"},{"label": " Collection #7","id": "cat7", "type": "collection"},{"label": "Link #7 (optional)","id": "url7", "type": "url"},{"type": "image_picker","id": "image7","label": "Image #7"},{"type": "paragraph","content": "#8 ——————————————"},{"label": " Collection #8","id": "cat8", "type": "collection"},{"label": "Link #8 (optional)","id": "url8", "type": "url"},{"type": "image_picker","id": "image8","label": "Image #8"},{"type": "paragraph","content": "#9 ——————————————"},{"label": " Collection #9","id": "cat9", "type": "collection"},{"label": "Link #9 (optional)","id": "url9", "type": "url"},{"type": "image_picker","id": "image9","label": "Image #9"},{"type": "paragraph","content": "#10 ——————————————"},{"label": " Collection #10","id": "cat10", "type": "collection"},{"label": "Link #1 (optional)0","id": "url10", "type": "url"},{"type": "image_picker","id": "image10","label": "Image #10"},{"type": "paragraph","content": "#11 ——————————————"},{"label": " Collection #11","id": "cat11", "type": "collection"},{"label": "Link #1 (optional)1","id": "url11", "type": "url"},{"type": "image_picker","id": "image11","label": "Image #11"},{"type": "paragraph","content": "#12 ——————————————"},{"label": " Collection #12","id": "cat12", "type": "collection"},{"label": "Link #1 (optional)2","id": "url12", "type": "url"},{"type": "image_picker","id": "image12","label": "Image #12"},{"type": "paragraph","content": "#13 ——————————————"},{"label": " Collection #13","id": "cat13", "type": "collection"},{"label": "Link #1 (optional)3","id": "url13", "type": "url"},{"type": "image_picker","id": "image13","label": "Image #13"},{"type": "paragraph","content": "#14 ——————————————"},{"label": " Collection #14","id": "cat14", "type": "collection"},{"label": "Link #1 (optional)4","id": "url14", "type": "url"},{"type": "image_picker","id": "image14","label": "Image #14"},{"type": "paragraph","content": "#15 ——————————————"},{"label": " Collection #15","id": "cat15", "type": "collection"},{"label": "Link #1 (optional)5","id": "url15", "type": "url"},{"type": "image_picker","id": "image15","label": "Image #15"},{"type": "paragraph","content": "#16 ——————————————"},{"label": " Collection #16","id": "cat16", "type": "collection"},{"label": "Link #1 (optional)6","id": "url16", "type": "url"},{"type": "image_picker","id": "image16","label": "Image #16"},{"type": "paragraph","content": "#17 ——————————————"},{"label": " Collection #17","id": "cat17", "type": "collection"},{"label": "Link #1 (optional)7","id": "url17", "type": "url"},{"type": "image_picker","id": "image17","label": "Image #17"},{"type": "paragraph","content": "#18 ——————————————"},{"label": " Collection #18","id": "cat18", "type": "collection"},{"label": "Link #1 (optional)8","id": "url18", "type": "url"},{"type": "image_picker","id": "image18","label": "Image #18"},{"type": "paragraph","content": "#19 ——————————————"},{"label": " Collection #19","id": "cat19", "type": "collection"},{"label": "Link #1 (optional)9","id": "url19", "type": "url"},{"type": "image_picker","id": "image19","label": "Image #19"},{"type": "paragraph","content": "#20 ——————————————"},{"label": " Collection #20","id": "cat20", "type": "collection"},{"label": "Link #2 (optional)0","id": "url20", "type": "url"},{"type": "image_picker","id": "image20","label": "Image #20"},{"type": "paragraph","content": "#21 ——————————————"},{"label": " Collection #21","id": "cat21", "type": "collection"},{"label": "Link #2 (optional)1","id": "url21", "type": "url"},{"type": "image_picker","id": "image21","label": "Image #21"},{"type": "paragraph","content": "#22 ——————————————"},{"label": " Collection #22","id": "cat22", "type": "collection"},{"label": "Link #2 (optional)2","id": "url22", "type": "url"},{"type": "image_picker","id": "image22","label": "Image #22"},{"type": "paragraph","content": "#23 ——————————————"},{"label": " Collection #23","id": "cat23", "type": "collection"},{"label": "Link #2 (optional)3","id": "url23", "type": "url"},{"type": "image_picker","id": "image23","label": "Image #23"},{"type": "paragraph","content": "#24 ——————————————"},{"label": " Collection #24","id": "cat24", "type": "collection"},{"label": "Link #2 (optional)4","id": "url24", "type": "url"},{"type": "image_picker","id": "image24","label": "Image #24"},{"type": "paragraph","content": "#25 ——————————————"},{"label": " Collection #25","id": "cat25", "type": "collection"},{"label": "Link #2 (optional)5","id": "url25", "type": "url"},{"type": "image_picker","id": "image25","label": "Image #25"}
+        ]
+      },
+      {
+        "type": "wis",
+        "name": "Wishlist",
+        "limit": 1
+      },
+      {
+        "type": "compe",
+        "name": "Compare",
+        "limit": 1
+      },
+      {
+        "type": "sea",
+        "name": "Search",
+        "limit": 1
+      },
+      {
+        "type": "acc",
+        "name": "Account",
+        "limit": 1
+      },
+      {
+        "type": "help",
+        "name": "Help text",
+        "limit": 1,
+        "settings": [
+         {
+            "type": "text",
+            "id": "title",
+            "label": "Heading",
+            "default": "Need help?"
+         },
+         {
+            "type": "html",
+            "id": "text",
+            "label": "Content",
+            "default": "<i class=\"pegk pe-7s-call fwb mr__10\"><\/i>+01 23456789<br><i class=\"pegk pe-7s-mail fwb mr__10\"><\/i><a class=\"cg\" href=\"mailto:kalles@domain.com\">kalles@domain.com<\/a>"
+         }
+        ]
+      },
+      {
+        "type": "cur",
+        "name": "Currency",
+        "limit": 1
+      },
+      {
+        "type": "lang",
+        "name": "Languages",
+        "limit": 1
+      }
+    ],
+    "default": {
+      "blocks": [
+        { "type": "menu" },
+        { "type": "menu" },
+        { "type": "menu" },
+        { "type": "menu" },
+        { "type": "wis" },
+        { "type": "sea" },
+        { "type": "acc" },
+        { "type": "help" },
+        { "type": "lang" },
+        { "type": "cur" }
+      ]
+    }
+  }
+{% endschema %}

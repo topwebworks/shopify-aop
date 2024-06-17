@@ -1,0 +1,133 @@
+<!-- sections/logo-list.liquid -->
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{%- liquid
+    assign sid = section.id
+    assign se_stts = section.settings
+    assign se_blocks = section.blocks
+    assign col_tb = se_stts.col_tb
+    assign col_mb = se_stts.col_mb
+    if se_stts.btn_owl == "outline"
+    assign arrow_icon = 1
+    else
+    assign arrow_icon = 2
+    endif
+    assign ARRhtml1 = 'a,,' | split: ','
+    assign ARRhtml2 = 'div,data-,data-' | split: ','
+    assign t4s_se_class = 't4s_nt_se_' | append: sid
+ -%}    
+<div class="t4s-section-inner {{ t4s_se_class }} t4s_nt_se_{{ sid }} t4s-container-wrap "  >
+  <div class="t4s-container">
+    {{- html_layout[0] -}}
+    {%- render 'section_tophead', se_stts: se_stts -%}
+        <div data-goto--item  class="t4s_ratioadapt t4s-align-items-center t4s-row t4s-row-cols-lg-{{se_stts.col_dk}} t4s-row-cols-md-4 t4s-row-cols-2  " id="b_{{ block.id }}" data-select-flickity {{ block.shopify_attributes }}>
+        {%- if se_blocks.size > 0 -%}
+            {%- for block in se_blocks -%}
+                {%- liquid
+                    assign bk_stts = block.settings 
+                    assign image = bk_stts.image 
+                    assign url = bk_stts.url
+                    if url == blank 
+                        assign ARRhtml = ARRhtml2
+                    else 
+                        assign ARRhtml = ARRhtml1 
+                    endif 
+               -%}
+                <div data-goto--item class="t4s-col-item t4s-logo-item t4s-text-center data-goto" id="b_{{ block.id }}" data-select-flickity {{ block.shopify_attributes }} >
+                    <{{ ARRhtml[0] }} {{ ARRhtml[1] }}href="{{ url }}" {{ ARRhtml[2] }} class="t4s-eff t4s-eff-none t4s-eff-img-none" data-goto--open timeline hdt-reveal="slide-in">                 
+                        {%- if image != blank -%}
+                            <div class="t4s_ratio" style="--aspect-ratioapt:{{ image.aspect_ratio }};--max-width:{{ image.width }}px">
+                                <img class="lazyloadt4s t4s-obj-eff t4s-w-100" data-pswp-src="{{ image | image_url }}" data-pswp-w="{{ image.width }}" data-pswp-h="{{ image.height }}"  data-src="{{ image | image_url: width: 1 }}" data-widths="[100,200,400,600,700,800,900,1000,1200,1400,1600]" data-optimumx="2" data-sizes="auto" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.alt | escape }}" >
+                                <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                            </div>
+                        {%- else -%}
+                            <div class="t4s_ratio" style="--aspect-ratioapt:1.77776">{{ 'logo' | placeholder_svg_tag: 't4s-placeholder-svg t4s-obj-eff' }} </div>
+                        {%- endif -%}                   
+                    </{{ ARRhtml[0] }}> 
+                </div>
+            {%- endfor -%}
+        {%- endif -%}
+    </div>
+                    </div>
+    {{- html_layout[1] -}}
+</div>
+{%- style -%}
+    .t4s-logo-list .flickityt4s-enabled .flickityt4s-slider {display: flex;align-items: center;}
+    .t4s-logo-list .t4s-logo-item .t4s_ratio{margin:0 auto; max-width:var(--max-width)}
+{%- endstyle -%}
+{%- schema -%}
+{
+    "name": "IL-Logo list",
+    "tag": "section",
+    "class": "t4s-section t4s-section-all t4s_bk_flickity t4s_tp_istope t4s-gallery t4s-logo-list ia-logo-list",
+    "settings": [
+        {
+            "type": "text",
+            "id": "top_heading",
+            "label": "+ Heading"
+        },
+        {
+            "type": "textarea",
+            "id": "top_subheading",
+            "label": "+ Subheading"
+        },
+              {
+            "type": "select",
+            "id": "col_dk",
+            "label": "Items per row",
+            "default": "6",
+            "options": [
+                {
+                    "value": "1",
+                    "label": "1"
+                },
+                {
+                    "value": "2",
+                    "label": "2"
+                },
+                {
+                    "value": "3",
+                    "label": "3"
+                },
+                {
+                    "value": "4",
+                    "label": "4"
+                },
+                {
+                    "value": "5",
+                    "label": "5"
+                },
+                {
+                    "value": "6",
+                    "label": "6"
+                }
+            ]
+        }
+    ],
+    "blocks": [
+        {
+            "type": "logo_item",
+            "name": "Logo",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Logo image"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Link to"
+                }
+            ]
+        }
+    ],
+    "presets": [
+      {
+        "name": "IL-Logo list",
+        "category": "Homepage",
+        "blocks": [
+        ]
+      }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,354 @@
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.js"></script>
+{{ 'slider-settings.css' | asset_url | stylesheet_tag }}
+{{ 'pre_flickityt4s.min.css' | asset_url | stylesheet_tag }}
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign sid = section.id
+  assign se_stts = section.settings
+ -%} 
+{% style %}
+  
+   {% if section.settings.bg_color != blank %}#shopify-section-{{- section.id }} .il-tab-wrapper .panelContainer{background-color:{{ section.settings.bg_color }};} {% endif %}
+
+{% endstyle %}
+
+
+<div class="il-tab-wrapper  t4s-section-inner"  {% render 'section_style', se_stts: se_stts -%}>
+	<div class="t4s-container">
+		<div class="tabbedPanels">
+		   <ul class="tabs">
+              {%- for block in section.blocks -%}
+                    <li><a id="blog-{{- block.id -}}" href="#panel{{ forloop.index }}">{{ block.settings.tab_label }}</a></li>
+              {% endfor %}
+		   </ul>
+          {%- for block in section.blocks -%}
+                      {% style %}#blog-{{- block.id -}}.active{border-color:{{ block.settings.tab_border_color }};}{% endstyle %}
+          {% endfor %}
+		   <div class="panelContainer">
+            {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'richtext_block' -%}
+		      <div id="panel{{ forloop.index }}" class="panel">
+		      		<div class="content-header-and-body">
+		      			<div class="content-header-body-wrapper t4s-row t4s-align-items-center">
+		      				<div class="t4s-col-item content-header-image">
+                              {% if block.settings.richtext_desktop_image != blank %}
+		      					<img src="{{ block.settings.richtext_desktop_image.src | img_url: 'master' }}" alt="" class="richtext_desktop_image">
+		      					<img src="{% if block.settings.richtext_mobile_image != blank %}{{ block.settings.richtext_mobile_image.src | img_url: 'master' }} {% else %}{{ block.settings.richtext_desktop_image.src | img_url: 'master' }}{% endif %}" alt="" class="richtext_mobile_image">
+                              {% endif %}
+                              
+		      				</div>
+		      				<div class="t4s-col-item content-header-description">
+		      					<h2 class="t4s-section-title t4s-title h3"> {{ block.settings.block_heading }}</h2>
+		      					<div class="desc-text">
+                                  {{ block.settings.block_content }}
+                                </div>
+		      				</div>		      				
+		      			</div>
+		      		</div>
+		      </div>
+             {%- when 'icon_with_text_block' -%}
+		      <div id="panel{{ forloop.index }}" class="panel">
+		         <div class="tab-icons-with-text">
+		         	<div class="tab-icons-with-text-wrapper t4s-row t4s-align-items-center">
+		      				<div class="tab-icons-image">
+                               {% if block.settings.iconBlock_desktop_image != blank %}
+		      					<img src="{{ block.settings.iconBlock_desktop_image.src | img_url: 'master' }}" alt="" class="iconBlock_desktop_image">
+		      					<img src="{% if block.settings.iconBlock_mobile_image != blank %}{{ block.settings.iconBlock_mobile_image.src | img_url: 'master' }} {% else %}{{ block.settings.iconBlock_desktop_image.src | img_url: 'master' }}{% endif %}" alt="" class="richtext_mobile_image">
+                              {% endif %}
+		      				</div>	
+		      				<div class="tab-icons-text-section">
+		      					<div class="tab-icon-text-item">
+		      						<div class="tab-image">
+                                      {% if block.settings.icon1 != blank %}
+  		      							<img src="{{ block.settings.icon1.src | img_url: 'master' }}">
+                                      {% endif %}
+		      						</div>
+		      						<div class="tab-icon-text-info">
+		      							<h6>{{ block.settings.item_heading1 }}</h6>
+		      							<div class="text-info-desc">
+		      								{{ block.settings.item_content1 }}
+		      							</div>
+		      						</div>
+		      					</div>	
+		      					<div class="tab-icon-text-item">
+		      						<div class="tab-image">
+		      							 {% if block.settings.icon2 != blank %}
+  		      							<img src="{{ block.settings.icon2.src | img_url: 'master' }}">
+                                      {% endif %}
+		      						</div>
+		      						<div class="tab-icon-text-info">
+		      							<h6>{{ block.settings.item_heading2 }}</h6>
+		      							<div class="text-info-desc">
+		      								{{ block.settings.item_content2 }}
+		      							</div>
+		      						</div>
+		      					</div>	
+		      					<div class="tab-icon-text-item">
+		      						<div class="tab-image">
+		      							 {% if block.settings.icon3 != blank %}
+  		      							<img src="{{ block.settings.icon3.src | img_url: 'master' }}">
+                                      {% endif %}
+		      						</div>
+		      						<div class="tab-icon-text-info">
+		      							<h6>{{ block.settings.item_heading3 }}</h6>
+		      							<div class="text-info-desc">
+		      								{{ block.settings.item_content3 }}
+		      							</div>
+		      						</div>
+		      					</div>	
+		      					<div class="tab-icon-text-item">
+		      						<div class="tab-image">
+                                       {% if block.settings.icon4 != blank %}
+  		      							<img src="{{ block.settings.icon4.src | img_url: 'master' }}">
+                                      {% endif %}
+		      						</div>
+		      						<div class="tab-icon-text-info">
+		      							<h6>{{ block.settings.item_heading4 }}</h6>
+		      							<div class="text-info-desc">
+		      								{{ block.settings.item_content4 }}
+		      							</div>
+		      						</div>
+		      					</div>			      							      							      					         		
+		         			</div>
+		         		</div>
+		         </div>
+		      </div>
+             {% endcase %}
+             {% endfor %}
+		   </div>
+		</div>
+   </div>
+</div>
+
+<script>
+  
+
+
+$(document).ready(function() {
+    
+
+	
+  $('.tabs a').click(function(){
+  
+     $('.panel').hide();
+     $('.tabs a.active').removeClass('active');
+     $(this).addClass('active');
+     
+     var panel = $(this).attr('href');
+     $(panel).fadeIn(1000);
+     
+     return false;  // prevents link action
+    
+  });  
+
+     $('.tabs li:first a').click();
+     
+}); 
+
+
+if ( matchMedia('screen and (max-width: 1199px)').matches ) {
+    var $flkty1 = new Flickity( '.tabbedPanels .tabs', {  
+    cellAlign: 'left',
+    adaptiveHeight: true,
+    prevNextButtons: false,
+    contain: true,  
+    pageDots: true   
+  });
+}
+
+  
+</script>
+
+{% schema %}
+  {
+    "name": "IL Tabs",
+    "settings": [
+      {
+        "type":"color",
+        "id":"bg_color",
+        "label":"background Color"
+      },
+                  {
+          "type": "text",
+          "id": "mg",
+          "label": "Margin",
+          "info":"Margin top, margin right, margin bottom, margin left. If you not use to blank",
+          "default": ",,50px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd",
+          "label": "Padding",
+          "info":"Padding top, padding right, padding bottom, padding left. If you not use to blank",
+          "placeholder": "50px,,50px,"
+      },
+      {
+        "type": "header",
+        "content": "+ Design Tablet Options"
+      },
+      {
+          "type": "text",
+          "id": "mg_tb",
+          "label": "Margin",
+          "default": ",,50px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd_tb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+      },
+      {
+        "type": "header",
+        "content": "+ Design mobile options"
+      },
+      {
+          "type": "text",
+          "id": "mg_mb",
+          "label": "Margin",
+          "default": ",,30px,",
+          "placeholder": ",,50px,"
+      },
+      {
+          "type": "text",
+          "id": "pd_mb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+      }
+    ],
+    "blocks":[
+      {
+        "type":"richtext_block",
+        "name":"Content Header and body",
+        "limit":6,
+        "settings":[
+            {
+                "type": "text",
+                "id": "tab_label",
+                "label": "Tab Label"
+            },
+            {
+              "type":"color",
+              "id":"tab_border_color",
+              "label":"Tab Border Color"
+            },          
+            {
+                "type": "image_picker",
+                "id": "richtext_desktop_image",
+                "label": "Desktop Image"
+            },
+           {
+                "type": "image_picker",
+                "id": "richtext_mobile_image",
+                "label": "Mobile Image"
+            },
+            {
+                "type": "text",
+                "id": "block_heading",
+                "label": "Block Heading"
+            },
+            {
+                "type": "richtext",
+                "id": "block_content",
+                "label": "Block Content"
+            }
+        ]
+      },
+      {
+        "type":"icon_with_text_block",
+        "name":"Icon with text",
+        "limit":6,
+        "settings":[
+            {
+                "type": "text",
+                "id": "tab_label",
+                "label": "Tab Label"
+            },
+            {
+              "type":"color",
+              "id":"tab_border_color",
+              "label":"Tab Border Color"
+            },          
+            {
+                "type": "image_picker",
+                "id": "iconBlock_desktop_image",
+                "label": "Desktop Image"
+            },
+            {
+                "type": "image_picker",
+                "id": "iconBlock_mobile_image",
+                "label": "Mobile Image"
+            },
+            {
+                "type": "text",
+                "id": "item_heading1",
+                "label": "Item Heading 1"
+            },
+            {
+                "type": "text",
+                "id": "item_content1",
+                "label": "Item Content 1"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon1",
+                "label": "Item Icon 1"
+            },
+           {
+                "type": "text",
+                "id": "item_heading2",
+                "label": "Item Heading 2"
+            },
+            {
+                "type": "text",
+                "id": "item_content2",
+                "label": "Item Content 2"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon2",
+                "label": "Item Icon 2"
+            },
+           {
+                "type": "text",
+                "id": "item_heading3",
+                "label": "Item Heading 3"
+            },
+            {
+                "type": "text",
+                "id": "item_content3",
+                "label": "Item Content 3"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon3",
+                "label": "Item Icon 3"
+            },
+           {
+                "type": "text",
+                "id": "item_heading4",
+                "label": "Item Heading 4"
+            },
+            {
+                "type": "text",
+                "id": "item_content4",
+                "label": "Item Content 4"
+            },
+            {
+                "type": "image_picker",
+                "id": "icon4",
+                "label": "Item Icon 4"
+            }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "IL Tabs"
+      }
+    ]    
+  }
+{% endschema %}

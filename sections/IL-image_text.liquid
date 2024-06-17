@@ -1,0 +1,227 @@
+<!-- sections/image_text.liquid -->
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'image-text.css' | asset_url | stylesheet_tag }}
+{%- liquid
+    assign image_fix = image_nt | image_tag
+    assign sid = section.id
+    assign se_stts = section.settings
+    assign se_blocks = section.blocks
+    assign block_first = se_blocks.first
+    assign stt_layout = se_stts.layout
+    if stt_layout == 't4s-se-container' 
+        assign html_layout = '<div class="t4s-container">__</div></div>' | split: '__'
+    elsif stt_layout == 't4s-container-wrap'
+        assign html_layout = '<div class="t4s-container">__</div>' | split: '__'
+    else
+        assign html_layout = '__' | split: '__'
+    endif
+    assign use_button = false 
+    assign use_carousel = false
+    assign t4s_se_class = 't4s_nt_se_' | append: sid
+    if se_stts.use_cus_css and se_stts.code_cus_css != blank
+        render 'se_cus_css', code_cus_css: se_stts.code_cus_css, t4s_se_class: t4s_se_class
+    endif 
+ -%}
+   {% if section.settings.full-width == false %}<div class="t4s-container"> {% endif %}
+<div class="t4s-section-inner {{ t4s_se_class }} t4s_nt_se_{{ sid }} {{ stt_layout }}"  {% render 'section_style', se_stts: se_stts -%} >
+
+    {{- html_layout[0] -}}
+    <div class="t4s-container-inner">
+    <div class="t4s-image-text t4s-row t4s-align-items-center t4s-row ">
+      {%- for block in se_blocks -%}
+        {%- liquid
+          assign bk_stts = block.settings 
+          assign image = bk_stts.image 
+       -%}
+        {%- case block.type -%}
+            {%- when 'bl_image' -%}
+                {%- capture html_img_text -%}
+                        {%- assign image = bk_stts.image1 -%}
+                            {%- if image == blank -%}
+                                {{ 'image' | placeholder_svg_tag: 't4s-placeholder-svg' }}
+                            {%- endif -%} 
+                            {%- if image != blank -%}
+                                <div class="t4s-col-item">
+                                    <div class="t4s_ratio" style="--aspect-ratioapt:{{ image.aspect_ratio }}">
+                                        <img {% if image.presentation.focal_point != '50.0% 50.0%' %} style="object-position: {{ image.presentation.focal_point }}"{% endif %} class="lazyloadt4s" data-src="{{ image | image_url: width: 1 }}" data-widths="[100,200,400,600,700,800,900,1000,1200,1400,1600]" data-optimumx="2" data-sizes="auto" src="{% render 'img_svg', w: image.width, h: image.height %}" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.alt | escape }}">    
+                                        <span class="lazyloadt4s-loader is-bg-img" style="background: url({{ image | image_url: width: 1 }});"></span>
+                                    </div>
+                                </div>
+                            {%- endif -%} 
+                {%- endcapture -%}
+                <div class="t4s-col-img t4s-col-item t4s-col-lg-6 t4s-col-md-6 t4s-col-12 {% if bk_stts.post_mobile == "reverse" %}t4s-order-md-1 t4s-order-0 row-reverce {% endif %}  t4s-image-text-layout-carousel" >    
+  
+                        <div class=" t4s-row t4s-gx-0 t4s-gy-0 t4s-row-cols-1 t4s_ratioadapt t4s_position_8 t4s_cover">
+                            {{ html_img_text }}
+                        </div>     
+                </div>
+            {%- when 'bl_text' -%}
+                <div class="t4s-col-text t4s-col-item t4s-col-lg-6 t4s-col-md-6  t4s-col-12 {% if bk_stts.post_mobile == "reverse" %} row-reverce {% endif %} " timeline hdt-reveal="slide-in">
+                    <div class="t4s-image-text-content t4s-text-left t4s-shadow-wrap">
+                        {%- if bk_stts.sub_heading != blank -%}<p class="t4s-image-text-subheading">{{ bk_stts.sub_heading }}</p>{%- endif -%}
+                        {%- if bk_stts.heading != blank -%}<h2 class="t4s-image-text-heading" >{{ bk_stts.heading }}</h2>{%- endif -%}
+                        {%- if bk_stts.text -%}<div class="t4s-image-text-des t4s-rte">{{ bk_stts.text }}</div>{%- endif -%}
+                        {%- if bk_stts.button_link != blank and bk_stts.button_label != blank -%}
+                        {%- assign use_button = true -%}
+                            <a class="t4s-btn-custom  t4s-btn-style-primary  t4s-btn-effect-fade" href="{{ bk_stts.button_link }}" >{{ bk_stts.button_label }}</a>
+                        {%- endif -%}
+                    </div>
+                </div>
+          {%- endcase -%}
+      {%- endfor -%}
+    </div>
+    {{- html_layout[1] -}}
+</div>
+         {% if section.settings.full-width == false %}</div>{% endif %}
+{%- if use_carousel -%}
+{{ 'pre_flickityt4s.min.css' | asset_url | stylesheet_tag }}
+{{ 'slider-settings.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if use_button -%}
+    {{ 'button-style.css' | asset_url | stylesheet_tag }}
+    <link href="{{ 'custom-effect.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- schema -%}
+    {
+      "name": "IL-Image with text",
+      "tag": "section",
+      "class": "t4s-section t4s-section-all t4s_tp_flickity ia-image-with-text",
+      "settings": [
+        {
+"type": "checkbox",
+"id": "full-width",
+"label": "Full Width Layout",
+"default": false
+},
+    {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "Background"
+    },
+            {
+        "type": "text",
+        "id": "mg",
+        "label": "Margin",
+        "info":"Margin top, margin right, margin bottom, margin left. If you not use to blank",
+        "default": ",,50px,",
+        "placeholder": ",,50px,"
+    },
+    {
+        "type": "text",
+        "id": "pd",
+        "label": "Padding",
+        "info":"Padding top, padding right, padding bottom, padding left. If you not use to blank",
+        "placeholder": "50px,,50px,"
+    },
+    {
+        "type": "header",
+        "content": "+ Design Tablet Options"
+    },
+    {
+        "type": "text",
+        "id": "mg_tb",
+        "label": "Margin",
+        "placeholder": ",,50px,"
+    },
+    {
+        "type": "text",
+        "id": "pd_tb",
+        "label": "Padding",
+        "placeholder": ",,50px,"
+    }, 
+    {
+        "type": "header",
+        "content": "+ Design mobile options"
+    },
+    {
+        "type": "text",
+        "id": "mg_mb",
+        "label": "Margin",
+        "default": ",,30px,",
+        "placeholder": ",,50px,"
+    },
+    {
+        "type": "text",
+        "id": "pd_mb",
+        "label": "Padding",
+        "placeholder": ",,50px,"
+    }
+    ],
+    "blocks":[
+      {
+        "type":"bl_image",
+        "name":"Image",
+        "limit":1,
+        "settings":[
+            {
+                "type": "image_picker",
+                "id": "image1",
+                "label": "Image"
+            },
+            {
+                "type": "select",
+                "id": "post_mobile",
+                "label": "Position image",
+                "default": "default",
+                "options": [
+                    {
+                        "value": "default",
+                        "label": "Default"
+                    },
+                    {
+                        "value": "reverse",
+                        "label": "Reverse"
+                    }
+                ]
+            }
+        ]
+      },
+      {
+        "type":"bl_text",
+        "limit":1,
+        "name":"Text",
+        "settings":[
+            {
+                "type": "text",
+                "id": "sub_heading",
+                "label": "Sub heading"
+            },
+            {
+                "type": "text",
+                "id": "heading",
+                "label": "Heading",
+                "default": "Image with text"
+            },
+            {
+                "type": "richtext",
+                "id": "text",
+                "label": "Text",
+                "default": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>"
+            },
+            {
+                "type": "text",
+                "id": "button_label",
+                "label": "Button label",
+                "info":"If set blank will not show",
+                "default": "Button label"
+            },
+            {
+                "type": "url",
+                "id": "button_link",
+                "label": "Button link",
+                "info":"If set blank will not show"
+            }
+        ]
+      }
+    ],
+    "presets": [
+        {
+          "name": "IL-Image with text",
+          "category": "homepage",
+          "blocks":[
+          ]
+        }
+      ]
+    }
+  {%- endschema -%}
+  

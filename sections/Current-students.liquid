@@ -1,0 +1,82 @@
+<div class="current-student-data"> 
+  <div class="t4s-container">
+  <div class="top-heading">
+<div class="t4s-row">
+   <div class="t4s-col-12 t4s-col-item">
+  <h3>Student</h3>
+   </div>
+</div>
+</div>
+<div class="t4s-customer t4s-customer-account is--account t4s-row">
+  <div class="t4s-col-12 t4s-col-md-3 t4s-col-item t4s-account-sidebar">
+    <nav class="t4s-account-nav">
+       <ul>
+          <li class="t4s-account-nav-link t4s-account-nav-link--dashboard ">
+             <a href="{{ routes.account_url }}"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> {{ 'customer.account.dashboard' | t }}</a>
+          </li>
+         <li class="t4s-account-nav-link t4s-account-nav-link--dashboard edit-student is--active t4s-pe-none">
+           <a href="/pages/student-info" ><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11.5 14c4.14 0 7.5 1.57 7.5 3.5V20H4v-2.5c0-1.93 3.36-3.5 7.5-3.5zm6.5 3.5c0-1.38-2.91-2.5-6.5-2.5S5 16.12 5 17.5V19h13v-1.5zM11.5 5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm0 1a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z" fill="currentcolor"/>
+</svg>
+
+             Manage Students
+           </a>
+         </li>
+          <li class="t4s-account-nav-link t4s-account-nav-link--edit-address">
+             <a href="{{ routes.account_addresses_url }}"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> {{ 'customer.addresses.title' | t }} ({{ customer.addresses_count }})</a>
+          </li>
+          
+          <li class="t4s-account-nav-link t4s-account-nav-link--wishlist">
+             <a href="/pages/wishlist"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> {{ 'customer.account.wishlist' | t }} (<span>0</span>)</a>
+          </li>
+      
+          <li class="t4s-account-nav-link t4s-account-nav-link--customer-logout">
+            <a  href="{{ routes.account_logout_url }}" data-no-instant><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> {{ 'customer.account.log_out' | t }}</a>
+          </li>
+       </ul>
+    </nav>
+</div>
+<div class="current-student-data-wrapper t4s-col-12 t4s-col-md-9 t4s-col-item"> 
+  <div class="student-detail">
+    {% if section.settings.student_info != blank %}
+    <p>{{ section.settings.student_info }}</p>
+    {% endif %}
+  </div>
+  {% if customer.metafields.custom.student_accounts.value != blank %}
+  <div class="current-student-info-data">
+    <div class="t4s-table-res-df">
+       {% for student in customer.metafields.custom.student_accounts.value %}
+       <table class="t4s-table-res">
+          <tbody>
+             <tr>
+                <td><strong>Name:</strong></td>
+                <td>{{  student.first_name }} {{  student.last_name }}</td>
+             </tr>
+             <tr>
+                <td><strong>username:</strong></td>
+                <td>{{  student.username }}</td>
+             </tr>
+          </tbody>
+       </table>
+      {% endfor %}
+    </div>      
+  </div>  
+  {% endif %}
+  <button class="addstudent">Add Student</button>
+</div>
+</div>
+  </div>
+</div>  
+{% schema %}
+  {
+    "name": "Current students",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "student_info",
+        "label": "Student Information Text",
+        "default": "If you need to Edit any student information, please call XXX XXX XXXX for assistance."
+      }
+    ]
+  }
+{% endschema %}

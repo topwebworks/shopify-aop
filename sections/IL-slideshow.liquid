@@ -1,0 +1,287 @@
+<!-- sections/slideshow.liquid -->
+{{ 'pre_flickityt4s.min.css' | asset_url | stylesheet_tag }}
+{{ 'section.css' | asset_url | stylesheet_tag }}
+{{ 'slideshow.css' | asset_url | stylesheet_tag }}
+{{ 'content-position.css' | asset_url | stylesheet_tag }}
+{{ 'slider-settings.css' | asset_url | stylesheet_tag }}
+{%- liquid
+
+  assign sid = section.id
+  assign se_blocks = section.blocks
+  assign se_stts = section.settings
+  assign isRunLoop = true
+  assign SetBL = true
+  assign use_button = false
+  assign use_animation = false
+  assign general_block = false
+  assign t4s_se_class = 't4s_nt_se_' | append: sid
+  if se_stts.use_cus_css and se_stts.code_cus_css != blank
+      render 'se_cus_css', code_cus_css: se_stts.code_cus_css, t4s_se_class: t4s_se_class
+  endif 
+-%}
+{%- capture data_flickityt4s -%}
+{
+  &quot;cellAlign&quot;: &quot;center&quot;,&quot;freeScroll&quot;: 0, &quot;contain&quot; : 1,&quot;dragThreshold&quot; : 15,&quot;percentPosition&quot;: 1,&quot;imagesLoaded&quot;: 0,&quot;lazyload&quot;: 0,
+  &quot;arrowIcon&quot;:&quot;2&quot;, &quot;t4sid&quot;: &quot;template--16676861903011__da9c4ba2-bb47-4f0f-b87d-6a2e7172a34e&quot;, &quot;prevNextButtons&quot;: false,
+  &quot;pageDots&quot;: true,&quot;pauseAutoPlayOnHover&quot;:true,&quot;wrapAround&quot;: true,&quot;autoPlay&quot;:8000,
+  &quot;adaptiveHeight&quot;:true
+}
+{%- endcapture -%}
+  {%- capture append_style -%}--aspect-ratio-cusdt : {{ se_stts.custom_dk1 }}px;--aspect-ratio-custb : {{ se_stts.custom_dk1 }}px;--aspect-ratio-cusmb :{{ se_stts.mobile_height }}px;{%- endcapture -%}
+<div class="t4s-section-inner {{ t4s_se_class }} t4s_nt_se_{{ sid }}"  {% render 'section_style', se_stts: se_stts, append_style: append_style -%}>         
+  <div class="t4s-slideshow t4s-row t4s-row-cols-1 t4s-gx-0 t4s-flicky-slider t4s_position_8 t4s_cover  t4s-slide-eff-slide  t4scuspx3_{{ se_stts.custom_dk1 }}px t4s-dots-style-default t4s-dots-cl-custom2 t4s-dots-default t4s-dots-round-true  flickityt4s" data-flickityt4s-js='{{ data_flickityt4s }}'  style="--aspect-ratio-cusdt:{{ se_stts.custom_dk1 }}px;" >
+      {%- for block in section.blocks -%}            
+          {%- liquid  
+              assign bk_stts = block.settings
+              assign image_mb = bk_stts.image_mb
+              assign image = bk_stts.image | default: image_mb
+              assign mb_image = image_mb | default: image 
+              if isRunLoop
+                  assign ratio = image.aspect_ratio 
+                  assign isRunLoop = SetBL
+              endif 
+              assign url = bk_stts.link_img1 
+              assign img_url_w  = image | image_url: width: 1904 | split: '1904'
+              assign img_url_w0 = img_url_w[0]
+              assign img_url_w1 = img_url_w[1]
+              assign img_url_w_mb  = mb_image | image_url: width: 1904 | split: '1904'
+              assign img_url_w_mb0 = img_url_w_mb[0]
+              assign img_url_w_mb1 = img_url_w_mb[1]
+              assign img_1 = img_url_w0 | append: 1 | append: img_url_w1
+              assign img_1_mb = img_url_w_mb0 | append: 1 | append: img_url_w_mb1
+     
+         -%}
+          
+          <div class="t4s-slideshow-item t4s-col-item t4s-slide t4s_position_8" id="b_{{ block.id }}" data-select-flickity {{ block.shopify_attributes }}>
+              <div class="t4s-slideshow-inner t4s-pr t4s-oh t4s_ratio t4s_ratio_hasmb"  >
+                      {%- if image -%}   
+                          {%- if forloop.first -%}
+                                <img {% if mb_image.presentation.focal_point != '50.0% 50.0%' %} style="object-position: {{ mb_image.presentation.focal_point }}"{% endif %} class="t4s-img-as-bg t4s-d-md-none -t4s-lz--fadeIn t4s-slide-none"
+                                srcset="{{ img_url_w_mb0 }}375{{ img_url_w_mb1 }} 375w, {{ img_url_w_mb0 }}550{{ img_url_w_mb1 }} 550w, {{ img_url_w_mb0 }}750{{ img_url_w_mb1 }} 750w, {{ img_url_w_mb0 }}1100{{ img_url_w_mb1 }} 1100w, {{ img_url_w_mb0 }}1500{{ img_url_w_mb1 }} 1500w, {{ img_url_w_mb0 }}1780{{ img_url_w_mb1 }} 1780w, {{ img_url_w_mb0 }}2000{{ img_url_w_mb1 }} 2000w, {{ img_url_w_mb0 }}3000{{ img_url_w_mb1 }} 3000w,{{ img_url_w_mb0 }}3840{{ img_url_w_mb1 }} 3840w, {{ mb_image | image_url }} {{ mb_image.width }}w"
+                                sizes="(min-width: 768px) 768px,100vw" src="{{ img_url_w_mb0 }}1500{{ img_url_w_mb1 }}"
+                                loading="lazy" onload="loadImageT4s(this)" alt="{{ mb_image.alt | escape }}" width="{{ mb_image.width }}" height="{{ mb_image.height }}">
+                                <span class="lazyloadt4s-loader is-bg-img t4s-d-md-none" style="background: {{ url_img_mb }}"></span>
+                                <img {% if image.presentation.focal_point != '50.0% 50.0%' %} style="object-position: {{ image.presentation.focal_point }}"{% endif %} class="t4s-img-as-bg t4s-d-none t4s-d-md-block -t4s-lz--fadeIn t4s-slide-none"
+                                srcset="{{ img_url_w0 }}375{{ img_url_w1 }} 375w, {{ img_url_w0 }}550{{ img_url_w1 }} 550w, {{ img_url_w0 }}750{{ img_url_w1 }} 750w, {{ img_url_w0 }}1100{{ img_url_w1 }} 1100w, {{ img_url_w0 }}1500{{ img_url_w1 }} 1500w, {{ img_url_w0 }}1780{{ img_url_w1 }} 1780w, {{ img_url_w0 }}2000{{ img_url_w1 }} 2000w, {{ img_url_w0 }}3000{{ img_url_w1 }} 3000w,{{ img_url_w0 }}3840{{ img_url_w1 }} 3840w, {{ image | image_url }} {{ image.width }}w"
+                                sizes="{{ size_img }}" src="{{ img_url_w0 }}1500{{ img_url_w1 }}"
+                                loading="lazy" onload="loadImageT4s(this)" alt="{{ image.alt | escape }}" width="{{ image.width }}" height="{{ image.height }}">
+                                <span class="lazyloadt4s-loader is-bg-img t4s-d-none t4s-d-md-block" style="background: {{ url_img }}"></span>
+                          {%- else -%}
+                              <img {% if mb_image.presentation.focal_point != '50.0% 50.0%' %} style="object-position: {{ mb_image.presentation.focal_point }}"{% endif %} class="lazyloadt4s t4s-lz--fadeIn t4s-img-as-bg t4s-d-md-none t4s-slide-none" data-src="{{ img_1_mb }}" data-widths="[375, 575, 750]" data-optimumx="2" data-sizes="auto" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="{{ mb_image.width }}" height="{{ mb_image.height }}" alt="{{ mb_image.alt | escape }}">
+                              <span class="lazyloadt4s-loader is-bg-img t4s-d-md-none" style="background: {{ url_img_mb }}"></span>
+                              <img {% if image.presentation.focal_point != '50.0% 50.0%' %} style="object-position: {{ image.presentation.focal_point }}"{% endif %} class="lazyloadt4s t4s-lz--fadeIn t4s-img-as-bg t4s-d-none t4s-d-md-block t4s-slide-none" data-src="{{ img_1 }}" data-widths="[800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2500, 3000, 3400, 3800, 4100]" data-optimumx="2" data-sizes="auto" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" width="{{ image.width }}" height="{{ image.height }}" alt="{{ image.alt | escape }}">
+                              <span class="lazyloadt4s-loader is-bg-img t4s-d-none t4s-d-md-block" style="background: {{ url_img }}"></span>
+                          {%- endif -%}
+
+                          {%- else -%} 
+                          {%- capture current -%}{% cycle 1, 2 %}{%- endcapture -%}
+                              {{ 'lifestyle-' | append: current | placeholder_svg_tag: 't4s-placeholder-svg t4s-svg-bg1' }}  
+                          {%- endif -%}
+                          <div class="t4s-content-wrap t4s-full-width-link t4s-z-100">
+                              <div class="t4s-content-position t4s-container t4s-pa t4s-text-md-left t4s-text-center t4s-bg-content-true t4s-box-content-square-{{ bk_stts.box_square }} t4s-br-content-{{ bk_stts.border_bl }} t4s-br-style-{{ bk_stts.br_style }}" style="--time-animation:1s;">  
+                                    <div class="slideshow-content-width t4s-content-position">
+                                        {% if bk_stts.text!= blank %}<h2 class="h1">{{ bk_stts.text }}</h2>{% endif %}
+                                        {% if bk_stts.content!= blank %}<p>{{ bk_stts.content }}</p>{% endif %}
+                                        {% if bk_stts.button_text != blank %}
+                                          <a href="{{ bk_stts.button_link }}" target="_self" class=" t4s-btn-custom t4s-btn-style-primary " >{{ bk_stts.button_text }}</a>
+                                        {% endif %}
+                                        {% if bk_stts.second_button_text != blank %}
+                                           <a href="{{ bk_stts.second_button_link }}" target="_self" class="t4s-btn-custom t4s-btn-style-light " >{{ bk_stts.second_button_text }}</a>
+                                        {% endif %}
+                                     </div>
+                              </div> 
+                          </div>
+             </div>
+             <a href="{{ url }}" target="_self" class="t4s-full-width-link{% if url == blank %} t4s-pe-none {% else %} t4s-pe-auto{% endif %}"></a>
+          </div>
+      {%- endfor -%}
+  </div>  
+</div>
+{%- if general_block -%}
+    {{ 'general-block.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if use_button -%}
+    {{ 'button-style.css' | asset_url | stylesheet_tag }}
+    <link href="{{ 'custom-effect.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- endif -%}
+{%- if use_animation -%}
+    <link href="{{ 't4s-animation.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+{%- endif -%}
+<style>
+#shopify-section-{{section.id}} .t4s_ratio:before {
+  padding-top:{{se_stts.desktop_height}}px;
+}
+  #shopify-section-{{section.id}} .t4s-content-wrap h2 , #shopify-section-{{section.id}} .t4s-content-wrap p
+  {
+    color:{{section.settings.color}};
+  }
+     #shopify-section-{{section.id}} .t4s-slideshow 
+    {
+    --aspect-ratio-cusdt:{{section.settings.desktop_height}}px !important;
+    }
+  @media(max-width:767px)
+  {
+    #shopify-section-{{section.id}} .t4s_ratio:before {
+      padding-top:{{section.settings.mobile_height}}px;
+    }
+    #shopify-section-{{section.id}} .t4s-slideshow 
+    {
+    --aspect-ratio-cusdt:{{section.settings.mobile_height}}px !important;
+    }
+  }
+  </style>
+{%- schema -%}
+{
+    "name":"IL-Slideshow",
+    "tag": "section",
+    "class": "t4s-section t4s-section-all t4s_bk_flickity t4s_tp_cd t4s-sec-slideshow ia-slideshow",
+    "settings":[
+      {
+"type": "range",
+"id": "desktop_height",
+"min": 50,
+"max": 1000,
+"step":50,
+"unit": "px",
+"label": "Desktop Height",
+"default": 600
+},
+      {
+"type": "range",
+"id": "mobile_height",
+"min": 50,
+"max": 1000,
+"step":50,
+"unit": "px",
+"label": "Mobile Height",
+"default": 400
+},
+         {
+                    "type":"color",
+                    "id":"color",
+                    "label":"Text Color"
+        },
+              {
+            "type": "text",
+            "id": "mg",
+            "label": "Margin",
+            "info":"Margin top, margin right, margin bottom, margin left. If you not use to blank",
+            "default": ",,50px,",
+            "placeholder": ",,50px,"
+        },
+        {
+            "type": "text",
+            "id": "pd",
+            "label": "Padding",
+            "info":"Padding top, padding right, padding bottom, padding left. If you not use to blank",
+            "placeholder": "50px,,50px,"
+        },
+              {
+          "type": "header",
+          "content": "+ Design Tablet Options"
+        },
+        {
+          "type": "text",
+          "id": "mg_tb",
+          "label": "Margin",
+          "placeholder": ",,50px,"
+        },
+        {
+          "type": "text",
+          "id": "pd_tb",
+          "label": "Padding",
+          "placeholder": ",,50px,"
+        },
+        {
+            "type": "header",
+            "content": "+ Design mobile options"
+        },
+        {
+            "type": "text",
+            "id": "mg_mb",
+            "label": "Margin",
+            "default": ",,30px,",
+            "placeholder": ",,50px,"
+        },
+        {
+            "type": "text",
+            "id": "pd_mb",
+            "label": "Padding",
+            "placeholder": ",,50px,"
+        }
+    ],
+    "blocks":[
+        {
+            "type":"image_parent",
+            "name":"Image slide",
+            "settings":[
+                {
+                    "type": "image_picker","id": "image",
+                    "label": "Desktop Image",
+                    "info": "1800 x 600px .jpg recommended"
+                },
+                {
+                    "type": "image_picker","id": "image_mb",
+                    "label": "Mobile image (optional)",
+                    "info": "750 x 1100px .jpg recommended. If none is set, desktop image will be used."
+                }, 
+                {
+                    "type": "url",
+                    "id": "link_img1",
+                    "label": "Link image",
+                    "info": "The whole image becomes clickable."
+                },
+                              {
+                    "type":"textarea",
+                    "id":"text",
+                    "label":"Heading",
+                    "default":"Text",
+                    "info":"If you want to line break, please add a <br> tag in the text"
+                },
+                {
+                    "type":"textarea",
+                    "id":"content",
+                    "label":"Content",
+                    "default":"Text",
+                    "info":"If you want to line break, please add a <br> tag in the text"
+                },
+                {
+                    "type":"text",
+                    "id":"button_text",
+                    "label":"first Button label",
+                    "default":"Button label",
+                    "info":"If set blank will not show"
+                },
+                {
+                    "type":"url",
+                    "id":"button_link",
+                    "label":"first Button link",
+                    "info":"If set blank will not show"
+                },
+                {
+                    "type":"text",
+                    "id":"second_button_text",
+                    "label":"second Button label",
+                    "default":"Button label",
+                    "info":"If set blank will not show"
+                },
+                {
+                    "type":"url",
+                    "id":"second_button_link",
+                    "label":"second Button link",
+                    "info":"If set blank will not show"
+                }
+            ]
+        }
+
+    ],
+    "presets": [
+        {
+            "category": "homepage1",
+            "name":"IL-Slideshow",
+            "blocks":[
+            ]
+        }
+    ]
+}
+{% endschema %}

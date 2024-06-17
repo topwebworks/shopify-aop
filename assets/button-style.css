@@ -1,0 +1,193 @@
+button , .button , .t4s-btn-custom , .t4s-btn , .t4s-btn-base , input[type=submit]:not(.t4s-btn) , .t4s_btn_black , .t4s_btn_white {
+/* font-size: 14px !important; */
+    line-height: 1.57;
+    font-weight: 700 !important;
+    padding: 11px 33px;
+    border-radius: 50px !important;
+    border: 1px solid;
+    transition: .3s ease-in-out;
+    letter-spacing: 0px !important;
+   min-height: 46px;
+}
+.t4s-btn-custom , .t4s-btn , .t4s-btn-base , input[type=submit]:not(.t4s-btn) {
+padding: 11px 33px!important;
+    min-height: 46px;
+}
+
+.t4s-btn , .t4s_btn_black {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+background-color:var(--button-background);
+border-color:var(--button-background);
+color:var(--button-color); 
+}
+.t4s-btn:hover , .t4s_btn_black:hover {
+background-color:var(--button-background-hover) !important;
+border-color:var(--button-background-hover);
+color:var(--button-color-hover);
+opacity:1 !important;
+}
+.t4s-btn-effect-default:hover {
+  opacity:1 !important;
+}
+.t4s-btn:not(.t4s-btn-style-outline):not(.t4s-btn-effect-fade):not(.t4s-btn-effect-default):hover {
+background-color:var(--button-background);
+}
+.t4s-btn.t4s-btn-effect-fade:hover,
+.t4s-btn.t4s-btn-effect-default:hover{  
+background-color:var(--button-background-hover) !important;
+}
+.t4s-btn + .t4s-btn {
+  margin-left: 10px;
+}
+/* .t4s-btn span:first-child {
+  height: inherit;
+  display: flex;
+  align-items: center;
+} */
+@media(max-width: 767px) {
+  .t4s-btn + .t4s-btn {
+      margin-left: 5px;
+  }
+}
+/* Custom button*/
+.t4s-btn-style-outline {
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+.t4s-btn-style-outline + .t4s-btn-style-outline {
+  margin-left: 18px;
+}
+.t4s-btn-style-outline:hover {
+background-color:var(--secondary-light-button-background-hover) !important;
+border-color:var(--secondary-light-button-color-hover);
+color:var(--secondary-light-button-color-hover);
+}
+
+.t4s-btn-style-bordered,
+.t4s-btn-style-bordered_top,
+.t4s-btn-style-link {
+  --btn-color: var(--pri-cl);
+  --btn-color-hover: var(--pri-cl-hover);
+  min-height: 1px;
+  height: auto !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+.t4s-btn-style-bordered_top{
+  --btn-color: var(--pri-cl);
+  --btn-color-hover: var(--pri-cl-hover);
+  min-height: var(--btn-mh);
+  height: auto!important;
+  padding: 0!important;
+  border-radius: 0!important;
+  background-color: transparent!important;
+}
+.t4s-btn-style-bordered {
+  --btn-border          : var(--pri-cl);
+  --btn-border-hover    : var(--pri-cl-hover);
+  border-bottom: solid 1px;
+}
+.t4s-btn-style-bordered_top {
+  --btn-border          : var(--pri-cl);
+  --btn-border-hover    : var(--pri-cl-hover);
+  border-top: solid 2px;
+}
+
+.t4s-btn-color-light {
+background-color:var(--button-background);
+border-color:var(--button-background);
+color:var(--button-color); 
+}
+.t4s-btn-color-dark {
+background-color:var(--button-background);
+border-color:var(--button-background);
+color:var(--button-color); 
+}
+
+.t4s-btn-color-primary {
+background-color:var(--button-background);
+border-color:var(--button-background);
+color:var(--button-color); 
+}
+
+.t4s-btn-style-outline.t4s-btn-color-light  {
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+
+.t4s-btn-style-outline.t4s-btn-color-dark , .t4s_btn_white {
+background-color:var(--secondary-dark-button-background);
+border-color:var(--secondary-dark-button-color);
+color:var(--secondary-dark-button-color);
+}
+
+.t4s-btn-style-outline.t4s-btn-color-primary {
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+
+.t4s-btn-style-bordered.t4s-btn-color-light,
+.t4s-btn-style-bordered_top.t4s-btn-color-light,
+.t4s-btn-style-link.t4s-btn-color-light {
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+
+.t4s-btn-style-bordered.t4s-btn-color-dark,
+.t4s-btn-style-bordered_top.t4s-btn-color-dark,
+.t4s-btn-style-link.t4s-btn-color-dark {
+background-color:var(--secondary-dark-button-background);
+border-color:var(--secondary-dark-button-color);
+color:var(--secondary-dark-button-color);
+}
+.t4s-btn-style-bordered.t4s-btn-color-primary,
+.t4s-btn-style-bordered_top.t4s-btn-color-primary,
+.t4s-btn-style-link.t4s-btn-color-primary{
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+.t4s-btn-custom {
+display: inline-flex;
+justify-content: center;
+}
+.t4s-btn-custom.t4s-btn-style-primary {
+background-color:var(--button-background);
+border-color:var(--button-background);
+color:var(--button-color); 
+}
+.t4s-btn-custom.t4s-btn-style-primary:hover , .t4s-btn-custom.t4s-btn.t4s-btn-effect-fade:hover {
+background-color:var(--button-background-hover) !important;
+border-color:var(--button-background-hover);
+color:var(--button-color-hover);
+}
+.t4s-btn-custom.t4s-btn-style-light {
+background-color:var(--secondary-light-button-background);
+border-color:var(--secondary-light-button-color);
+color:var(--secondary-light-button-color);
+}
+.t4s-btn-custom.t4s-btn-style-light:hover  , .t4s-btn-style-outline.t4s-btn-color-light:hover {
+background-color:var(--secondary-light-button-background-hover) !important;
+border-color:var(--secondary-light-button-color-hover);
+color:var(--secondary-light-button-color-hover);
+}
+.t4s-btn-custom.t4s-btn-style-dark {
+background-color:var(--secondary-dark-button-background);
+border-color:var(--secondary-dark-button-color);
+color:var(--secondary-dark-button-color);
+}
+.t4s-btn-custom.t4s-btn-style-dark:hover , .t4s-btn-style-outline.t4s-btn-color-dark:hover , .t4s_btn_white:hover {
+background-color:var(--secondary-dark-button-background-hover) !important;
+border-color:var(--secondary-dark-button-background-hover);
+color:var(--secondary-dark-button-color-hover);
+}

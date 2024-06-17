@@ -1,0 +1,26 @@
+<div class="il-table">
+  <div class="t4s-container">
+    <div class="il-table-wrapper">
+      {{ section.settings.table_data }}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "IL Table",
+    "settings": [
+      {
+       "type": "html",
+        "id": "table_data",
+        "label": "Table Data",
+        "info": "Html format data"
+      }
+    ],
+    "presets": [
+      {
+        "name": "IL Table"
+      }
+    ]    
+  }
+{% endschema %}
